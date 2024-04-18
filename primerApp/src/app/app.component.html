@@ -1,0 +1,13 @@
+<h1 class="titleStyle">{{title}}</h1>
+
+<button (click)="sumar()">Sumar</button>
+
+<p>{{suma}}</p>
+
+@if (suma == 1) {
+  <p>{{nombre}}</p>
+}
+
+<p *ngIf = "suma == 1">{{nombre}}</p> 
+
+<input type="text" [(ngModel)]="nombre">

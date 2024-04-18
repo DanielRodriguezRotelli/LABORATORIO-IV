@@ -1,0 +1,38 @@
+<!--
+
+1- (app.component.html) Realizar:
+Una aplicación que se le ingresen dos edades en dos cuadro de textos
+edadUno, EdadDos
+mostrar el promedio y la suma en dos cuadros de textos nuevos
+botones "calcular" y "limpiar cuadros de textos"
+
+-->
+
+<h1 class="titleStyle">{{title}}</h1>
+
+<p>1- (app.component.html) Realizar:</p>
+<p> Una aplicación que se le ingresen dos edades en dos cuadro de textos
+  edadUno, EdadDos</p>
+<p>Mostrar el promedio y la suma en dos cuadros de textos nuevos
+  botones "calcular" y "limpiar cuadros de textos"</p>
+
+<div>
+  <label for="edadUno">Edad Uno:</label>
+  <input type="text" id="edadUno" [(ngModel)]="edadUno">
+
+  <label for="edadDos">Edad Dos:</label>
+  <input type="text" id="edadDos" [(ngModel)]="edadDos">
+
+  <button (click)="calcular()">Calcular</button>
+  <button (click)="limpiar()">Limpiar Cuadros de Textos</button>
+
+  <div *ngIf="mostrarResultados">
+    <label for="suma">Suma:</label>
+    <input type="text" id="suma" [value]="suma" readonly>
+
+    <label for="promedio">Promedio:</label>
+    <input type="text" id="promedio" [value]="promedio" readonly>
+  </div>
+</div>
+
+

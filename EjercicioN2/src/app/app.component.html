@@ -1,0 +1,37 @@
+<!--
+2-( componentes nuevos) Realizar:
+la clase usuario con nombre y clave ,
+el componente "Bienvenido"
+el componente "login"
+el componente "error"
+( dejar los componentes listos)
+opcional: hacer ruteo
+-->
+
+<div>
+  <h1>{{title}}</h1>
+</div>
+
+
+<div *ngIf="vistaActual == 'login'">
+  <app-login></app-login>
+  <button (click)="login()">Login</button> 
+  <!-- <p>bandera: {{flag}}</p> -->
+</div>
+
+<div *ngIf="vistaActual == 'bienvenido'">
+  <app-bienvenido></app-bienvenido>
+  <button (click)="volverAlLogin()">Cerrar sesión</button>
+  <!-- <p>bandera: {{flag}}</p> -->
+</div>
+
+<div *ngIf="vistaActual == 'error'">
+  <app-error></app-error>
+  <button (click)="volverAlLogin()">Volver al Login</button>
+  <!-- <p>bandera: {{flag}}</p> -->
+</div>   
+
+
+<router-outlet></router-outlet>
+
+

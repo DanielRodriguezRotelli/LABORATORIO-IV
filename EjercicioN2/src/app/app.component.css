@@ -1,0 +1,79 @@
+.title{
+  color: rgb(43, 226, 67); 
+}
+/* Aplica color azul violeta a los elementos que tienen la clase title. En este caso, afecta al título de la aplicación.*/
+
+body {
+  font-family: 'Times New Roman', sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+/* body: Define el estilo global del cuerpo del documento:
+-font-family: Arial, sans-serif;: Establece la fuente del texto a Arial (o una fuente genérica sans-serif si Arial no está disponible).
+-margin: 0;: Elimina el margen predeterminado alrededor del cuerpo del documento.
+-padding: 20px;: Añade un relleno de 20 píxeles alrededor del contenido del cuerpo.
+*/
+
+.form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* .form: Aplica estilos al contenedor principal del formulario:
+-max-width: 400px;: Establece un ancho máximo de 400 píxeles para el formulario.
+-margin: 0 auto;: Centra el formulario horizontalmente en la página.
+*/
+
+.input-group {
+  margin-bottom: 10px;
+}
+
+/* .input-group: Aplica un margen inferior de 10 píxeles a los grupos de entrada (cada conjunto de etiqueta y cuadro de texto).*/
+
+input[type="text"] {
+  width: 50%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* input[type="text"]: Aplica estilos a todos los cuadros de texto:
+-width: 100%;: Establece el ancho del cuadro de texto al 50% del contenedor padre.
+-padding: 8px;: Añade un relleno de 8 píxeles dentro del cuadro de texto.
+-box-sizing: border-box;: Incluye el relleno y el borde en el ancho total del cuadro de texto, asegurando que no desborde su contenedor.
+*/
+
+.button-group {
+  display: flex;
+  gap: 10px; /* Espacio entre botones */
+}
+
+/* .button-group: Define un contenedor flex para los botones y usa gap para establecer el espacio entre ellos. */
+
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* button: Aplica estilos a todos los botones:
+-padding: 8px 16px;: Añade un relleno de 8 píxeles en la parte superior e inferior, y 16 píxeles en los lados.
+-background-color: #007bff;: Establece el color de fondo del botón a un azul (#007bff).
+-color: #fff;: Establece el color del texto del botón a blanco.
+-border: none;: Elimina cualquier borde predeterminado del botón.
+-cursor: pointer;: Cambia el cursor a una mano cuando el usuario pasa el ratón sobre el botón, indicando que es interactivo.
+*/
+
+.resultado {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+/* .resultado: Aplica estilos a los contenedores que muestran los resultados:
+-margin-top: 20px;: Añade un margen superior de 20 píxeles, separando los resultados de otros elementos por encima.
+-padding: 10px;: Añade un relleno de 10 píxeles dentro del contenedor del resultado.
+-border: 1px solid #ccc;: Añade un borde sólido de 1 píxel de color gris claro (#ccc) alrededor del contenedor del resultado.
+*/

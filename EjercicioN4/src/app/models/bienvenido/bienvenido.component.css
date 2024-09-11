@@ -1,0 +1,33 @@
+.container {
+    max-width: 90%;              /* Usa un porcentaje para hacer que el ancho sea flexible */
+    width: 600px;                /* Ancho máximo en pantallas más grandes */
+    margin: 50px auto;           /* Centra horizontalmente y agrega margen superior */
+    padding: 20px;               /* Espaciado interno */
+    border: 1px solid #ccc;      /* Borde gris claro */
+    border-radius: 10px;         /* Bordes redondeados */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    background-color: #f9f9f9;   /* Color de fondo del contenedor */
+    text-align: center;          /* Centra el texto dentro del contenedor */
+    background-color: rgb(158, 198, 207);
+  }
+  
+  .container .mensaje{
+      background-color: #bda3a3; /* Color de fondo del recuadro */
+      padding: 15px;             /* Espaciado interno del recuadro */
+      border: 1px solid #ccc;     /* Borde gris claro */
+      border-radius: 8px;         /* Bordes redondeados */
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+      max-width: 600px;           /* Ancho máximo del recuadro */
+      margin: 20px 0;             /* Margen superior e inferior */
+      text-align: center;         /* Centrar el texto dentro del recuadro */
+      font-size: 20px;
+  }
+  
+  .container .title {
+      color: rgb(251, 255, 0);
+      font-size: 30px;
+      font-weight: bold;
+  }
+  
+  
+  

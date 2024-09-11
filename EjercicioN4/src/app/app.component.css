@@ -1,0 +1,32 @@
+.title{
+    font-size: 2em;           /* Tamaño de fuente grande para pantallas grandes */
+    color: #b60808;                /* Color del texto */
+    text-align: center;         /* Centrar el texto horizontalmente */
+    margin: 20px 0;             /* Espaciado superior e inferior */
+    line-height: 1.2;           /* Espaciado entre líneas */
+    font-weight: bold;          /* Fuente en negrita */
+  }
+  
+  .botones{
+      text-align: center;         /* Centrar el texto horizontalmente */
+  }
+  
+  .btn{
+    font-size: 20px;            /* Aumenta el tamaño de la fuente */
+    text-align: center;         /* Centrar el texto horizontalmente */
+    padding: 12px 24px;         /* Aumenta el espaciado interno del botón */
+    background-color: #022346;  /* Color de fondo */
+    color: #fff;                /* Color del texto */
+    border-radius: 5px;         /* Ajusta los bordes redondeados */
+    border: color(srgb red green blue);               /* Elimina el borde */
+    cursor: pointer;            /* Cambia el cursor cuando se pasa por encima */
+    margin: 10px;
+  }
+  
+  .btn:hover {
+      background-color: #0056b3; /* Color más oscuro al hacer hover */
+    }
+  
+  .active-route{
+    background-color: aqua;
+  }

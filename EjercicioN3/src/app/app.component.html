@@ -1,0 +1,46 @@
+<!--
+Ejercicio 3:Hacer la navegación de todos los componentes, incluyendo la page de error. 
+-->
+
+<div class="title">
+  <h1>{{title}}</h1>
+</div>
+
+<div class="botones">
+  
+  <button class="btn" routerLink="login" routerLinkActive="active-route">Login</button>
+  <!-- <button class="btn" (click)="goto('login')">Login</button> -->
+  
+  <button class="btn" routerLink="bienvenido" routerLinkActive="active-route">Bienvenido</button>
+  <!-- <button (click)="goto('home')">Home</button> -->
+
+  <button class="btn" routerLink="error" routerLinkActive="active-route">Error</button>
+  <!-- <button class="btn" (click)="goto('error')">Error</button> -->
+
+<div>
+
+
+<!--
+  <div *ngIf="vistaActual == 'login'">
+    <app-login></app-login>
+    <button (click)="login()">Login</button> 
+    <!-- <p>bandera: {{flag}}</p> 
+  </div>
+  
+  <div *ngIf="vistaActual == 'bienvenido'">
+    <app-bienvenido></app-bienvenido>
+    <button (click)="volverAlLogin()">Cerrar sesión</button>
+    <!-- <p>bandera: {{flag}}</p> 
+  </div>
+  
+  <div *ngIf="vistaActual == 'error'">
+    <app-error></app-error>
+    <button (click)="volverAlLogin()">Volver al Login</button>
+    <!-- <p>bandera: {{flag}}</p> 
+  </div>   
+-->
+  
+  
+  
+  
+  <router-outlet />

@@ -1,0 +1,68 @@
+.container {
+    display: flex;   
+    justify-content: center; /* Distribuye los recuadros con espacio entre ellos */
+    align-items:center;     /* Alinea verticalmente los recuadros al centro */
+    gap: 20px;               /* Añade espacio entre los recuadros (opcional) */
+    padding: 10px;
+    margin-top: 100px;
+}
+
+.container .recuadro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra la imagen horizontalmente */
+    align-items: center;
+    text-align: center;  /* Centrar el texto dentro del recuadro */
+    background-image: url("../../../assets/espacio1.png");
+    padding: 15px;             /* Espaciado interno del recuadro */
+    border: 4px groove #755858;     /* Borde gris claro */
+    border-radius: 8px;         /* Bordes redondeados */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    max-width: 800px;           /* Ancho máximo del recuadro */
+    width: 50%;                 /* Ajusta el ancho del recuadro (en porcentaje del contenedor padre) */
+    margin: 50px;             /* Margen superior e inferior */  
+    font-size: 20px;
+    
+}
+  
+
+.container .title {
+    color: rgb(251, 255, 0);
+    font-size: 30px;
+    font-weight: bold;
+    word-wrap: break-word;       /* Ajusta las palabras largas */
+    overflow-wrap: break-word;   /* Evita que el texto largo se salga */
+    max-width: 100%;             /* Evita que el título sea más ancho que el contenedor */
+}
+
+.image-welcome img {
+    max-width: 100%;   /* La imagen ocupará como máximo el 100% del ancho disponible */
+    height: auto;      /* Mantiene la proporción de la imagen */
+    object-fit: contain; /* Asegura que la imagen no se deforme */
+    display: block;     /* Elimina espacios en blanco alrededor de la imagen */
+}
+
+@media (max-width: 768px) {
+    .container .recuadro {
+        max-width: 95%;  /* En pantallas pequeñas, el recuadro ocupará todo el ancho disponible */
+        margin: 20px;     /* Ajusta el margen en pantallas más pequeñas */
+        max-width: none;        /* Quita el ancho máximo para permitir que se expanda más */
+    }
+
+    .container .title {
+        font-size: 24px; /* Reduce el tamaño del texto en pantallas más pequeñas */
+        
+    }
+}
+
+@media (max-width: 480px) {
+    .container .title {
+        font-size: 18px;  /* Aún más pequeño para pantallas muy pequeñas */
+    }
+    .container .recuadro {
+        width: 100%;           /* Ocupa el 100% del ancho de la pantalla */
+        margin: 10px;          /* Reduce el margen en pantallas muy pequeñas */
+    }
+}
+
+ 

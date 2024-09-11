@@ -1,0 +1,71 @@
+.container {
+    display: flex;           /* Activa el modo flexbox */
+    justify-content: space-around; /* Distribuye los recuadros con espacio entre ellos */
+    align-items:stretch;     /* Alinea verticalmente los recuadros al centro */
+    gap: 20px;               /* Añade espacio entre los recuadros (opcional) */
+    padding: 10px;
+    margin: 150px; /* Reduje el margen para que no cause problemas en pantallas más pequeñas */
+    flex-wrap: wrap; /* Permite que los recuadros se muevan hacia abajo si no caben en una fila */
+}
+
+.recuadroDatos, .recuadroJuego {
+    flex-grow: 2;           /* Define cuánto espacio extra tomarán estos recuadros */
+    flex-basis: 0;         
+    border: 1px solid black; /* Bordes para los recuadros */
+    padding: 20px;
+    text-align: center;      /* Centra el texto dentro de cada recuadro */
+    background-color: #f16868;
+    border-radius: 10px;    
+    box-sizing: border-box;  /* Asegura que el padding no afecte el ancho total */  
+    min-width: 250px; /* Asegura que los recuadros tengan un tamaño mínimo en pantallas pequeñas */
+    word-wrap: break-word;  /* Evita que el texto largo se salga del contenedor */
+    
+}
+
+.recuadroFoto {
+    flex-grow: 1;           /* Menor flexibilidad para que sea más pequeño */
+    flex-basis: 0;
+    display: flex;
+    border: 1px solid black; /* Bordes para los recuadros */
+    padding: 20px;
+    text-align: center;      /* Centra el texto dentro de cada recuadro */
+    background-color: #f16868;
+    justify-content: center; /* Centra la imagen horizontalmente */
+    align-items: center;     /* Centra la imagen verticalmente */
+    border-radius: 10px;    
+    box-sizing: border-box;
+    min-width: 200px; /* Establece un tamaño mínimo para que no desaparezca */
+}
+
+.recuadroDatos, .recuadroJuego, .recuadroFoto {
+    width: 80%;  /* Los recuadros ocuparán el ancho completo en pantallas pequeñas */
+    margin-bottom: 20px; /* Añade espacio entre los recuadros */
+}
+
+.foto img {
+    max-width: 100%;   /* Ajusta el tamaño máximo de la imagen para que no sobresalga del contenedor */
+    height: auto; 
+}
+
+h1{
+    color: rgb(37, 31, 31);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra */
+}
+
+p{
+    font-size: 25px;
+    color: white;
+    width: 90%;
+    word-wrap: break-word;  /* Asegura que el texto largo se mantenga dentro del recuadro */
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* En pantallas pequeñas, los recuadros estarán en columna */
+        align-items: center;   /* Centra los recuadros en pantallas pequeñas */
+    }
+
+    .recuadroDatos, .recuadroJuego, .recuadroFoto {
+        width: 100%;          /* Los recuadros ocuparán el 100% del ancho de la pantalla */
+    }
+}

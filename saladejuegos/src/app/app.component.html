@@ -1,0 +1,13 @@
+<header>
+  <img id="logo" [src]="'assets/' + currentIcon" alt="Logo">
+  <nav>
+      <ul >
+        <li><a [routerLink]="['/home']">HOME</a></li>
+        <li><a [routerLink]="['/login']">INICIAR SESION</a></li>
+        <li><a [routerLink]="['/quiensoy']">QUIEN SOY</a></li>
+      </ul>
+  </nav>  
+</header>
+  
+
+<router-outlet />

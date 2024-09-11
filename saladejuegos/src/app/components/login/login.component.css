@@ -1,0 +1,93 @@
+.container {
+    display: flex;           /* Activa el modo flexbox */
+    justify-content: center; /* Distribuye los recuadros con espacio entre ellos */
+    align-items:center;     /* Alinea verticalmente los recuadros al centro */
+    gap: 20px;               /* Añade espacio entre los recuadros (opcional) */
+    padding: 10px;
+    margin-top: 150px;
+}
+
+.container .recuadro{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra la imagen horizontalmente */
+    align-items: center;
+    text-align: center;  /* Centrar el texto dentro del recuadro */
+    background-image: url("../../../assets/espacio.png");
+    padding: 15px;             /* Espaciado interno del recuadro */
+    border: 4px groove #755858;     /* Borde gris claro */
+    border-radius: 8px;         /* Bordes redondeados */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    max-width: 800px;           /* Ancho máximo del recuadro */
+    width: 30%;                 /* Ajusta el ancho del recuadro (en porcentaje del contenedor padre) */
+    margin: 50px auto;             /* Margen superior e inferior */  
+    font-size: 20px;
+}
+
+ 
+.container .recuadro .input-group {
+    display: flex;             /* Uso de flexbox para alinear elementos */
+    align-items: center;       /* Alinea verticalmente en el centro */
+    margin-bottom: 10px;       /* Espacio inferior entre los grupos de entrada */
+    width: 90%;                /* Hace que el grupo de entrada ocupe todo el ancho del recuadro */
+}
+
+
+.input-group label {
+    width: 100px;              /* Ancho fijo para las etiquetas */
+    margin-right: 10px;        /* Espacio entre la etiqueta y el input */
+    font-weight: bold;         /* Negrita para las etiquetas */
+    font-size: 25px;
+    color: azure;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5); /* Sombra de texto */
+}
+
+
+.input-text {
+    flex: 1;                   /* Input se expande para llenar el espacio restante */
+    padding: 8px;              /* Espaciado interno */
+    border: 1px solid #ccc;    /* Borde gris claro */
+    border-radius: 4px;        /* Bordes redondeados */
+    box-sizing: border-box;    /* Incluye padding en el ancho total */
+    width: 90%; 
+}
+  
+.container .recuadro .title{
+    color: rgb(251, 255, 0);
+    font-size: 30px;
+    font-weight: bold;
+    text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5); /* Sombra de texto */
+}
+
+.delete{
+    padding: 8px;              /* Espaciado interno */
+    border: 1px solid #ccc;    /* Borde gris claro */
+    border-radius: 4px;        /* Bordes redondeados */
+    box-sizing: border-box;    /* Incluye padding en el ancho total */
+}
+
+.button-link{
+    width: 100px;  
+    height: 30px;  
+    background-color: red;
+    color: antiquewhite;
+    font-size: large;
+    margin-right: 10px;
+}
+
+.button-registrer{
+    background-color: green;
+    color: antiquewhite;
+    width: 100px;  
+    height: 30px;
+    font-size: large;
+    }
+
+.notification{
+    font-size: 1.5em;  
+    color: red;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;     
+    background-color: #0a0304;
+}
+ 

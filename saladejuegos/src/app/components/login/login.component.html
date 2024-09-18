@@ -1,25 +1,33 @@
-
 <div class="container">
-    <div class="recuadro">
-      <div class="title">
-        <h1>Login</h1>
-      </div>
-      <div class="input-group">
-        <label for="mail">E-mail:</label>
-        <input class="input-text" id="mail" [(ngModel)]="mail">
-      </div>
-      <div class="input-group">
-        <label for="clave">Clave:</label>
-        <input class="input-text" id="clave" [(ngModel)]="password">
-      </div>
-      <div>
-        <button class="button-link" (click)="loguear()">Login</button>
-        <button class="button-registrer" [routerLink]="['/registrar']">Registrate!</button>
-      </div>
-      <div class="notification" style="visibility: hidden;">
-        <button class="delete" (click)="esconderNotificacion()"></button>
-        {{notificacion}}
-      </div>
+    <div class="box-login">
+        <div class="title">
+          <h1>Login</h1>
+        </div>
+        <div class="input-group">
+          <label for="mail">E-mail:</label>
+          <input class="input-text" id="mail" [(ngModel)]="mail">
+        </div>
+        <div class="input-group">
+          <label for="clave">Password:</label>
+          <input class="input-text" type="password" id="clave" [(ngModel)]="password">
+        </div>
+        <div>
+          <button class="button-link" (click)="login()">Login</button>
+          <button class="button-registrer" [routerLink]="['/register']">Registrate!</button>
+        </div>
+  
+        @if (flagError) {
+          <div class="notification" (click)="clearError()">
+            <p>{{notification}}</p>
+          </div>
+        }
+    </div>
+  
+    <div class="seccion-botones">
+        <button class="acceso-rapido" (click)="fillUser1()">USUARIO1</button>
+        <button class="acceso-rapido" (click)="fillUser2()">USUARIO2</button>
+        <button class="acceso-rapido" (click)="fillUser3()">USUARIO3</button>
     </div>
   </div>
   
+    

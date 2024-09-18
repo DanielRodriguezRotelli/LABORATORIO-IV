@@ -1,0 +1,1 @@
+export const environmentConfig = {"projectId":"saladejuegos-aa45d","appId":"1:978479184156:web:c676b26988c0c0e99e62d9","storageBucket":"saladejuegos-aa45d.appspot.com","apiKey":"AIzaSyDwmX3xDIBxZ_hQad1AGQmUPKSL0dW65v4","authDomain":"saladejuegos-aa45d.firebaseapp.com","messagingSenderId":"978479184156","measurementId":"G-86Z081RJN1"};

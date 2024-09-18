@@ -1,0 +1,29 @@
+<div class="container">
+
+    <div class="box-register">
+        <div class="title">
+          <h1>Registrate</h1>
+        </div>
+  
+        <div class="input-group">
+          <label for="mail">E-mail:</label>
+          <input class="input-text" id="mail" [(ngModel)]="mail">
+        </div>
+  
+        <div class="input-group">
+          <label for="clave">Password:</label>
+          <input class="input-text" id="clave" [(ngModel)]="pass">
+        </div>
+  
+        <div>
+          <button class="button-registrer" (click)="register()">Registrar</button>
+        </div>
+        
+        @if (flagError) {
+          <div class="notification" (click)="clearError()">
+            <p>{{notification}}</p>
+          </div>
+        }
+    </div>
+  </div>
+    

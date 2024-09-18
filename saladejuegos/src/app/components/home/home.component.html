@@ -1,12 +1,49 @@
-
-
 <div class="container">
-    <div class="recuadro">
-        <div class="title">
-            <h2 >¡¡¡{{title}}!!!</h2>
-        </div>
-        <div class="image-welcome">
-            <img src="../../../assets/favicon.png" alt="">
-        </div>
+    <div class="title">
+        <h1 class="texto-h1">{{title1}}</h1>
+        <img class="logo" src="../../../assets/logoTipo.png" alt="Logo de la aplicación">
+        <h1 class="texto-h1">{{title2}}</h1>
     </div>
+    @if (this.auth.currentUser?.email) {
+        <div class="image-container">
+            <!-- Imagen 1 -->
+            <div class="image" (click)="goToQuestions()">
+                <img src="../../../assets/questions.png" alt="Componente 1">
+            </div>
+            <!-- Imagen 2 -->
+            <div class="image" (click)="goToGreater()">
+                <img src="../../../assets/grater.png" alt="Componente 2">
+            </div>
+            <!-- Imagen 3 -->
+            <div class="image" (click)="goToHangman()">
+                <img src="../../../assets/hangman.png" alt="Componente 3">
+            </div>
+            <!-- Imagen 4 -->
+            <div class="image" (click)="goToPropio()">
+                <img src="../../../assets/propio.png" alt="Componente 4">
+            </div>
+        </div>
+    }@else {
+        <div class="image-container">
+            <!-- Imagen 1 -->
+            <div class="image" (click)="goToLogin()">
+                <img src="../../../assets/questions.png" alt="Componente 1">
+            </div>
+            <!-- Imagen 2 -->
+            <div class="image" (click)="goToLogin()">
+                <img src="../../../assets/grater.png" alt="Componente 2">
+            </div>
+            <!-- Imagen 3 -->
+            <div class="image" (click)="goToLogin()">
+                <img src="../../../assets/hangman.png" alt="Componente 3">
+            </div>
+            <!-- Imagen 4 -->
+            <div class="image" (click)="goToLogin()">
+                <img src="../../../assets/propio.png" alt="Componente 4">
+            </div>
+        </div>
+    }
 </div>
+
+
+

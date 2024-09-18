@@ -1,5 +1,9 @@
 {
   "projects": {
+    "saladejuegos": "saladejuegos-aa45d",
     "default": "saladejuegos-aa45d"
-  }
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QuiensoyComponent } from './quiensoy.component';
+import { GreaterorlessComponent } from './greaterorless.component';
 
-describe('QuiensoyComponent', () => {
-  let component: QuiensoyComponent;
-  let fixture: ComponentFixture<QuiensoyComponent>;
+describe('GreaterorlessComponent', () => {
+  let component: GreaterorlessComponent;
+  let fixture: ComponentFixture<GreaterorlessComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [QuiensoyComponent]
+      imports: [GreaterorlessComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(QuiensoyComponent);
+    fixture = TestBed.createComponent(GreaterorlessComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

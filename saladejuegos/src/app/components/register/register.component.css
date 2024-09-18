@@ -1,11 +1,13 @@
 .container {
     display: flex;           /* Activa el modo flexbox */
-    flex-direction: column;
-    align-items: center;
+    justify-content: center; /* Distribuye los recuadros con espacio entre ellos */
+    align-items:center;     /* Alinea verticalmente los recuadros al centro */
+    gap: 20px;               /* Añade espacio entre los recuadros (opcional) */
+    padding: 10px;
     margin-top: 150px;
 }
 
-.container .box-login{
+.container .box-register{
     display: flex;
     flex-direction: column;
     justify-content: center; /* Centra la imagen horizontalmente */
@@ -23,7 +25,7 @@
 }
 
  
-.container .box-login .input-group {
+.container .box-register .input-group {
     display: flex;             /* Uso de flexbox para alinear elementos */
     align-items: center;       /* Alinea verticalmente en el centro */
     margin-bottom: 10px;       /* Espacio inferior entre los grupos de entrada */
@@ -50,7 +52,7 @@
     width: 90%; 
 }
   
-.container .box-login .title{
+.container .box-register .title{
     color: rgb(251, 255, 0);
     font-size: 30px;
     font-weight: bold;
@@ -79,29 +81,7 @@
     width: 100px;  
     height: 30px;
     font-size: large;
-}
-
-.seccion-botones {
-    display: flex;  
-    justify-content: center;
-    margin-top: 20px;
-}
-    
-.acceso-rapido {
-    background-color: #4CAF50;
-    color: rgb(255, 255, 255);
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 15px;
-    width: 100px;  
-    height: 30px;
-}
-
-.acceso-rapido:hover {
-    background-color: #45a049;
-}
+    }
 
 .notification{
     font-size: 1.5em;  

@@ -1,0 +1,25 @@
+<div class="container is-flex is-justify-content-center is-align-items-center" style="height: 100vh;">
+    <!-- Contenedor principal centrado y con flexbox -->
+    <div class="card-container box has-background-light" style="padding: 20px; width: 100%; max-width: 1200px;">
+      
+      <!-- Imagen de la carta -->
+      <div class="image-container" style="flex: 1; text-align: center;">
+        <img [src]='image' alt="Imagen" class="card-image">
+      </div>
+  
+      <!-- Botones de juego -->
+      <div id="play-buttons" class="button-group" style="flex: 1; text-align: center;">
+        <button class="button is-primary mx-1" (click)="play('Mayor')">MAYOR</button>
+        <button class="button is-primary mx-1" (click)="play('Menor')">MENOR</button>
+        <button id="start-button" class="button is-link mx-1" (click)="play('Nuevo')">COMENZAR</button>
+      </div>
+  
+      <!-- Puntuación -->
+      <div class="score-container" style="flex: 1; text-align: center;">
+        <p class="title score-title">Puntos</p>
+        <p class="title score-points">{{ points }}</p>
+      </div>
+  
+    </div>
+  </div>
+  

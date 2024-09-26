@@ -1,0 +1,97 @@
+/* Contenedor principal */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Para centrar verticalmente */
+}
+
+/* Contenedor de la tarjeta */
+.card-container {
+  display: flex;
+  flex-direction: row; /* Elementos en la misma línea */
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border: 2px solid #f3c591; /* Recuadro */
+  border-radius: 10px; /* Bordes redondeados */
+  background-color: #07610b; /* Fondo claro */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Imagen */
+.card-image {
+  max-width: 75%;
+  border-radius: 10px; /* Bordes redondeados */
+  border: 2px solid #080808; /* Recuadro */
+  height: auto;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column; /* Colocar botones en columna */
+  align-items: center; /* Centrar horizontalmente */
+}
+
+/* Botones */
+.button-group button {
+  background-color: #ff9800; /* Color naranja llamativo */
+  color: white; /* Texto blanco */
+  font-size: 1.5rem; /* Tamaño de letra más grande */
+  font-family: 'Arial', sans-serif; /* Fuente simple pero clara */
+  padding: 15px 30px; /* Botones más grandes */
+  border-radius: 8px; /* Bordes redondeados */
+  border: 2px solid #e77b15;; /* Sin borde alrededor del botón */
+  cursor: pointer; /* Cursor de puntero al pasar sobre los botones */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Animación suave en hover */
+  margin-bottom: 15px; /* Espacio entre botones */
+}
+
+.button-group button:hover {
+  background-color: #ff5722; /* Cambiar a un tono más oscuro en hover */
+  transform: scale(1.1); /* Agrandar ligeramente al pasar el mouse */
+}
+
+/* Responsive: ajustar tamaño para pantallas pequeñas */
+@media (max-width: 768px) {
+  .card-container {
+    flex-direction: column; /* Cambiar a columna en pantallas pequeñas */
+    text-align: center;
+  }
+
+  .card-image {
+    margin-bottom: 20px;
+  }
+
+  .button-group {
+    margin-bottom: 20px;
+  }
+}
+
+/* Contenedor de la puntuación */
+.score-container {
+  margin-top: 30px;
+  max-width: 75%;
+  border: 2px solid white; /* Borde alrededor del texto */
+  border-radius: 10px; /* Bordes redondeados */
+  background-color: rgba(0, 5, 1, 0.705); /* Fondo oscuro semi-transparente */
+  padding: 15px; /* Espaciado interno para el borde */
+}
+
+/* Título de la puntuación */
+.score-title {
+  font-size: 3rem; /* Tamaño de fuente más grande */
+  color: white; /* Texto en color blanco */
+  font-family: 'Georgia', serif; /* Fuente elegante */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra suave */
+  padding: 10px; /* Espaciado interno para el borde */
+}
+
+/* Estilo específico para el puntaje */
+.score-points {
+  font-size: 4rem; /* Tamaño del puntaje aún más grande */
+  color: white; /* Texto en color blanco */
+  font-family: 'Georgia', serif; /* Fuente elegante */
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); /* Sombra suave */
+  display: inline-block; /* Para que se ajuste al tamaño del contenido */
+}

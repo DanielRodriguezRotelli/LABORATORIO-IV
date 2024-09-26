@@ -4,15 +4,16 @@ import { Router, RouterLink } from '@angular/router';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth, signOut } from '@angular/fire/auth';
 import { LoginComponent } from '../login/login.component';
-import { HangmanComponent } from '../hangman/hangman.component';
-import { QuestionsComponent } from '../questions/questions.component';
+import { HangmanComponent } from '../../modules/games/hangman/hangman.component';
+import { QuestionsComponent } from '../../modules/games/questions/questions.component';
 import { AboutmeComponent } from '../aboutme/aboutme.component';
-import { GreaterorlessComponent } from '../greaterorless/greaterorless.component';
+import { GreaterorlessComponent } from '../../modules/games/greaterorless/greaterorless.component';
+import { GamesModule } from '../../modules/games/games.module';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [LoginComponent, AboutmeComponent, HangmanComponent, GreaterorlessComponent, QuestionsComponent, RouterLink],
+  imports: [GamesModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -55,18 +56,18 @@ export class HomeComponent {
   }
 
   goToQuestions():void{
-    this.router.navigate(['/questions']);
+    this.router.navigate(['/games/questions']);
   }
 
   goToGreater():void{
-    this.router.navigate(['/greater']);
+    this.router.navigate(['/games/greater']);
   }
 
   goToHangman():void{
-    this.router.navigate(['/hangman']);
+    this.router.navigate(['/games/hangman']);
   }
 
   goToPropio():void{
-    this.router.navigate(['/propio']);
+    this.router.navigate(['/games/propio']);
   }
 }

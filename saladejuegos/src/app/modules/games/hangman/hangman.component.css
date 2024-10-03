@@ -2,11 +2,19 @@
 .container {
   display: flex; /* Usar flexbox para centrar el contenido */
   justify-content: center; /* Centra horizontalmente */
+  flex-direction: column;
   align-items: center; /* Centra verticalmente */
-  height: 90vh; /* Ocupa el 50% de la altura de la ventana */
-  width: 90%; /* Ocupar el 80% del ancho de la ventana */
+  height: 85%; /* Ocupa el 50% de la altura de la ventana */
+  width: 85%; /* Ocupar el 80% del ancho de la ventana */
   margin: auto; /* Centra el contenedor */
+  margin-top: 20px; /* Centra el contenedor */
   /*background-color: #fff171; /* Fondo claro */
+  /*border: 2px solid #ffffff; /* Borde azul */
+  border-radius: 10px; /* Esquinas redondeadas */
+  background-image: url('../../../../assets/pizarron.jpg');
+  background-size: contain; /* Asegura que la imagen se vea completa */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-position: center; /* Centra la imagen dentro del contenedor */
 }
 
 /* Estilo para el contenedor del juego */
@@ -14,42 +22,59 @@
   display: flex; /* Asegúrate de que se use flexbox */
   justify-content: space-between; /* Espacia los contenedores equitativamente */
   align-items: center; /* Alinea los elementos verticalmente */
+  margin: auto; /* Espacio entre los contenedores */
+  margin-top: 50px; /* Espacio entre los contenedores */
   padding: 10px; /* Espaciado interno del contenedor del juego */
-  border: 2px solid #252729; /* Borde azul */
+  /*border: 2px solid #252729; /* Borde azul */
   border-radius: 10px; /* Esquinas redondeadas */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  width: 100%; /* Ocupar el 100% del ancho disponible */
-  max-width: 1100px; /* Ancho máximo para el contenedor */
-  height: 500px; /* Ancho máximo para el contenedor */
-  background-color: #1800a1; /* Fondo claro */
+  width: 90%; /* Ocupar el 100% del ancho disponible */
+  height: 60%; /* Ancho máximo para el contenedor */
+  /*background-color: #1800a1; /* Fondo claro */
+  
 }
 
 /* Estilo para contenedor imagen */
 .img-container {
-  flex: 1; /* Permite que cada contenedor ocupe el mismo ancho */
+  display: flex; /* Permite que cada contenedor ocupe el mismo ancho */
   margin: 0 10px; /* Espacio entre los contenedores */
-  height: 500px; /* Ancho máximo para el contenedor */
-  max-width: 400px;
+  height: 95%; /* Ancho máximo para el contenedor */
+  max-width: 30%;
+  /*border: 2px solid #007bff; /* Borde azul */
+}
+
+.word-info-container {
+  display: flex; /* Permite que cada contenedor ocupe el mismo ancho */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 10px; /* Espacio entre los contenedores */
+  width: 75%; /* Ocupar el 100% del ancho disponible */
+  height: 95%; /* Ancho máximo para el contenedor */
   /*border: 2px solid #007bff; /* Borde azul */
 }
 
 .info-container {
-  flex: 2; /* Más pequeño que el teclado */
-  display: flex;
+  display: flex; /* Permite que cada contenedor ocupe el mismo ancho */
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin: 0 10px; /* Espacio entre los contenedores */
+  width: 60%; /* Ocupar el 100% del ancho disponible */
+  height: 95%; /* Ancho máximo para el contenedor */
   /*border: 2px solid #007bff; /* Borde azul */
 }
 
 /* Estilo para contenedor teclado */
 .keyboard-container {
-  flex: 2; /* Permite que cada contenedor ocupe el mismo ancho */
-  margin: 0 10px; /* Espacio entre los contenedores */
-  /*border: 2px solid #007bff; /* Borde azul */
-  height: 500px; /* Ancho máximo para el contenedor */
-  width: 300p;
+  display: flex; /* Permite que cada contenedor ocupe el mismo ancho */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  margin: auto; /* Espacio entre los contenedores */
+  margin-bottom: 80px; /* Espacio entre los contenedores */
+  /*border: 2px solid #462908; /* Borde azul */
+  height: 20%; /* Ancho máximo para el contenedor */
+  width: 60%;
   
 }
 
@@ -61,40 +86,47 @@
   height: 500px; /* Ancho máximo para el contenedor */
 }
 
+
+
 /* Estilo para la cuadrícula del teclado */
 .keyboard-grid {
-  margin-top: 50px;
   display: grid; /* Habilita CSS Grid */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  margin: auto; /* Espacio entre los contenedores */
+  margin-right: 0px; /* Espacio entre los contenedores */
   grid-template-columns: repeat(9, 1fr); /* 9 columnas de igual tamaño */
   grid-template-rows: repeat(3, 1fr); /* 3 filas de igual tamaño */
-  gap: 3px; /* Espacio entre los botones */
+  gap: 0px; /* Espacio entre los botones */
   width: 100%; /* Asegura que ocupe todo el ancho disponible */
   /*border: 2px solid #007bff; /* Borde azul */
-  background-color: #ac9e9e; /* Color de fondo azul */
+  background-color: #265c15; /* Color de fondo azul */
 }
 
 /* Estilo para los botones del teclado */
 .alphabet {
   /*gap: 25px; /* Espaciado interno de los botones */
-  width: 50px; /* Ancho del botón */
+  width: 80px; /* Ancho del botón */
   height: 50px; /* Altura del botón */
-  font-size: 18px; /* Tamaño de fuente ajustado */
+  font-size: 28px; /* Tamaño de fuente ajustado */
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
   text-align: center; /* Centrar el texto */
   background-color: #000000; /* Color de fondo azul */
   color: white; /* Color de texto blanco */
-  border: none; /* Sin borde */
+  border: 1px solid #007bff; /* Borde azul */
   border-radius: 5px; /* Esquinas redondeadas */
   cursor: pointer; /* Cambia el cursor al pasar por encima */
   transition: background-color 0.3s; /* Transición suave */
 }
 
 .alphabet:hover {
-  background-color: #0056b3; /* Color de fondo al pasar el mouse */
+  background-color: #cde01f; /* Color de fondo al pasar el mouse */
 }
 
 /* Estilo para la imagen de vidas */
 .life-image {
-  width: 350px; /* Ajustar tamaño de la imagen de vidas */
+  width: 100%; /* Ajustar tamaño de la imagen de vidas */
   height: auto; /* Mantener proporción */
   border: 2px solid #f18a36; /* Borde azul */
 }
@@ -108,6 +140,7 @@
   text-align: center; /* Alinear el texto al centro */
   margin: 20px 0; /* Espaciado superior e inferior */
   letter-spacing: 5px; /* Espacio entre letras */
+  /*border: 2px solid #007bff; /* Borde azul */
 }
 
 .lifes{
@@ -122,26 +155,26 @@
 
 /* Estilo para la notificación */
 .notification {
-  font-size: 30px; /* Tamaño de la fuente */
-  font-weight: bold; /* Texto en negrita */
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Efecto de relieve */
-  font-family: 'Roboto', sans-serif; /* Cambia la fuente a Roboto */
-  color: #ffffff; /* Color de la fuente */
+  display: flex; /* Usar flexbox para centrar el contenido */
+  justify-content: center; /* Centra horizontalmente */
+  flex-direction: column;
+  align-items: center; /* Centra verticalmente */
   background-color: #ff0000; /* Color de fondo */
   text-align: center; /* Alinear el texto al centro */
-  padding: 20px; /* Espacio interno para el contenido */
-  margin-top: 30px; /* Espaciado superior */
+  padding: 10px; /* Espacio interno para el contenido */
+  margin: auto; /* Espaciado superior */
   letter-spacing: 5px; /* Espacio entre letras */
   border-radius: 10px; /* Esquinas redondeadas */
 }
 
 /* Estilo para el mensaje dentro de la notificación */
 .notification-message {
+  font-size: 30px; /* Tamaño de la fuente */
+  font-weight: bold; /* Texto en negrita */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Efecto de relieve */
+  font-family: 'Roboto', sans-serif; /* Cambia la fuente a Roboto */
+  color: #ffffff; /* Color de la fuente */
   margin-bottom: 10px; /* Espaciado entre el mensaje y el botón */
-}
-
-.notification.show {
-  display: block; /* Mostrar la notificación cuando sea necesario */
 }
 
 .score-title {
@@ -152,9 +185,10 @@
   color: #ffffff; /* Color de la fuente */
   text-align: center; /* Alinear el texto al centro */
   margin-top: 20px; /* Espaciado superior e inferior */
+  /*border: 2px solid #007bff; /* Borde azul */
 }
 
-button.reboot {
+button.restart {
   background-color: #ffffff; /* Color de fondo blanco para el botón */
   color: #007bff; /* Color de texto azul */
   border: 2px solid #007bff; /* Borde azul */
@@ -165,18 +199,27 @@ button.reboot {
   transition: background-color 0.3s, color 0.3s; /* Transición suave para el fondo y color */
 }
 
-button.reboot:hover {
+button.restart:hover {
   background-color: #05090c; /* Color de fondo azul al pasar el mouse */
   color: white; /* Cambiar color de texto a blanco al pasar el mouse */
 }
 
-.button-next{
-  background-color: #429c39; /* Color de fondo blanco para el botón */
-  color: #e4e9ee; /* Color de texto azul */
-  border: 2px solid #031f02; /* Borde azul */
-  border-radius: 5px; /* Esquinas redondeadas */
-  padding: 10px 20px; /* Espaciado interno */
-  font-size: 20px; /* Tamaño de la fuente del botón */
-  cursor: pointer; /* Cambia el cursor al pasar por encima */
-  transition: background-color 0.3s, color 0.3s; /* Transición suave para el fondo y color */
+button.button-next{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto; /* Centrar horizontalmente */
+  padding: 15px 30px; /* Tamaño del botón */
+  font-size: 24px; /* Tamaño de la fuente */
+  background-color: #4CAF50; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none; /* Sin borde */
+  border-radius: 8px; /* Bordes redondeados */
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+button.button-next:hover {
+  background-color: #05090c; /* Color de fondo azul al pasar el mouse */
+  color: white; /* Cambiar color de texto a blanco al pasar el mouse */
 }

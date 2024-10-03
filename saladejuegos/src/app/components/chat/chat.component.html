@@ -1,1 +1,25 @@
-<p>chat works!</p>
+<div  *ngIf="this.auth.currentUser && !showChat" class="chaticonContainer" (click)="showChat=true">
+  <img src="https://cdn-icons-png.flaticon.com/512/61/61516.png" class="chatIcon" alt="chatIcon">
+</div>
+
+<div class="card-container" *ngIf="this.auth.currentUser && showChat">
+  <div class="card-header">
+    <p class="text-header">EN LINEA</p>
+   <div class="closeIcon" (click)="showChat=false"> X </div>
+  </div>
+
+  <div class="card-body">
+    <div #chatContainer id="messageContainer" class="messages h-100">
+        <div *ngFor="let message of chat" class="msj" [ngClass]="(user===message.user) ? 'message-user' : 'message-other'">
+          <p *ngIf="user !== message.user" class="user-message"><strong>{{message.user}}</strong></p>
+          <p class="text-message">{{message.text}}</p>
+          <p class="time-message">{{getLocaleString(message.timestamp)}}</p>
+        </div>
+    </div>
+  </div>
+
+  <div class="card-footer">
+      <input class="message-input" [(ngModel)]="newMessage" placeholder="Escribe un mensaje...">
+      <button class="send-btn" (click)="sendMessage()">Enviar</button>
+  </div>
+</div>

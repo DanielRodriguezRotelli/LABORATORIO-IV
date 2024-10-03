@@ -13,6 +13,9 @@ export class AboutmeComponent {
    link: string = "https://www.linkedin.com/in/danielrodríguezrotelli";
    title1: string = "Profesor de Musica - EMPA";
    title2: string = "Estudiante de Programación - UTN";
-   Description1: string ="Docente de Música en escuelas secundarias. Músico sesionista. Arreglador musical.";
-   Description2: string ="Buscando y descubriendo nuevos rumbos. Compromiso y dedicación para aprender y adaptarme a nuevos desafíos.";
+   description1: string ="Docente de Música en escuelas secundarias. Músico sesionista. Arreglador musical.";
+   description2: string ="Buscando y descubriendo nuevos rumbos. Compromiso y dedicación para aprender y adaptarme a nuevos desafíos.";
+
+   gameName: string = "Batalla Naval";
+   description3: string = "";
 }

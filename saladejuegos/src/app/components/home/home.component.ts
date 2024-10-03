@@ -67,7 +67,7 @@ export class HomeComponent {
     this.router.navigate(['/games/hangman']);
   }
 
-  goToPropio():void{
-    this.router.navigate(['/games/propio']);
+  goToBattleship():void{
+    this.router.navigate(['/games/battleship']);
   }
 }

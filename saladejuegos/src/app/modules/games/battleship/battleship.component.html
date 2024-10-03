@@ -1,0 +1,102 @@
+<!--
+<div *ngIf="showEndGameMessage" class="end-game-message-container">
+  <div class="end-game-message">
+      <p>{{ endGameMessage }}</p>
+      <p>Has respondido todas las preguntas</p>
+      <p>Acertaste {{ userScore }} de {{ totalQuestions }}.</p>
+  </div>
+  <button class="restart-btn is-success" (click)="resetGame()">Reiniciar Juego</button>
+</div>
+
+<div *ngIf="!showEndGameMessage" class="container">
+-->
+<div class="container">
+  <div class="pricipal-title">
+    <h1>BATALLA NAVAL</h1>
+  </div>
+
+  <div class="battleship-game">
+    <!-- Panel de información o ganador-->
+    <div class="info-panel">
+
+      <!-- Mensaje de victoria -->
+      <div *ngIf="playerShipsFloat === 0 || opponentShipsFloat === 0" class="notification-winner">
+        <p>{{wingMessage}}</p>
+      </div>
+
+      <!-- Si todavia no hay ganador... muestra informacion del juego -->
+      <div *ngIf="playerShipsFloat > 0 && opponentShipsFloat > 0" class="info-game">
+        <p>Barcos restantes del jugador: {{ playerShipsFloat }}</p>
+        <p>Turno: {{ currentPlayer }}</p>
+        <p>Barcos restantes del oponente: {{ opponentShipsFloat }}</p>
+      </div>
+
+    </div>
+
+    
+    <!-- Tablero del jugadores -->
+    <div class="board-message">
+      <div class="player1">
+        <span>{{player1}}:</span>>
+        <span *ngIf="currentPlayer === this.player1"> {{ attackMessage }}</span>
+      </div>
+
+      <div class="computer">
+        <span>RIVAL: </span>
+        <span *ngIf="currentPlayer === 'computer'"> {{ attackMessage }}</span>
+      </div>
+    </div>
+  
+    <!-- Contenedor de los tableros -->
+    <div class="boards-container">
+      <!-- Tablero del jugador -->
+      <div class="player-board-container">
+        <div class="grid">
+          <div *ngFor="let row of playerBoard; let i = index" class="row">
+            <div *ngFor="let cell of row; let j = index" 
+                  class="cell"
+                  [ngClass]="{'ship':cell.hasShip ,'hit': cell.isHit && cell.hasShip, 'miss': cell.isHit && !cell.hasShip}">             
+
+              <!-- Mostrar 'X' con la coordenada si la celda ha sido golpeada y tiene un barco -->
+              <p *ngIf="cell.isHit && cell.hasShip">X</p>
+
+              <!-- Mostrar '0' si la celda ha sido golpeada y NO tiene un barco -->
+              <p *ngIf="cell.isHit && !cell.hasShip">O</p>
+
+              <!-- Mostrar la coordenada si la celda NO ha sido golpeada -->
+              <p *ngIf="!cell.isHit">{{ getCoordinate(i, j) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Tablero de la computadora -->
+      <div class="computer-board-container">
+        <div class="grid">
+          <div *ngFor="let row of opponentBoard; let i = index" class="row">
+            <div *ngFor="let cell of row; let j = index" 
+              class="cell"
+              [ngClass]="{'ship':cell.hasShip, 'hit': cell.isHit && cell.hasShip, 'miss': cell.isHit && !cell.hasShip}"
+              (click)="selectCell(i, j, 'computer')">
+
+              <!-- Mostrar solo las coordenadas si la celda no ha sido golpeada -->
+              <p *ngIf="cell.isHit && cell.hasShip">X</p>
+
+              <!-- Mostrar '0' si la celda ha sido golpeada y NO tiene un barco -->
+              <p *ngIf="cell.isHit && !cell.hasShip">0</p>
+
+              <!-- Mostrar la coordenada si la celda NO ha sido golpeada -->
+              <p *ngIf="!cell.isHit">{{ getCoordinate(i, j) }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de reinicio -->
+     <img src="../../../../assets/botonRojo.png" alt="" (click)="restartGame()" class="restart-btn">
+  </div>
+</div>
+
+
+

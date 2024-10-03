@@ -1,2 +1,44 @@
-<h1 class="title">¡¡¡¡ PREGUNTADOS !!!!</h1>
+<div *ngIf="showEndGameMessage" class="end-game-message-container">
+    <div class="end-game-message">
+        <p>{{ endGameMessage }}</p>
+        <p>Has respondido todas las preguntas</p>
+        <p>Acertaste {{ userScore }} de {{ totalQuestions }}.</p>
+    </div>
+    <button class="restart-btn is-success" (click)="resetGame()">Reiniciar Juego</button>
+</div>
+
+<div *ngIf="!showEndGameMessage" class="container">
+
+    <div class="pricipal-title">
+        <h1>Identifique el país por la bandera</h1>
+    </div>
+
+    <div class="questions-container is-dark text-center main-container flag-quiz">
+        <!-- Primer contenedor: muestra la bandera y las respuestas contestadas -->
+        <div class="flag-container">
+            <img class="flag" [src]="flagUrl" alt="Flag" />
+            <p>{{ questionsAnswered }} / {{totalQuestions}}</p>
+        </div>
+
+        <!-- Segundo contenedor: muestra la pregunta y las opciones de respuestas -->
+        <div class="question-options-container">
+            <p class="title-options">ELIJA EL PAIS</p>
+            <div class="options">
+              <div *ngFor="let option of options; let i = index">
+                <a class="nes-btn is-warning" (click)="checkAnswer(i)">{{ option }}</a>
+              </div>
+            </div>
+        </div>
+    
+        <!-- Tercer contenedor: muestra el puntaje del jugador -->
+        <div class="score-container">
+            <p>Aciertos: <span class="score-text is-success">{{ userScore }}</span></p>
+            <p>Desaciertos: <span class="unscore-text is-success">{{ userMistakes }}</span></p>
+            <p>TOTAL: <span class="total-score-text is-success">{{ questionsAnswered }}</span></p>
+        </div>
+
+    </div>
+
+</div>
+
 

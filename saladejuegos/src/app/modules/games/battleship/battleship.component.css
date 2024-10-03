@@ -1,0 +1,219 @@
+.pricipal-title{
+  display: flex;
+  width: 100%;
+  height: 12%;
+  align-items: center;
+  justify-content: center; 
+  font-size: 30px;
+  border: 2px solid #7bf89a; /* Borde azul */
+  /*border-radius: 10px; /* Esquinas redondeadas */
+  background-color: black;
+  background-image: url('../../../../assets/radar.jpg');
+  background-size: contain; /* Asegura que la imagen se vea completa */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  color: rgb(13, 219, 226);
+  -webkit-text-stroke: 1px rgb(255, 255, 255); /* Contorno */
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); /* Sombra */
+
+    
+}
+
+.container {
+  display: flex;
+  flex-direction: column; /* Mantiene los elementos dentro del contenedor en una columna */
+  align-items: center; /* Centra horizontalmente el contenido interno del contenedor */
+  justify-content: flex-start; /* Centra verticalmente el contenido dentro del contenedor */
+  height: 90vh; /* Ocupa el 90% de la altura de la ventana */
+  width: 95%; /* Ocupa el 90% del ancho de la ventana */
+  margin: auto; /* Centra horizontalmente el contenedor en la página */
+  margin-top: 10px; 
+  /*border: 2px solid #ffffff; /* Borde azul */
+  border-radius: 10px; /* Esquinas redondeadas */
+  /*background-color: #fff171; /* Fondo claro */
+}
+
+
+/* Estilo para el contenedor principal del juego */
+.battleship-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Arial', sans-serif;
+  border: 2px solid #7bf89a; /* Borde azul */
+  /*border-radius: 10px; /* Esquinas redondeadas */
+  /*background-color: #ebc20c;*/
+  background-image: url('../../../../assets/tableroManejo.jpg');
+  background-size: contain; /* Asegura que la imagen se vea completa */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+  /*padding: 10px;*/
+
+  height: 100%; 
+  width: 100%; 
+
+}
+
+
+/* Panel de información del juego */
+.info-panel {
+  display: flex;
+  flex-direction: row; /* Asegurar que los elementos estén en fila */
+  justify-content: space-around; /* Distribuir los elementos de manera uniforme */
+  align-items: center; /* Centrar los elementos verticalmente */
+  padding: 10px;
+  border: 2px solid #252729; /* Borde azul */
+  border-radius: 10px; /* Esquinas redondeadas */
+  background-color: #1b0202;
+  border-radius: 10px;
+  margin-top: 10px;
+  height: auto; /* Ocupa el 90% de la altura de la ventana */
+  width: 60%; 
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.info-panel p {
+  margin: 0 15px; /* Separar ligeramente los párrafos */
+  font-size: 20px;
+  font: bold;
+  color: rgb(16, 216, 149);
+  
+}
+
+.info-game{
+  display: flex;
+  flex-direction: row; /* Asegurar que los elementos estén en fila */
+  justify-content: space-between; /* Distribuir los elementos de manera uniforme */
+  align-items: center; /* Centrar los elementos verticalmente */
+  width: 100%; /* Ocupar todo el ancho disponible */
+  
+}
+
+
+
+/* Contenedor para ambos tableros */
+.boards-container {
+  display: flex; /* Asegúrate de que se use flexbox */
+  justify-content: space-around; /* Espacia los contenedores equitativamente */
+  align-items: center; /* Alinea los elementos verticalmente */
+  padding: 0px; /* Espaciado interno del contenedor del juego */
+  border: 2px solid #252729; /* Borde azul */
+  border-radius: 10px; /* Esquinas redondeadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  width: 60%; /* Ocupar el 100% del ancho disponible */
+  height: 65%; /* Ancho máximo para el contenedor */
+  background-color: #76e2d9; /* Fondo claro */
+  background-image: url('../../../../assets/Manejo.jpg');
+  background-size: contain; /* Asegura que la imagen se vea completa */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  background-position: center; /* Centra la imagen dentro del contenedor */
+}
+
+
+/* Contenedor para cada tablero (jugador y computadora) */
+.player-board-container, .computer-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  background-color: transparent;
+}
+
+/* Estilo general de la cuadrícula */
+.boards-container .grid {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  grid-template-rows: repeat(10, 40px); 
+  gap: 5px; /* Espaciado entre celdas, tanto horizontal como vertical */
+  padding: 1px;
+  /*border: 2px solid #252729; /* Borde azul */
+  border-radius: 10px; /* Esquinas redondeadas */
+}
+
+/* Estilo para las celdas de la cuadrícula */
+.cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #ffffff;
+  border: 1px solid #0019fd; /* Borde azul */
+  transition: background-color 0.3s ease;
+  margin-bottom: 2px; /* Margen temporal para pruebas */
+}
+
+.cell:hover {
+  background-color: #ddd;
+}
+
+/* Estilo para celdas que tienen un barco */
+.cell.ship {
+  background-color: #ffffff; /* Gris para barcos */
+}
+
+/* Estilo para celdas que han sido golpeadas */
+.cell.hit {
+  background-color: red !important; /* Color para indicar un golpe exitoso */
+  color: white;
+}
+
+/* Estilo para celdas fallidas */
+.cell.miss {
+  background-color: blue !important; /* Color para indicar un disparo fallido */
+  color: white;
+}
+
+
+/* Botón de reinicio */
+.restart-btn {
+  width: 100px;  /* Asegúrate de que el ancho y alto sean iguales */
+  height: 100px;
+  border-radius: 50%;  /* Esto hace que la imagen sea circular */
+  object-fit: cover;   /* Esto asegura que la imagen se ajuste dentro del contenedor */
+  border: 2px solid #000000; /* Borde azul */
+}
+
+.restart-btn:hover {
+  background-color: #0056b3;
+}
+
+
+.win-message {
+  margin: 20px;
+  color: green;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.board-message {
+  display: flex;
+  justify-content: space-around; /* Distribuir los elementos de manera uniforme */
+  align-items: center; /* Centrar los elementos verticalmente */
+  /*padding: 10px;*/
+  border: 2px solid #252729; /* Borde azul */
+  border-radius: 10px; /* Esquinas redondeadas */
+  background-image: url('../../../../assets/panelTaablero.jpg');
+  border-radius: 10px;
+  height: 6%; /* Ocupa el 90% de la altura de la ventana */
+  width: 60%; 
+}
+
+.board-message span{
+  font-size: 35px;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  -webkit-text-stroke: 1px rgb(0, 0, 0); /* Contorno */
+  text-shadow: 2px 2px 4px rgba(133, 133, 133, 0.5); /* Sombra */
+}
+
+.player1 .computer{
+  display: flex; /* Asegúrate de que se use flexbox */
+  justify-content: space-around; /* Espacia los contenedores equitativamente */
+  align-items: center; /* Alinea los elementos verticalmente */
+}

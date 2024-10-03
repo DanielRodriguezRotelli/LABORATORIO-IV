@@ -1,39 +1,48 @@
 
 <div class="container">
+
+    <!-- Primer contenedor: Imagen , palabra e info (horizontal)-->
     <div class="hangman-container has-text-centered mt-6 is-flex is-align-items-center">
         
-        <!-- Primer contenedor: Imagen y palabra a descubrir -->
+        <!-- contenedor: Imagen -->
         <div class="img-container is-flex is-flex-direction-column is-align-items-center" style="flex: 1; margin-right: 20px;">
             <img src="../../../../assets/{{attempts}}-vida.png" alt="Imagen" class="life-image"/>
-            <p class="hidden-word">{{ getDisplayWord() }}</p>
         </div>
         
-        <!-- Segundo contenedor: Teclado y vidas -->
-        <div class="keyboard-container is-flex is-flex-direction-column is-align-items-center" style="flex: 1;">
-            <!-- Teclado (solo visible si attempts > 0) -->
-            <div id="alphabet-container" class="keyboard-grid" *ngIf="attempts > 0">
-                <button *ngFor="let letter of alphabet" (click)="guessLetter(letter)" id="letter-{{ letter }}" class="alphabet">
-                    {{ letter }}
-                </button>
-            </div>
-            <!-- Notificación de Game Over (solo visible si attempts === 0) -->
-            <div *ngIf="showNotification" class="notification show">
-                <div class="notification-message">
-                    GAME OVER
-                    <br>
-                    Descubriste {{rightWordsCounter}} palabras.
-                </div>
-                <button class="reboot" (click)="hideNotification()">REINICIAR</button>
-            </div>
+        <!-- contenedor: Palabra e Info (columna) -->
+        <div class="word-info-container is-flex is-flex-direction-column is-align-items-center" style="flex: 1;">
+
             <div class="info-container">
-                <p class="lifes">Vidas: {{ attempts }}</p>
+                <p class="lifes">Vidas: {{ lifes }}</p>
+                <p class="lifes">Intentos: {{ attempts }}</p>
                 <p class="score-title">Puntos: {{ points }}</p>
-              </div>
+            </div>
+            <p class="hidden-word">{{ getDisplayWord() }}</p>
+        </div>
+    </div>
+
+     <!-- Segundo contenedor: Teclado -->
+     <div class="keyboard-container" style="flex: 1;">
+       
+        <!-- Notificación de Game Over (solo visible si attempts === 0) -->
+        <div *ngIf="showNotification" class="notification">
+            <div class="notification-message">
+                GAME OVER
+                <br>
+                Descubriste {{rightWordsCounter}} palabras.
+            </div>
+            <button class="restart" (click)="hideNotification()">REINICIAR</button>
         </div>
 
         <!-- Botón SIGUIENTE -->
-        <button *ngIf="showNextButton" class="button-next is-primary mb-6" (click)="nextClick()">SIGUIENTE</button>
-
+        <button *ngIf="showNextButton" class="button-next" (click)="nextClick()">SIGUIENTE</button>
+       
+        <!-- Teclado (solo visible si attempts > 0) -->
+        <div id="alphabet-container" class="keyboard-grid" *ngIf="attempts > 0">
+            <button *ngFor="let letter of alphabet" (click)="guessLetter(letter)" id="letter-{{ letter }}" class="alphabet">
+                {{ letter }}
+            </button>
+        </div>
     </div>
 </div>
 

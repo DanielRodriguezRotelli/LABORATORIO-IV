@@ -4,13 +4,14 @@ import { LoginComponent } from "./components/login/login.component";
 import { Auth, signOut, User } from '@angular/fire/auth';
 import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { ChatComponent } from "./components/chat/chat.component";
 
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, LoginComponent, CommonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, LoginComponent, CommonModule, ChatComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

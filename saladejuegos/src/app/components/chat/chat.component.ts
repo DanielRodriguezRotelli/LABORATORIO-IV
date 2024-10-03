@@ -1,12 +1,87 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input, AfterContentChecked, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Message } from '../../models/message';
+import { addDoc, collection, collectionData, Firestore } from  '@angular/fire/firestore';
+import { Timestamp, orderBy, query } from 'firebase/firestore';
+import { Auth } from '@angular/fire/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.css'
+  styleUrl: './chat.component.scss'
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit, AfterViewChecked {
+ 
+  @ViewChild('chatContainer') chatContainer!: ElementRef; // Asegúrate de que esto sea correcto
+  @ViewChild('messageContainer') messageContainer!: ElementRef; // Referencia al contenedor de mensajes
+  public chat: Message[] = [];
+  newMessage: string = '';
+  user: string = "";
+  dateOptions : Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit'};
+  showChat: boolean = false; // Estado del chat (minimizado o no)
 
+  constructor(private firestore: Firestore,
+              public auth: Auth){}
+
+  ngOnInit(): void {
+    // Escuchar los cambios en el estado de autenticación
+    onAuthStateChanged(this.auth, (user) => {
+      this.user = user?.email || 'usuario desconocido'; // Asigna el correo del usuario o 'usuario desconocido'
+    });
+    this.getData();
+  }
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom(); // Asegurarse de hacer scroll cuando cambia la vista
+  }
+
+  sendMessage() {
+    if (this.newMessage ==="") {
+      return;
+    }
+    if (this.auth.currentUser) { // Verifica si el usuario está logueado
+      const message: Message = {
+        user: this.user,
+        text: this.newMessage,
+        timestamp: Timestamp.fromDate(new Date)
+      };
+      let col = collection(this.firestore, 'chat');
+      addDoc(col, message)
+      this.newMessage = '';
+ 
+    }
+  }
+
+  getData(){
+    let col = collection(this.firestore, 'chat');
+      
+    const orderQuery = query(col,orderBy('timestamp','asc'));
+
+    const observable = collectionData(orderQuery);
+
+    observable.subscribe((respuesta:any) => {
+
+      this.chat = respuesta;
+    })
+  }
+
+  scrollToBottom(): void {
+    setTimeout(() => {
+      if (this.chatContainer) {
+        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      }
+    }, 0);
+  }
+
+  getLocaleString(date: Timestamp){
+    return new Date(date.seconds*1000).toLocaleString('es-AR', this.dateOptions);
+  }
+
+
+  
 }

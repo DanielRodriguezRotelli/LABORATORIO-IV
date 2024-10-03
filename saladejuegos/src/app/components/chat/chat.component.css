@@ -1,0 +1,168 @@
+.card-container {
+    width: 300px;
+    height: 450px;
+    border: 2px solid #0e0808;
+    position: fixed;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    /*padding: 10px;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* Borde gris claro */
+}
+
+.card-header{
+    display: flex;               /* Activa Flexbox */
+    justify-content: space-between;      /* Centra el contenido horizontalmente */
+    align-items: center;       
+    background-color: rgb(7, 83, 20);
+    color: white;
+    height: 50px;
+    padding: 0 10px;  /* Espaciado en los lados */
+}
+
+.card-body {
+    height: 350px;
+    background-image: url('../../../assets/fondo-chat.png');
+    display: flex;
+    flex-direction: column;
+}
+
+.card-footer {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(7, 83, 20);
+}
+
+.messages {
+    overflow-y: auto;
+    max-height: 100%;
+    font-family: Helvetica;
+    padding: 0.3rem;
+    flex-grow: 1;
+}
+
+.msj {
+    margin-top: 0; /* Espacio entre mensajes */
+    margin-bottom: 0; /* Espacio entre mensajes */
+}
+
+.text-header{
+    font-size: 20px; 
+}
+
+.message-input {
+    width: 450px;
+    
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.send-btn {
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #9dff00;
+    color: rgb(223, 77, 9);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.send-btn:hover {
+    background-color: #7db300; /* Cambia de color cuando pasas el cursor */
+}
+
+
+input {
+    flex-grow: 1;
+    margin-right: 10px;
+}  
+
+.message-user {
+    text-align: left;
+    background-color: #085c1a;
+    color: rgb(255, 255, 255);
+    margin-left: 20%;
+    padding: 1px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.message-other {
+    text-align: left;
+    background-color: #1a1b1d;
+    color: rgb(255, 255, 255);
+    margin-right: 20%;
+    padding: 1px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.message-other .user-message{
+    color: #bd0e0e;
+    font-weight: bold;  /* Negrita */
+    font-size: 0.85rem;
+    margin-bottom: 0.1rem; /* Reduce el espacio entre el nombre y el texto */
+}
+
+.message-user .user-message{
+    color: #e6b512;
+    font-weight: bold;  /* Negrita */
+    font-size: 0.85rem;
+    margin-bottom: 0.1rem; /* Reduce el espacio entre el nombre y el texto */
+}
+
+
+/* Estilo del texto del mensaje */
+.text-message {
+    font-size: 1rem;   /* Tamaño estándar del mensaje */
+    margin-top: 0;          /* Elimina cualquier margen superior */
+    margin-bottom: 0.2rem;  /* Añade un pequeño margen inferior si es necesario */
+    line-height: 1.4;  /* Ajusta el espacio entre líneas si es necesario */
+}
+
+/* Estilo del tiempo del mensaje */
+.time-message {
+    font-size: 0.5rem;  /* La mitad del tamaño del texto del mensaje */
+    color: #999;        /* Color gris claro */
+    margin-top: 0.2rem;
+    text-align: right;  /* Alinea el tiempo a la derecha */
+}
+
+.chaticonContainer{
+    position: fixed;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    background-color: grey;
+    border-radius: 100%;
+    box-shadow: 0 0 10px 2px green;
+
+}
+
+.chatIcon{
+    width: 40px;
+    height: 40px;
+    color: green;
+}
+
+.closeIcon{
+    size: 40px;
+    position: absolute;
+    right: 0.5rem;
+    border-radius: 100%;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+}

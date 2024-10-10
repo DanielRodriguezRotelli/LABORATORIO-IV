@@ -1,0 +1,88 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f4f4f9;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    text-align: center;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.8em;
+  }
+  
+  table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  thead {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  thead th {
+    padding: 12px;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.1em;
+  }
+
+  thead th:first-child {
+    text-align: left; /* Usuario a la izquierda */
+  }
+
+  thead th:nth-child(2), thead th:nth-child(3) {
+    text-align: center; /* Juego y Puntaje al centro */
+  }
+
+  thead th:nth-child(2) {
+    padding-right: 200px; /* Aumenta la separación entre Juego y Puntaje */
+  }
+  
+  thead th:last-child {
+    text-align: right; /* Fecha a la derecha */
+  }
+  
+  
+  
+  tbody tr {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  td {
+    padding: 12px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+
+  td:nth-child(2) {
+    text-align: center;
+    padding-right: 180px; /* Aumenta el espacio entre Juego y Puntaje en el cuerpo de la tabla */
+  }
+  
+  
+  td:nth-child(3) {
+    text-align: center; /* Centrar la columna de puntaje */
+  }
+  
+  td:nth-child(4) {
+    text-align: right; /* Alinear la columna de fecha a la derecha */
+  }
+  
+  p {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2em;
+    color: #666;
+    margin-top: 20px;
+  }

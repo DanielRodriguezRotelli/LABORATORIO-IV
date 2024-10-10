@@ -6,6 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { QuestionsComponent } from './questions/questions.component';
 import { GreaterorlessComponent } from './greaterorless/greaterorless.component';
 import { BattleshipComponent } from './battleship/battleship.component';
+import { FormsModule } from '@angular/forms';
+import { Firestore } from '@angular/fire/firestore';
 
 
 
@@ -15,7 +17,8 @@ import { BattleshipComponent } from './battleship/battleship.component';
   imports: [
     CommonModule,
     GamesRoutingModule,
-    HttpClientModule
+    FormsModule,
+    HttpClientModule, 
   ]
 })
 export class GamesModule { }

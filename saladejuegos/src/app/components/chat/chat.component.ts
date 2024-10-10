@@ -22,8 +22,17 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   public chat: Message[] = [];
   newMessage: string = '';
   user: string = "";
-  dateOptions : Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit'};
+  dateOptions : Intl.DateTimeFormatOptions = { 
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  
   showChat: boolean = false; // Estado del chat (minimizado o no)
+  private openedChat: boolean = false; // Nuevo estado para saber si el chat acaba de abrirse
+  isAtBottom: boolean = true; // Estado para verificar si el usuario está en la parte inferior
 
   constructor(private firestore: Firestore,
               public auth: Auth){}
@@ -37,7 +46,9 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.scrollToBottom(); // Asegurarse de hacer scroll cuando cambia la vista
+    if (this.showChat && this.isAtBottom) {
+      this.scrollToBottom(); // Asegurarse de hacer scroll cuando cambia la vista
+    }
   }
 
   sendMessage() {
@@ -67,21 +78,42 @@ export class ChatComponent implements OnInit, AfterViewChecked {
     observable.subscribe((respuesta:any) => {
 
       this.chat = respuesta;
-    })
+      if (this.showChat && this.isAtBottom) {
+        this.scrollToBottom(); // Hacer scroll hacia abajo cuando llegan nuevos mensajes
+      }
+    });
   }
 
   scrollToBottom(): void {
-    setTimeout(() => {
-      if (this.chatContainer) {
-        this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-      }
-    }, 0);
+    if (this.messageContainer && this.messageContainer.nativeElement) {
+      setTimeout(() => {
+        this.messageContainer.nativeElement.scrollTop = this.messageContainer.nativeElement.scrollHeight;
+      }, 100); // Un pequeño retardo para asegurar que el DOM está actualizado
+    }
   }
+
+  onScroll(event: Event): void {
+    const target = event.target as HTMLElement;
+    // Verificar si el usuario está en la parte inferior
+    this.isAtBottom = target.scrollHeight - target.scrollTop === target.clientHeight;
+  }
+
+  // Método que se ejecuta cuando el chat se abre
+  openChat(): void {
+    this.showChat = true;
+    setTimeout(() => {
+      this.scrollToBottom(); // Desplazar al mensaje más reciente al abrir el chat
+    }, 100); // Un pequeño retardo para asegurar que el DOM está actualizado
+  }
+/*
+  isUserAtBottom(): boolean {
+    const threshold = 150;
+    const position = this.messageContainer.nativeElement.scrollTop + this.messageContainer.nativeElement.clientHeight;
+    const height = this.messageContainer.nativeElement.scrollHeight;
+    return position >= height - threshold;
+  }*/
 
   getLocaleString(date: Timestamp){
     return new Date(date.seconds*1000).toLocaleString('es-AR', this.dateOptions);
-  }
-
-
-  
+  }  
 }

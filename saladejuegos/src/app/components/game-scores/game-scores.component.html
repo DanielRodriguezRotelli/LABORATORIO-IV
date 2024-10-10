@@ -1,0 +1,34 @@
+
+<div class="container">
+    <!-- Si hay resultados, se muestra la tabla -->
+    <div *ngIf="listScore.length > 0">
+      <div class="principal-title">
+        <h2>Listado de Resultados</h2>
+      </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Juego</th>
+              <th>Puntaje</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let elements of listScore">
+               <!-- Cada fila de la tabla muestra los datos correspondientes -->
+              <td>{{ elements.userName }}</td>
+              <td>{{ elements.gameName }}</td>
+              <td>{{ elements.score }}</td>
+              <td>{{ getLocaleString(elements.date) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- Si no hay resultados, muestra un mensaje -->
+      <div *ngIf="listScore.length === 0">
+        <p>No hay resultados aún.</p>
+      </div>
+  
+  </div>
+  

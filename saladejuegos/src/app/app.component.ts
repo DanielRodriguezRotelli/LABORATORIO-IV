@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet, NavigationEnd } from '@angular/router';
 import { LoginComponent } from "./components/login/login.component";
 import { Auth, signOut, User } from '@angular/fire/auth';
 import { Observable, of } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ChatComponent } from "./components/chat/chat.component";
+import { ScoreService } from './services/score.service';
 
 
 
@@ -21,11 +22,13 @@ export class AppComponent implements OnInit {
   currentIcon: string = '';
   flagError: boolean = false;
   notification:string ="";
-
+  isDropdownOpen : boolean = false;
   usuarioLogueado: string = "";
+  showModal: boolean = false;  // Nuevo: Controla si se muestra el modal
 
   constructor(private router: Router, 
-              public auth: Auth) {}
+              public auth: Auth,
+              private scoreService: ScoreService) {}
 
   ngOnInit() {
     this.router.events.subscribe(event => {
@@ -39,16 +42,46 @@ export class AppComponent implements OnInit {
     this.usuarioLogueado = datoHijo;
   }
 
+  toggleDropdown(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation(); // Evita que el evento se propague
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
-  //@Input() usuarioLogueado: any;
+  // Cierra el dropdown si se hace clic fuera de él
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: MouseEvent) {
+    // Cierra el dropdown solo si se hace clic fuera de él
+    const target = event.target as HTMLElement;
+    const dropdown = document.querySelector('.dropdown-menu');
+  
+    if (this.isDropdownOpen && dropdown && !dropdown.contains(target)) {
+      this.isDropdownOpen = false;
+    }
+  }
 
-/*
-  logout() {
-    this.auth.logout();  // Aquí deberías llamar al método de logout en tu AuthService
-    this.router.navigate(['/login']);  // Redirigir al login después de cerrar sesión
-  }*/
+  selectGame(game: string) {
+    console.log('entro a selectgame');
+    console.log('selecciono: '+ game);
+    this.scoreService.setSelectedGame(game); // Establece el juego seleccionado
+    this.isDropdownOpen = false; // Cierra el dropdown
+    this.router.navigate(['/score']);
+  }
 
-  logout(){
+  // Mostrar el modal al hacer clic en "Cerrar sesión"
+  logout(event: MouseEvent) {
+    event.preventDefault();  // Evitar que el enlace refresque la página
+    this.showModal = true;   // Mostrar el modal
+  }
+
+  // Confirmar encuesta y redirigir
+  completeSurvey() {
+    this.showModal = false;
+    this.router.navigate(['/survey']); // Redirigir a la encuesta
+  }
+  
+  closeModalAndLogout(){
+    this.showModal = false;
     signOut(this.auth).then(() =>{
       this.flagError = false;
       this.goToHome();

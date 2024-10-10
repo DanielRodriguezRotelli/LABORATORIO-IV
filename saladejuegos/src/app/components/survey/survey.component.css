@@ -1,0 +1,72 @@
+/* Estilos generales del formulario */
+form {
+    max-width: 600px;
+    margin: 0 auto; /* Centra el formulario */
+    padding: 20px;
+    border: 2px solid #007bff; /* Borde celeste */
+    border-radius: 10px; /* Bordes redondeados */
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombras suaves */
+    width: 100%; /* Asegura que el formulario ocupe el 100% del contenedor */
+  }
+  
+  /* Estilo para etiquetas */
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Espaciado entre preguntas */
+  div.question {
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos para los inputs de texto */
+  input[type="text"],
+  input[type="number"],
+  input[type="tel"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  
+  /* Radio buttons y checkboxes */
+  input[type="radio"],
+  input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  /* Estilo para las opciones de las preguntas */
+  .option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .option label {
+    margin-left: 5px;
+  }
+  
+  /* Botón de envío */
+  button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+  

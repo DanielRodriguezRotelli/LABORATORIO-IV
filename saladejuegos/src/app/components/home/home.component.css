@@ -19,9 +19,9 @@
 
 .texto-h1 {
   font-size: 100px;
-  color: #e6dbdb; /* Cambia el color según tu diseño */
+  color: #ff0000; /* Cambia el color según tu diseño */
   margin: 0;
-  text-shadow: 1px 1px 2px black, -1px -1px 2px red;;
+  text-shadow: 1px 1px 2px black, -1px -1px 2px rgb(255, 255, 255);;
 }
 
 .logo {
@@ -29,8 +29,8 @@
   height: 90px;
   border-radius: 50%;  /* Hace que la imagen sea circular */
   object-fit: cover;   /* Asegura que la imagen se ajuste al contenedor circular sin deformarse */
-  box-shadow: 0 4px 8px rgba(8, 8, 8, 0.918); /* Sombra suave */
-  border: 2px solid #0e0d0d;  /* Opcional: borde alrededor del logo */
+  box-shadow: 0 4px 8px rgba(240, 59, 59, 0.918); /* Sombra suave */
+  border: 2px solid #ffffff;  /* Opcional: borde alrededor del logo */
 }
 
 .image-container {
@@ -64,10 +64,10 @@
   cursor: pointer;
   flex-basis: calc(50% - 20px); /* Dos imágenes por fila, restando el espacio del gap */
   box-sizing: border-box; /* Para asegurarte de que el padding no afecta el ancho total */
-  border-radius: 15px; /* Esquinas redondeadas */
+  border-radius: 20px; /* Esquinas redondeadas */
   overflow: hidden; /* Para que el borde no afecte el contenido */
   box-shadow: 0 4px 8px rgba(8, 8, 8, 0.918); /* Sombra suave */
-  border: 5px solid #eed708; /* Borde más grueso de 5px, color azul (puedes cambiar el color) */
+  border: 5px solid #ff7d03; /* Borde más grueso de 5px, color azul (puedes cambiar el color) */
 }
 
 .image img {

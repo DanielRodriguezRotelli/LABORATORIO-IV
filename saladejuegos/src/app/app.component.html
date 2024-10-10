@@ -4,22 +4,40 @@
       <img id="logo" src="../../../assets/home-icon.png" alt="Logo">
       <li><a [routerLink]="['/home']">HOME</a></li>
       <li><a [routerLink]="['/quiensoy']">QUIEN SOY</a></li>
+      <li class="dropdown">
+        <a href="#" (click)="toggleDropdown($event)">SCORE</a>
+        <ul class="dropdown-menu" *ngIf="isDropdownOpen">
+          <li><a (click)="selectGame('')">Total</a></li>
+          <li><a (click)="selectGame('Ahorcado')">Ahorcado</a></li>
+          <li><a (click)="selectGame('Mayor o Menor')">Mayor o Menor</a></li>
+          <li><a (click)="selectGame('Preguntados')">Preguntados</a></li>
+          <li><a (click)="selectGame('Batalla Naval')">Batalla Naval</a></li>
+        </ul>
+      </li>
     </nav>
     <nav class="navbar-right">
-      <li class="user" *ngIf="this.auth.currentUser?.email">USUARIO: {{this.auth.currentUser?.email}}</li>
-
-      @if (this.auth.currentUser?.email) {
-        <li><a href="#" (click)="logout()">CERRAR SESIÓN</a></li>
-      }@else {
-        <li><a [routerLink]="['/login']">INICIAR SESIÓN</a></li>
-      }
-        
+      <li class="user" *ngIf="auth.currentUser?.email">USUARIO: {{auth.currentUser?.email}}</li>
+      <li *ngIf="auth.currentUser?.email">
+        <!-- Evitar que el link recargue la página -->
+        <a href="#" (click)="logout($event)">CERRAR SESIÓN</a>
+      </li>
+      <li *ngIf="!auth.currentUser?.email">
+        <a [routerLink]="['/login']">INICIAR SESIÓN</a>
+      </li>
     </nav>
   </nav>  
 </header>
 
-<router-outlet />
-  
+<router-outlet></router-outlet>
 <app-chat></app-chat>
- 
 
+<!-- Modal para confirmar si el usuario desea realizar la encuesta -->
+<div *ngIf="showModal" class="modal-backdrop">
+  <div class="modal">
+    <h2>Le gustaría completar la encuesta? Solo llevará unos segundos</h2>
+    <div class="modal-buttons">
+      <button class="accept" (click)="completeSurvey()">Aceptar</button>
+      <button class="later" (click)="closeModalAndLogout()">En otro momento</button>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Ship } from '../../../models/ship';
 import { User as FirebaseUser } from '@firebase/auth';
 import { User } from '../../../models/user';
+import { GameScore } from '../../../models/gamesScores';
+import { addDoc, collection, Firestore, Timestamp } from '@angular/fire/firestore';
 
 // Definir una interfaz para las celdas del tablero
 interface BoardCell {
@@ -27,7 +29,7 @@ export class BattleshipComponent {
 
   playerBoard: BoardCell[][];
   opponentBoard: BoardCell[][];
-
+  userScore: number = 0;
   player1: string = "";
   currentPlayer: string = "";
   playerShipsFloat: number = 7;
@@ -54,7 +56,8 @@ export class BattleshipComponent {
 
 
   constructor(public auth: Auth, 
-              private cdr: ChangeDetectorRef) {
+              private cdr: ChangeDetectorRef,
+              private firestore: Firestore) {
 
     this.player1 = this.auth.currentUser?.email?.split('@')[0] || ""; // Puede ser un string vacio
     this.playerBoard = this.createBoard(); // Inicializa el tablero del jugador
@@ -259,14 +262,22 @@ export class BattleshipComponent {
     if (this.playerShipsFloat === 0) {
       this.wingMessage ='¡La computadora ha ganado!';
       this.gameOver = true; // El juego ha terminado, bloquear el tablero
+      if (this.userScore !== 0) {
+        this.saveScore(); 
+      }
     } else if (this.opponentShipsFloat === 0) {
       this.wingMessage ='¡Has ganado!';
+      this.userScore += 5;
       this.gameOver = true; // El juego ha terminado, bloquear el tablero
+      this.saveScore();
     }
     //this.showNotificationWinner = true;
   }
 
   restartGame() {
+    if (this.wingMessage ==='¡La computadora ha ganado!') {
+      this.userScore = 0;
+    }
     console.log("Reiniciando el juego...");
     this.playerShipsFloat = 7;
     this.opponentShipsFloat = 7;
@@ -286,8 +297,22 @@ export class BattleshipComponent {
     return `${letters[i]}${j + 1}`;
   }
 
-  /*
-  hideNotification() {
-    this.showNotificationWinner = false;
-  }*/
+  saveScore(): void {
+    const currentUser = this.auth.currentUser?.email;
+
+    if (currentUser) {
+      
+      // Guardar el resultado en Firestore
+      const result: GameScore = {
+        userName: currentUser || "Unknown",
+        gameName: "Batalla Naval",
+        date: Timestamp.fromDate(new Date),
+        score: this.userScore 
+      };
+
+      let col = collection(this.firestore, 'score');
+      addDoc(col, result)
+    }
+  }
+
 }

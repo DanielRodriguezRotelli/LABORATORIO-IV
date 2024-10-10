@@ -1,5 +1,5 @@
 .card-container {
-    width: 300px;
+    width: 350px;
     height: 450px;
     border: 2px solid #0e0808;
     position: fixed;
@@ -157,12 +157,14 @@ input {
     color: green;
 }
 
-.closeIcon{
-    size: 40px;
-    position: absolute;
-    right: 0.5rem;
-    border-radius: 100%;
-    background-color: red;
-    color: white;
-    cursor: pointer;
+.closeIcon {
+    cursor: pointer; /* Cambia el cursor al pasar sobre el ícono */
+}
+  
+.close-icon-image {
+    width: 30px; /* Ajusta el ancho según tus necesidades */
+    height: 30px; /* Ajusta la altura según tus necesidades */
+    border-radius: 50%;
+    background-color: rgb(7, 83, 20);
+    border: 1px solid #000000;
 }

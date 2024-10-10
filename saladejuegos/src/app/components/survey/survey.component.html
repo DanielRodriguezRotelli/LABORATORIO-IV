@@ -1,0 +1,66 @@
+<form [formGroup]="surveyForm" (ngSubmit)="submitSurvey()">
+    <div>
+        <label for="name">Nombre y Apellido:</label>
+        <input type="text" id="name" formControlName="name" />
+        <div *ngIf="surveyForm.get('name')?.invalid && surveyForm.get('name')?.touched">
+            Nombre y Apellido es requerido.
+        </div>
+    </div>
+
+    <div>
+        <label for="age">Edad:</label>
+        <input id="age" type="number" formControlName="age" />
+        <div *ngIf="surveyForm.get('age')?.invalid && surveyForm.get('age')?.touched">
+            Edad es requerida y debe estar entre 18 y 99.
+        </div>
+    </div>
+
+    <div>
+        <label for="phone">Teléfono:</label>
+        <input id="phone" formControlName="phone" />
+        <div *ngIf="surveyForm.get('phone')?.invalid && surveyForm.get('phone')?.touched">
+            Teléfono es requerido y debe ser un número de 1 a 10 dígitos.
+        </div>
+    </div>
+
+    <div>
+        <label>{{questions[0]}}</label>
+  
+            @for (item of options1; track item.value ) {
+                <label>
+                    <input type="radio" [value]="item.value" formControlName="answer1" /> 
+                    {{item.label}}
+                </label>
+            }
+        <div *ngIf="surveyForm.get('answer1')?.invalid && surveyForm.get('answer1')?.touched">
+            Debes seleccionar una opción.
+        </div>
+    </div>
+
+    <div>
+        <label for="favoriteGame">{{questions[1]}}</label>
+        <input id="favoriteGame" formControlName="answer2" />
+        <div *ngIf="surveyForm.get('answer2')?.invalid && surveyForm.get('answer2')?.touched">
+            Debes ingresar tu juego favorito.
+        </div>
+    </div>
+
+    <div>
+        <label>{{questions[2]}}</label>
+        <div formArrayName="answer3">
+            <div *ngFor="let opt of options3; let i = index">
+                <label>
+                    <input type="checkbox"  [formControlName]="i"  /> {{ opt.label}}
+                </label>
+            </div>
+            <div *ngIf="surveyForm.get('answer3')?.invalid && surveyForm.get('answer3')?.touched">
+                Debes seleccionar una opción.
+            </div>
+        </div>
+    </div>
+
+    <button  type="submit">
+        Enviar Encuesta
+    </button>
+  </form>
+  

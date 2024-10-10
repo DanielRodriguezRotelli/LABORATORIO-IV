@@ -8,12 +8,16 @@ import { HangmanComponent } from './modules/games/hangman/hangman.component';
 import { GreaterorlessComponent } from './modules/games/greaterorless/greaterorless.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { BattleshipComponent } from './modules/games/battleship/battleship.component';
+import { GameScoresComponent } from './components/game-scores/game-scores.component';
+import { SurveyComponent } from './components/survey/survey.component';
 
 export const routes: Routes = [
     // Si le ponemos 'prefix' nos va a arrojar un error en la consola de redireccion infinita
     { path: '', redirectTo: '/home', pathMatch: "full" },
     { path: 'login', component: LoginComponent },
     { path: 'home', component: HomeComponent },
+    { path: 'score', component: GameScoresComponent },
+    { path: 'survey', component: SurveyComponent },
     { path: 'quiensoy', component: AboutmeComponent },
     //{ path: 'battleship', component: BattleshipComponent },
     { path: 'chat', component: ChatComponent },

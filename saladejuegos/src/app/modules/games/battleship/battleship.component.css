@@ -154,7 +154,7 @@
 
 /* Estilo para celdas que tienen un barco */
 .cell.ship {
-  background-color: #ffffff; /* Gris para barcos */
+  background-color: #5e4e4e; /* Gris para barcos */
 }
 
 /* Estilo para celdas que han sido golpeadas */

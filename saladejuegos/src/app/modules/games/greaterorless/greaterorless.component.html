@@ -3,7 +3,7 @@
   <div class="rows-table">
     <!-- Vidas e intentos -->
     <div class="life-container" style="flex: 1; text-align: center;">
-      <p class="life-title">Intentos:</p>
+      <p class="life-title">Vidas:</p>
       <p class="life-points">{{ lifes }}</p>
     </div>  
 
@@ -11,7 +11,6 @@
     <div *ngIf="gameOver" class="image-container">
       <h1>{{message}}</h1>
     </div>
-
  
     <!-- Imagen de la carta -->
     <div *ngIf="!gameOver" class="image-container">
@@ -19,7 +18,7 @@
     </div>
 
     <!-- Botones de juego -->
-    <div *ngIf="!gameOver" id="play-buttons" class="button-group" style="flex: 1; text-align: center;">
+    <div *ngIf="isPlaying" id="play-buttons" class="button-group" #playButtons style="visibility: hidden;">
       <button class="button is-primary mx-1" (click)="play('Mayor')">MAYOR</button>
       <button class="button is-primary mx-1" (click)="play('Menor')">MENOR</button>
     </div>
@@ -27,16 +26,13 @@
     <!-- Puntuación -->
     <div class="score-container" style="flex: 1; text-align: center;">
       <p class="title score-title">Puntos: </p>
-      <p class="title score-points">{{ points }}</p>
+      <p class="title score-points">{{ userScore }}</p>
     </div>
   </div>
 
   <div class="row-btn">
-    <button id="start-button" class="button is-link mx-1" (click)="play('Nuevo')">COMENZAR</button>
+    <button id="start-button" (click)="startGame()" #startButton sytle="visibility: visible">Comenzar</button>
   </div>
 
-  <div *ngIf="gameOver" class="row-btn">
-  <button id="start-button" class="button is-link mx-1" (click)="startGame()">PLAY</button>
-  </div>
 </div>
   

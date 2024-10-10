@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Auth } from '@angular/fire/auth';
+import { addDoc, collection, Firestore, Timestamp } from '@angular/fire/firestore';
+import { GameScore } from '../../../models/gamesScores';
 
 @Component({
   selector: 'app-hangman',
@@ -13,7 +16,7 @@ export class HangmanComponent {
   "telefono", "camino", "bosque", "planta", "noche", "dia", "aire", "agua", "fuego", "tierra", "sueño", "luz", "felicidad", "sonrisa", 
   "corazon", "mano", "ojo", "cielo", "zapato", "camisa", "pelota", "auto"];
     
-  points: number = 0;
+  userScore: number = 0;
   word = this.getNewWord();
   guessedLetters: string[] = [];
   rightWordsCounter = 0;
@@ -22,6 +25,10 @@ export class HangmanComponent {
   showNextButton: boolean = false; 
   showNotification: boolean = false; 
   wordGuessed: boolean = false;
+
+  constructor( public auth: Auth, //private authService: AuthService
+               private firestore: Firestore
+  ) {}
 
   guessLetter(letter: string) {
     // Si la letra ya fue adivinada, no hacemos nada
@@ -41,6 +48,7 @@ export class HangmanComponent {
         if (this.lifes === 0) {
           // Mostrar la notificación de Game Over
           this.showNotification = true; // Activar la notificación
+          this.saveScore();
           return;
         }
         
@@ -100,7 +108,7 @@ export class HangmanComponent {
       // Si la palabra fue completamente adivinada
       if (!display.includes('_') && !this.wordGuessed) {
         this.wordGuessed = true;
-        this.points++;
+        this.userScore++;
         this.hideKeyboard(); // Oculta el teclado al adivinar la palabra
         this.showNextButton = true; // Muestra el botón "Next"
       }
@@ -160,5 +168,23 @@ export class HangmanComponent {
       this.rightWordsCounter++;
       this.resetWord();
     }, 0); // Evitar problemas de detección de cambios
+  }
+
+  saveScore(): void {
+    const currentUser = this.auth.currentUser?.email;
+
+    if (currentUser) {
+      
+      // Guardar el resultado en Firestore
+      const result: GameScore = {
+        userName: currentUser || "Unknown",
+        gameName: "Ahorcado",
+        date: Timestamp.fromDate(new Date),
+        score: this.userScore 
+      };
+
+      let col = collection(this.firestore, 'score');
+      addDoc(col, result)
+    }
   }
 }

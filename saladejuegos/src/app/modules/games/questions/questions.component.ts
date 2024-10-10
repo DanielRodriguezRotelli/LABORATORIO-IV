@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { CountryService } from '../../../services/country/country.service';
 import { Auth } from '@angular/fire/auth';
+import { addDoc, collection, Firestore, Timestamp } from '@angular/fire/firestore';
+import { GameScore } from '../../../models/gamesScores';
+
 
 
 @Component({
@@ -24,10 +27,9 @@ export class QuestionsComponent {
   public showEndGameMessage: boolean = false; // Controla la visibilidad del mensaje
   public endGameMessage: string = ''; // Mensaje que se mostrará
 
-  constructor(
-    private countryService: CountryService,
-    public auth: Auth
-    //private authService: AuthService
+  constructor( private countryService: CountryService,
+               public auth: Auth, //private authService: AuthService
+               private firestore: Firestore
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +39,7 @@ export class QuestionsComponent {
     //const user = this.authService.getLoggedUser();
     if (user) {
       this.loggedUser = user;
+      //console.log('usuario: ' + this.loggedUser.mail);
     }
   }
 
@@ -123,5 +126,21 @@ export class QuestionsComponent {
   endGame(): void {
     this.endGameMessage = `¡Fin del juego!`;
     this.showEndGameMessage = true; // Muestra el mensaje
+
+    const currentUser = this.auth.currentUser?.email;
+
+    if (currentUser) {
+      
+      // Guardar el resultado en Firestore
+      const result: GameScore = {
+        userName: currentUser || "Unknown",
+        gameName: "Preguntados",
+        date: Timestamp.fromDate(new Date),
+        score: this.userScore 
+      };
+
+      let col = collection(this.firestore, 'score');
+      addDoc(col, result)
+    }
   }
 }

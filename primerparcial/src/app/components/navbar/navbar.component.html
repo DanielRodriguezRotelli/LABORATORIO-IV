@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="welcome">Inicio</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <!-- Alineación del menú izquierdo -->
+      <ul class="navbar-nav me-auto">
+        <li *ngIf="loggedUser | async as user" class="nav-item">
+          <a class="nav-link active" routerLink="repartidor/alta">Alta Repartidor</a>
+        </li>
+
+        <li  *ngIf="loggedUser | async as user" class="nav-item">
+          <a class="nav-link active" routerLink="repartidor/detalle">Detalle repartidor</a>
+        </li>
+
+        <li *ngIf="loggedUser | async as user" class="nav-item">
+          <a class="nav-link active" routerLink="helados">Salen Helados</a>
+        </li>
+        
+      </ul>
+
+      <!-- Alineación del menú derecho -->
+      <ul class="navbar-nav ms-auto">
+        <li *ngIf="!(loggedUser | async)" class="nav-item">
+          <a class="nav-link active" routerLink="login">Login</a>
+        </li>
+
+        <li *ngIf="loggedUser | async as user" class="nav-item">
+          <a class="btn btn-danger" (click)="logout()">Cerrar sesión</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,10 @@
+<section class="vh-100" style="background-color: #000000">
+  <div class="container py-5 h-100" id="profile" *ngIf="!isLoading && data">
+    <h1>1er PARCIAL LABORATORIO IV</h1>
+    <div class="info-container ">
+      <p>{{ data.name }}<p>
+      <img alt="Profile Image" [src]="data.image" />
+      <p>{{ data.location }}</p>
+    </div>
+  </div>
+</section>

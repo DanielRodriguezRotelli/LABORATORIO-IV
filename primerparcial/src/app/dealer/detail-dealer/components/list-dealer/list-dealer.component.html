@@ -1,0 +1,31 @@
+<div>
+    <h2>Listado de Repartidores</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>DNI</th>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Numero de Licencia</th>
+          <th>Pais de Origen</th>
+          <th>Licencia Profesional?</th>
+          <th>Acciones</th> <!-- New column for the Seleccionar button -->
+          <!-- Add more table headers for other properties if needed -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let repartidor of repartidores">
+          <td>{{ repartidor?.dni }}</td>
+          <td>{{ repartidor?.nombre }}</td>
+          <td>{{ repartidor?.edad }}</td>
+          <td>{{ repartidor?.capacidad }}</td>
+          <td>{{ repartidor?.pais }}</td>
+          <td>{{ repartidor?.unidadPropia ? 'Sí' : 'No' }}</td>
+          <td>
+            <button (click)="seleccionarRepartidor(repartidor)" class="btn btn-primary">Seleccionar</button>
+          </td>
+          <!-- Display other properties in the table rows as needed -->
+        </tr>
+      </tbody>
+    </table>
+  </div>

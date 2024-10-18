@@ -1,0 +1,4 @@
+<div *ngIf="paisSeleccionado">
+    <h3>{{ paisSeleccionado.nombre }}</h3>
+    <img [src]="paisSeleccionado.bandera" alt="Flag" *ngIf="paisSeleccionado.bandera">
+  </div>

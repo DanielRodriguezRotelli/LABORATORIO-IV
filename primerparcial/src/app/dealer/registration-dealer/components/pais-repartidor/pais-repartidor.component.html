@@ -1,0 +1,16 @@
+<!-- pais-repartidor.component.html -->
+<div class="pais-repartidor">
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+      <span class="text-primary">Paises</span>
+    </h4>
+    <ul class="list-group mb-3">
+      <li class="list-group-item d-flex justify-content-between lh-sm" *ngFor="let pais of listadoPaises">
+        <div>
+          <h6 class="my-0">{{ pais.nombre }}</h6>
+          <img [src]="pais.bandera" alt="{{ pais.nombre }} Flag" width="32" height="20">
+        </div>
+        
+        <button class="btn btn-outline-success" (click)="seleccionarPais(pais)">Seleccionar</button>
+      </li>
+    </ul>
+  </div>

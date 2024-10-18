@@ -1,0 +1,84 @@
+
+<div class="container" style="margin-top: 100px;">
+  <div class="row g-5">
+    <app-pais-repartidor
+    class="col-md-5 col-lg-4 order-md-last"
+    (paisSeleccionado)="handlePaisSeleccionado($event)"
+    ></app-pais-repartidor>
+  
+    <div class="col-md-7 col-lg-8">
+      <h4 class="mb-3">Alta Chofer</h4>
+
+      <!-- Mensajes de error y éxito -->
+      <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+      </div>
+      <div *ngIf="successMessage" class="alert alert-success">
+        {{ successMessage }}
+      </div>
+
+      <form [formGroup]="altaRepartidorForm" class="mb-3" (ngSubmit)="createDeliveryPerson()">
+        <div class="row g-3">
+          <div class="col-sm-12">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input formControlName="nombre" type="text" class="form-control" id="nombre">
+            <small class="text-danger" *ngIf="nombre?.touched && nombre?.errors">
+              Ingrese un nombre válido
+            </small>
+          </div>
+
+          <div class="col-md-3">
+            <label for="edad" class="form-label">Edad</label>
+            <input formControlName="edad" type="number" class="form-control" id="edad" placeholder="18-80">
+            <small class="text-danger" *ngIf="edad?.touched && edad?.errors">
+              Ingrese una edad válida
+            </small>
+          </div>
+
+          <div class="col-md-9">
+            <label for="dni" class="form-label">DNI</label>
+            <input formControlName="dni" type="number" class="form-control" id="dni">
+            <small class="text-danger" *ngIf="dni?.touched && dni?.errors">
+              Ingrese un número de documento válido
+            </small>
+          </div>
+
+          <div class="col-sm-12">
+            <label for="pais" class="form-label">País de origen</label>
+            <input formControlName="pais" type="text" class="form-control bg-light" id="pais" readonly>
+            <small class="text-danger" *ngIf="pais?.touched && pais?.errors">
+              Escoja un país válido
+            </small>
+          </div>
+
+          <div class="col-md-5">
+            <label for="state" class="form-label">Tiene Licencia Profesional?</label>
+            <select formControlName="unidadPropia" class="form-select" id="state">
+              <option value="">Seleccione</option>
+              <option [value]="true">Sí</option>
+              <option [value]="false">No</option>
+            </select>
+            <small class="text-danger" *ngIf="unidadPropia?.touched && unidadPropia?.errors">
+              Ingrese una opción
+            </small>
+          </div>
+
+
+          <div class="col-md-7">
+            <label for="capacidad" class="form-label">Numero de licencia</label>
+            <input formControlName="capacidad" type="number" class="form-control" id="capacidad">
+            <small class="text-danger" *ngIf="capacidad?.touched && capacidad?.errors">
+              Ingrese la capacidad
+            </small>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <button class="w-100 btn btn-primary btn-lg" type="submit">Registrar nuevo
+          repartidor</button>
+      </form>
+    </div>
+  </div>
+</div>
+

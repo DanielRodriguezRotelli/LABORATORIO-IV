@@ -1,0 +1,1 @@
+export const enviromentConfig = {"projectId":"parciallaboiv-f0df8","appId":"1:1081754635300:web:a31cfdad138468dc775cb1","storageBucket":"parciallaboiv-f0df8.appspot.com","apiKey":"AIzaSyBnAShN-5N6UbPRoTaqHqzvBb4coj0OOO0","authDomain":"parciallaboiv-f0df8.firebaseapp.com","messagingSenderId":"1081754635300"};

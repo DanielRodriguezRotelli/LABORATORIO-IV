@@ -1,0 +1,41 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  margin-top: 20px;
+  color: white;
+  margin: 0; /* Asegura que no haya márgenes externos */
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+  width: 400px;
+  gap: 10px; /* Espacio entre los elementos de info-container */
+  border-radius: 10px;
+  border: 2px solid #6ec3eb;
+  background-color: rgb(133, 132, 132);
+  padding: 20px;
+  box-sizing: border-box; /* Evita que el padding incremente el tamaño del contenedor */
+}
+
+img {
+  width: 200px;
+  height: auto;
+  margin: 20px 0; /* Añade márgenes verticales de manera controlada */
+}
+
+p {
+  font-family: sans-serif;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  margin: 0; /* Evita márgenes externos en los párrafos */
+}

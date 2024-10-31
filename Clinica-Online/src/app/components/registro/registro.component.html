@@ -1,0 +1,453 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#edf2f4" type="ball-scale-multiple" [fullScreen]="true"
+  ><p style="color: #edf2f4; font-family: Roboto">Cargando...</p>
+</ngx-spinner>
+
+@if(authService.firebaseInicializado)
+{
+    @if (!authService.auth.currentUser)
+    {
+      @if(tipoRegistro == "")
+      {
+        <div class="py-5 text-center">
+          <h2>Usted desea registrarse como:</h2>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="btnradio1"
+                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio2"
+                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
+                  <!--
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio3"
+                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
+                  -->
+          </div>
+      </div>
+      }
+      @if (tipoRegistro == "paciente")
+      {
+        <div class="py-5 text-center">
+          <h2>Usted desea registrarse como:</h2>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="btnradio1"
+                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio2"
+                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
+              <!--
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio3"
+                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
+                  -->
+          </div>
+      </div>
+        <div class="col-12">
+          <h1 class="display-3 m-4 text-center">Paciente</h1>
+          <form [formGroup]="formPaciente" (ngSubmit)="enviarFormPaciente()">
+            <div class="row g-3">
+              <div class="col-sm-4">
+                <label class="form-label" for="dni">DNI</label>
+                <input type="number" class="form-control" id="dni" formControlName="dni">
+                @if(dniPaciente?.hasError('min'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe tener mas de 6 cifras</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" formControlName="nombre">
+                @if(nombrePaciente?.hasError('pattern'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" formControlName="apellido">
+                @if(apellidoPaciente?.hasError('pattern'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="edad">Edad</label>
+                <input type="number" class="form-control" id="edad" formControlName="edad">
+                @if(edadPaciente?.hasError('min'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe ser mayor de edad</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="obraSocial">Obra social</label>
+                <input type="text" class="form-control" id="obraSocial" formControlName="obraSocial">
+                @if(obraSocialPaciente?.hasError('pattern'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="mail">Mail</label>
+                <input type="text" class="form-control" id="mail" formControlName="mail">
+                @if(mailPaciente?.hasError('email'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Email inválido</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" formControlName="password">
+                @if(passwordPaciente?.hasError('minlength'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesta de más de 6 caracteres</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="imagen1">Imagen de perfil 1</label>
+                <input type="file" class="form-control" id="imagen1" formControlName="imagen1"
+                (change)="guardarEventoImagen($event, 1)">
+                @if(imagen1Paciente?.hasError('tipoArchivo'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe ser un archivo JPG, JPEG o PNG</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="imagen2">Imagen de perfil 2</label>
+                <input type="file" class="form-control" id="imagen2" formControlName="imagen2"
+                (change)="guardarEventoImagen($event, 2)">
+                @if(imagen2Paciente?.hasError('tipoArchivo'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe ser un archivo JPG, JPEG o PNG</small>
+                  </ng-container>
+                }
+              </div>
+            </div>
+            <div class="d-flex justify-content-center flex-column p-2 align-items-center my-4">
+              
+              <button type="submit" class="btn w-50 mx-auto my-4" [disabled]="formPaciente.invalid">
+                Enviar
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+
+      <!--
+
+      @if (tipoRegistro == "administrador")
+      {
+        <div class="py-5 text-center">
+          <h1 class="display-1">Registrarse</h1>
+          <p>Usted desea registrarse como:</p>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="btnradio1"
+                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio2"
+                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio3"
+                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <h1 class="display-3 m-4 text-center">Administrador</h1>
+          <form [formGroup]="formAdministrador" (ngSubmit)="enviarFormAdministrador()">
+            <div class="row g-3">
+              <div class="col-sm-4">
+                <label class="form-label" for="dni">DNI</label>
+                <input type="number" class="form-control" id="dni" formControlName="dni">
+                @if(dniAdministrador?.hasError('min'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe tener mas de 6 cifras</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" formControlName="nombre">
+                @if(nombreAdministrador?.hasError('pattern'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" formControlName="apellido">
+                @if(apellidoAdministrador?.hasError('pattern'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="edad">Edad</label>
+                <input type="number" class="form-control" id="edad" formControlName="edad">
+                @if(edadAdministrador?.hasError('min'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe ser mayor de edad</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="mail">Mail</label>
+                <input type="text" class="form-control" id="mail" formControlName="mail">
+                @if(mailAdministrador?.hasError('email'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Email inválido</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="password">Contraseña</label>
+                <input type="password" class="form-control" id="password" formControlName="password">
+                @if(passwordAdministrador?.hasError('minlength'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe estar compuesta de más de 6 caracteres</small>
+                  </ng-container>
+                }
+              </div>
+              <div class="col-sm-4">
+                <label class="form-label" for="imagen1">Imagen de perfil 1</label>
+                <input type="file" class="form-control" id="imagen1" formControlName="imagen"
+                (change)="guardarEventoImagen($event, 3)">
+                @if(imagenAdministrador?.hasError('tipoArchivo'))
+                {
+                  <ng-container>
+                    <small class="text-danger">Debe ser un archivo JPG, JPEG o PNG</small>
+                  </ng-container>
+                }
+              </div>
+            </div>
+            <div class="d-flex justify-content-center flex-column p-2 align-items-center my-4">
+              
+              <button type="submit" class="btn w-50 mx-auto my-4" [disabled]="formAdministrador.invalid">
+                Enviar
+              </button>
+            </div>
+          </form>
+        </div>
+      }
+      -->
+
+      @if (tipoRegistro == "especialista")
+      {
+        <div class="py-5 text-center">
+          <h2>Usted desea registrarse como:</h2>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+              <label class="btn btn-outline-primary" for="btnradio1"
+                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio2"
+                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
+
+                  <!--
+              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+              <label class="btn btn-outline-primary" for="btnradio3"
+                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
+                  -->
+          </div>
+      </div>
+
+        <h1 class="display-3 m-4 text-center">Especialista</h1>
+
+        <form [formGroup]="formEspecialista" (ngSubmit)="enviarFormEspecialista()" class="col-12  d-flex flex-column">
+
+            <div class="d-flex flex-md-row flex-column">
+        
+                <div class="col-md-4 col-12 order-md-last mx-2">
+                    <h4>
+                    <span>Especialidades</span>
+                    </h4>
+                    @if(especialidadesObtenidas)
+                    {
+                        <ul class="list-group mb-3" id="lista-especialidades">
+                        @for (especialidad of especialidades; track $index)
+                        {
+                            <li class="list-group-item d-flex justify-content-between lh-sm"
+                                (click)="seleccionarEspecialidad(especialidad.nombre)">
+                                <div>
+                                <h6 class="my-0">{{especialidad.nombre}}</h6>
+                                </div>
+                            </li>
+                        }
+                        </ul>
+                    }
+                    @else
+                    {
+                        <app-spinner></app-spinner>
+                    }
+                    <button class="btn w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">Añadir</button>
+                </div>
+        
+                <div class="d-flex flex-wrap col-md-8 col-12">
+        
+                    <div class="col-md-6  col-12 p-2">
+        
+                        <label class="form-label" for="dni">DNI</label>
+                        <input type="number" class="form-control" id="dni" formControlName="dni">
+                        @if(dniEspecialista?.hasError('min'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe tener mas de 6 cifras</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6  col-12 p-2">
+                        <label class="form-label" for="nombre">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre">
+                        @if(nombreEspecialista?.hasError('pattern'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label class="form-label" for="apellido">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" formControlName="apellido">
+                        @if(apellidoEspecialista?.hasError('pattern'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6  col-12 p-2">
+                        <label class="form-label" for="edad">Edad</label>
+                        <input type="number" class="form-control" id="edad" formControlName="edad">
+                        @if(edadEspecialista?.hasError('min'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe ser mayor de edad</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6  col-12 p-2">
+                        <label class="form-label" for="especialidad">Especialidad</label>
+                        <div class="input-group mb-3">
+                            <input placeholder="Seleccione una" readonly type="text" class="form-control" id="especialidad"
+                            formControlName="especialidad">
+                            <button class="btn" type="button" id="button-addon2" (click)="seleccionarEspecialidad('')">Limpiar</button>
+                        </div>
+                    
+                        @if(especialidadEspecialista?.hasError('pattern'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label class="form-label" for="mail">Mail</label>
+                        <input type="text" class="form-control" id="mail" formControlName="mail">
+                        @if(mailEspecialista?.hasError('email'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Email inválido</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6  col-12 p-2">
+                        <label class="form-label" for="password">Contraseña</label>
+                        <input type="password" class="form-control" id="password" formControlName="password">
+                        @if(passwordEspecialista?.hasError('minlength'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe estar compuesta de más de 6 caracteres</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="col-md-6 col-12 p-2">
+                        <label class="form-label" for="imagen">Imagen de perfil</label>
+                        <input type="file" class="form-control" id="imagen" formControlName="imagen"
+                            (change)="guardarEventoImagen($event, 4)">
+                        @if(imagenEspecialista?.hasError('tipoArchivo'))
+                        {
+                            <ng-container>
+                                <small class="text-danger">Debe ser un archivo JPG, JPEG o PNG</small>
+                            </ng-container>
+                        }
+                    </div>
+                    <div class="d-flex justify-content-center col-12">
+        
+                    </div>
+                </div>
+            </div>
+            <div class="my-4 p-2 mx-auto w-50 d-flex flex-column align-items-center">
+              <button type="submit" class="btn w-100 mt-4" [disabled]="formEspecialista.invalid">
+                Enviar
+              </button>
+            </div>
+        </form>
+        }
+    }
+    @else {
+    <div class="py-5 text-center">
+        <h1 class="display-1">Usted ya está logeado</h1>
+        <h1><strong>{{this.authService.auth.currentUser.email}}</strong></h1>
+        <button class="btn w-50 mx-auto mt-4 btn-lg" (click)="authService.LogOut()">
+          Cerrar sesión
+        </button>
+    </div>
+    }
+}
+@else
+{
+    <app-spinner></app-spinner>
+}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva especialidad</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form [formGroup]="formEspecialidad" (ngSubmit)="enviarFormEspecialidad()">
+              <div class="modal-body">
+                  Ingrese el nombre de la nueva especialidad a añadir
+                  <input type="text" class="form-control" id="nombreEspecialidad" formControlName="nombre">
+                  @if(nombreEspecialidad?.hasError('pattern'))
+                  {
+                  <ng-container>
+                      <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                  </ng-container>
+                  }
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn" data-bs-dismiss="modal">Cancelar</button>
+                  <button class="btn" data-bs-dismiss="modal"
+                      [disabled]="formEspecialidad.invalid" type="submit">Añadir</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>

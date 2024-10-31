@@ -1,0 +1,143 @@
+<app-spinner [ngClass]="claseSpinner"></app-spinner>
+
+@if(usuarioActual != undefined)
+{
+
+
+<div class="container d-flex flex-column p-4">
+    <div class="card col-12 my-4">
+        <div class="row g-0">
+            <div class="col-md-4">
+                @if (imagenActual != "")
+                {
+                    @if (authService.tipoUsuario == "paciente") 
+                    {
+                        
+                        <img src={{imagenActual}} class="d-block w-100" alt="...">
+                          
+                    }
+                    @else {
+
+                        <img src={{imagenActual}} class="img-fluid rounded-start" alt="...">
+                    }
+
+                }
+                @else {
+                <app-spinner></app-spinner>
+                }
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+
+                    <h1 class="card-title display-6"><strong>{{usuarioActual.nombre}}
+                            {{usuarioActual.apellido}}</strong></h1>
+                    <ul class="list-group list-group-flush">
+                        <h4 class="list-group-item rounded-3"><strong>DNI: </strong>{{usuarioActual.dni}}</h4>
+                        <h4 class="list-group-item rounded-3"><strong>Edad: </strong>{{usuarioActual.edad}}</h4>
+                        <h4 class="list-group-item rounded-3"><strong>Mail: </strong>{{usuarioActual.mail}}</h4>
+                        <h4 class="list-group-item rounded-3" *ngIf="authService.tipoUsuario == 'paciente'"><strong>Obra
+                                social:</strong>{{usuarioActual.obraSocial}}</h4>
+                        <h4 class="list-group-item rounded-3" *ngIf="authService.tipoUsuario == 'especialista'">
+                            <strong>Especialidades: </strong>{{usuarioActual.especialidades }}
+                        </h4>
+                        <h4 class="list-group-item rounded-3" *ngIf="authService.tipoUsuario == 'especialista' && usuarioActual.disponibilidades">
+                            <strong>Disponibilidades: </strong>
+                            
+                            @for (disponibilidad of usuarioActual.disponibilidades; track $index) 
+                            {
+                                {{disponibilidad.dia}} de {{disponibilidad.horaInicio }} a {{disponibilidad.horaFin }}
+                            }
+                        </h4>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #modalHistoriaClinica
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Historia clínica</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; max-height: 450px;">
+                @if (turnos) 
+                {
+                    @for (turno of turnos; track $index) 
+                    {
+                        @if (turno.historiaClinica) 
+                        {
+                            <div class="card p-2 m-4">
+                                <h3 class="card-title text-center">{{turno.especialidad}} | {{turno.fecha}}</h3>
+
+                                <h6 class="card-subtitle mb-2 text-muted text-center">Esp. {{turno.nombreEspecialista}} {{turno.apellidoEspecialista}}</h6>
+                                @for (key of objectKeys(turno.historiaClinica); track $index) 
+                                {
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item rounded-3 my-1">
+                                            {{ key }}: {{ turno.historiaClinica[key] }}
+                                        </li>
+                                    </ul>
+                                    
+                                }
+
+                            </div>
+                        }
+
+                    }
+                    @if(!tieneHistoriaClinica) {
+                        <h5 class="mx-4 p-4">No hay una historia clínica cargada</h5>
+                    }
+                }
+                    @else 
+                    {
+                        <app-spinner></app-spinner>
+                    }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalAnadirEspecialidad" tabindex="-1" aria-labelledby="modalAnadirEspecialidad"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAnadirEspecialidad">Nueva especialidad</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="formEspecialidad" (ngSubmit)="enviarFormEspecialidad()">
+                <div class="modal-body">
+                    Ingrese el nombre de la nueva especialidad a añadir
+                    <input type="text" class="form-control" id="nombreEspecialidad" formControlName="nombre">
+                    @if(nombreEspecialidad?.hasError('pattern'))
+                    {
+                    <ng-container>
+                        <small class="text-danger">Debe estar compuesto sólo por letras (no más de 50)</small>
+                    </ng-container>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancelar" data-bs-dismiss="modal"
+                        (click)="mostrarModalAgregarEspecialidad()">Cancelar</button>
+                    <button type="button" class="btn btn-ok" data-bs-dismiss="modal"
+                        [disabled]="formEspecialidad.invalid" type="submit"
+                        (click)="mostrarModalAgregarEspecialidad()">Crear</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+}
+@else {
+<app-spinner></app-spinner>
+}

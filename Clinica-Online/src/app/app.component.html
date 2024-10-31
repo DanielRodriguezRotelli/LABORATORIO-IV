@@ -1,0 +1,50 @@
+<div class="container-aplicacion">
+  <nav class="navbar navbar-expand-lg" id="navbar" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand">
+        <img src="../assets/img/logo.png" width="30" height="30" class="d-inline-block align-text-top">
+        Clínica-OnLine
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      @if(this.authService.firebaseInicializado)
+      {
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link"  routerLink='bienvenida'>Bienvenida</a>
+            </li>
+            <li class="nav-item" *ngIf="this.authService.usuarioLogeado">
+              <a class="nav-link"  routerLink='mi-perfil'>Mi perfil</a>
+            </li>
+            <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'administrador'">
+              <a class="nav-link"  routerLink='gestion-usuarios'>Usuarios</a>
+            </li>
+            <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'paciente' || this.authService.tipoUsuario == 'especialista'">
+              <a class="nav-link"  routerLink='turnos/mis-turnos'>Mis turnos</a>
+            </li>
+            <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'administrador'">
+              <a class="nav-link"  routerLink='turnos/mis-turnos'>Turnos</a>
+            </li>
+            <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'especialista'">
+              <a class="nav-link"  routerLink='pacientes'>Pacientes</a>
+            </li>
+          </ul>
+          @if (this.authService.auth.currentUser) {
+            <button class="btn mx-1 btn-cerrar" (click)="logOut()" >Cerrar sesión</button>
+          }
+          @else {
+            <button class="btn mx-1" routerLink='registro'>Registrarse</button>
+            <button class="btn mx-1" routerLink='login'>Iniciar sesión</button>
+          }
+        </div>
+      }
+    </div>
+  </nav>
+  
+  <div class="container-contenido">
+    <router-outlet>  </router-outlet>
+  </div>
+</div>

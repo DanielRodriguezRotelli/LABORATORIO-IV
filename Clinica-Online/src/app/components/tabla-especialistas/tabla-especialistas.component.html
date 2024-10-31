@@ -1,0 +1,47 @@
+@if(especialistasObtenidos)
+{
+    <div [ngStyle]="{'max-height.px': maxHeight}" class="table-responsive">
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col" *ngIf="tipoVista == 1">DNI</th>
+            <th scope="col" >Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col" *ngIf="tipoVista == 1">Edad</th>
+            <th scope="col" *ngIf="tipoVista == 1">Mail</th>
+            <th scope="col">Especialidades</th>
+            <th scope="col" *ngIf="tipoVista == 1">Estado</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @for (especialista of especialistas; track $index){
+            @if(especialista.id)
+            {
+                @if(estado ==null || estado == especialista.estado)
+                {
+
+                    @if(nombreEspecialidad != null && this.tieneEspecialidad(especialista, nombreEspecialidad) || nombreEspecialidad == null)
+                    {
+                        <tr (click)="enviarId(especialista.id)" >
+                            <th scope="row" *ngIf="tipoVista == 1">{{especialista.dni}}</th>
+                            <td>{{especialista.nombre}}</td>
+                            <td>{{especialista.apellido}}</td>
+                            <td *ngIf="tipoVista == 1">{{especialista.edad}}</td>
+                            <td *ngIf="tipoVista == 1">{{especialista.mail}}</td>
+                            <td *ngIf="tipoVista == 1">{{especialista.especialidades}}</td>
+                            <td *ngIf="tipoVista == 1">{{especialista.estado}}</td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+                
+            }
+        }
+    </tbody>
+</table>
+</div>
+}
+@else
+{
+<app-spinner></app-spinner>
+}

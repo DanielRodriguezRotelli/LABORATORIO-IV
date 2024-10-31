@@ -1,0 +1,1 @@
+export const enviromentConfig = {"projectId":"clinicaonline-a296c","appId":"1:583939661839:web:3bc8bf474b73ab1660837a","storageBucket":"clinicaonline-a296c.appspot.com","apiKey":"AIzaSyDKKWiR7ncgFSsklLqFUBxLyAyw8UfKxX0","authDomain":"clinicaonline-a296c.firebaseapp.com","messagingSenderId":"583939661839"};

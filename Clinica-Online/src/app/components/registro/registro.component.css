@@ -33,6 +33,87 @@ label {
     max-height: 250px;
     overflow-y: auto;
 }
+
+
 .ng-invalid:not(form)  {
     border-left: 5px solid hsl(0, 100%, 62%); /* red */
   }
+
+  .btn-paciente-grande, .btn-doctor-grande{
+    border: none;
+    border-radius: 10px; 
+    padding: 0.3rem; 
+    cursor: pointer;  
+    width: 300px;
+    height: 400px;
+  }
+
+
+  .btn-paciente-mediano, .btn-doctor-mediano{
+    border: none;
+    border-radius: 10px; 
+    padding: 0.3rem; 
+    cursor: pointer;  
+    width: 150px;
+    height: 200px;
+
+    img{
+        width: 100%;
+        height: 100%;
+    }
+    
+  }
+
+  .boton-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+    border-radius: inherit; /* Sigue el borde del botón */
+}
+
+
+  
+  .btn-paciente-chico, .btn-doctor-chico{
+    border: none;
+    border-radius: 10px; 
+    padding: 0.3rem; 
+    cursor: pointer;  
+    width: 150px;
+    height: 200px;
+
+    img{
+        width: 100%;
+        height: 100%;
+    }
+    
+  }
+  .spinner-activado {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner-desactivado{
+    display: none;
+}
+
+.border-green {
+    border: 3px solid green; /* Cambia el ancho y color según tu preferencia */
+}
+
+.border-red {
+    border: 3px solid red; /* Cambia el ancho y color según tu preferencia */
+}
+
+/* Asegúrate de que los botones tengan un borde por defecto */
+.btn-paciente, .btn-doctor {
+    border: 3px solid #070707; /* Borde por defecto */
+    transition: border-color 0.3s; /* Transición suave para el cambio de color */
+}

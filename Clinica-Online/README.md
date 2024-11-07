@@ -1,27 +1,22 @@
-# ClinicaOnline
+# Descripcion
+Este es el segundo trabajo práctico de Laboratorio IV de la Tecnicatura Universitaria en Programación dictada en la UTN FRA. El proyecto está realizado con Angular y Firebase y consiste en administrar una clínica online, con usuarios de roles: paciente, especialista o administradores.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.0.
+## Bienvenida
+Esta pagina muestra las caracteristicas generales de la clinica.
+![](https://github.com/DanielRodriguezRotelli/LABORATORIO-IV/tree/master/Clinica-Online/src/assets/pantallas/bienvenida.jpg)
 
-## Development server
+## Login
+Para entrar en la aplicación se tiene que registrar el usuario según su rol y el administrador es el único que puede dar de alta a otro administrador. Un especialista debe ser habilitado por un administrador y además los usuarios tienen que validar su correo electrónico después de registrarse para poder loguearse.
+![](https://github.com/DanielRodriguezRotelli/LABORATORIO-IV/tree/master/Clinica-Online/src/assets/pantallas/login.jpg)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Registro
+Si no está registrado, puede realizarlo segun su rol de usuario: paciente o especialista.
+![](https://github.com/DanielRodriguezRotelli/LABORATORIO-IV/tree/master/Clinica-Online/src/assets/pantallas/registro.jpg)
 
-## Code scaffolding
+## Solicitar Turno
+Como usuario puede solicitar un turno.
+![](https://github.com/DanielRodriguezRotelli/LABORATORIO-IV/tree/master/Clinica-Online/src/assets/pantallas/solicitarturno.jpg)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Mis turnos
+Como paciente o especialista puede visualizar los turnos y sus caracteristicas.
+![](https://github.com/DanielRodriguezRotelli/LABORATORIO-IV/tree/master/Clinica-Online/src/assets/pantallas/misturnos.jpg)

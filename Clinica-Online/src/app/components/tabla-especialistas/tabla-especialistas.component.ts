@@ -8,7 +8,7 @@ import { NgIf, NgStyle } from '@angular/common';
 @Component({
   selector: 'app-tabla-especialistas',
   standalone: true,
-  imports: [SpinnerComponent, NgStyle, NgIf],
+  imports: [SpinnerComponent, NgIf],
   templateUrl: './tabla-especialistas.component.html',
   styleUrl: './tabla-especialistas.component.css'
 })

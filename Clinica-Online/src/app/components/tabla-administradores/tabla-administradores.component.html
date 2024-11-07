@@ -1,35 +1,32 @@
-@if(administradoresObtenidos)
-{
+@if(administradoresObtenidos){
     <div class="table-responsive">
-    <table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">DNI</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Apellido</th>
-            <th scope="col">Edad</th>
-            <th scope="col">Mail</th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        @for (administrador of administradores; track $index){
-            @if(administrador.id)
-            {
-                <tr (click)="enviarId(administrador.id)">
-                    <th scope="row">{{administrador.dni}}</th>
-                    <td>{{administrador.nombre}}</td>
-                    <td>{{administrador.apellido}}</td>
-                    <td>{{administrador.edad}}</td>
-                    <td>{{administrador.mail}}</td>
-                    <td></td>
+        <table class="table table-warning table-hover table-stripped">
+            <thead>
+                <tr>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Edad</th>
+                    <th scope="col">Mail</th>
                 </tr>
-            }
-        }
-    </tbody>
-</table>
-</div>
+            </thead>
+            <tbody class="table-group-divider">
+                @for (administrador of administradores; track $index){
+                    @if(administrador.id){
+                        <tr (click)="enviarId(administrador.id)">
+                            <th scope="row">{{administrador.dni}}</th>
+                            <td>{{administrador.nombre}}</td>
+                            <td>{{administrador.apellido}}</td>
+                            <td>{{administrador.edad}}</td>
+                            <td>{{administrador.mail}}</td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 }
-@else
-{
-<app-spinner></app-spinner>
+@else{
+    <app-spinner></app-spinner>
 }

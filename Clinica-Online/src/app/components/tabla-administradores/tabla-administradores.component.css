@@ -4,3 +4,19 @@
     
     overflow-y: auto; 
 }
+
+.table thead th{
+    background-color: rgb(212, 212, 26); /* Color de fondo rojo */
+    color: white; /* Color del texto en blanco */
+}
+
+.table-header th {
+    padding: 12px; /* Puedes ajustar el padding si lo deseas */
+    text-align: left; /* Alineación del texto */
+}
+
+.table tbody tr {
+    background-color: #346ba1; /* Fondo claro para las filas */
+    color: #333; /* Color de texto */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el mouse */
+}

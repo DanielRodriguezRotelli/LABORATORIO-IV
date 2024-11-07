@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { logueadoGuard } from './guards/logueado.guard';
 import { especialistaGuard } from './guards/especialista.guard';
+import { pacienteGuard } from './guards/paciente.guard';
 
 export const routes: Routes = [
 
@@ -34,5 +35,10 @@ export const routes: Routes = [
         path: 'pacientes',
         loadComponent: () => import('./components/pacientes/pacientes.component').then(m => m.PacientesComponent),
         canActivate: [especialistaGuard]
+    },
+    {
+        path: 'turnos/solicitar',
+        loadComponent: () => import('./components/solicitar-turnos/solicitar-turnos.component').then(m => m.SolicitarTurnosComponent),
+        canActivate: [pacienteGuard]
     },
 ];

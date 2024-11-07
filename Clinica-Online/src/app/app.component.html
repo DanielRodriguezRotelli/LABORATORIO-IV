@@ -22,6 +22,9 @@
             <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'administrador'">
               <a class="nav-link"  routerLink='gestion-usuarios'>Usuarios</a>
             </li>
+            <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'administrador' || this.authService.tipoUsuario == 'paciente'">
+              <a class="nav-link"  routerLink='turnos/solicitar'>Solicitar turno</a>
+            </li>
             <li class="nav-item" *ngIf="this.authService.tipoUsuario == 'paciente' || this.authService.tipoUsuario == 'especialista'">
               <a class="nav-link"  routerLink='turnos/mis-turnos'>Mis turnos</a>
             </li>

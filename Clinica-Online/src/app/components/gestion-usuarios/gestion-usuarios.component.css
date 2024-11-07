@@ -26,3 +26,52 @@ button {
     --bs-btn-disabled-color: #ffffff;
     --bs-btn-disabled-bg: #157786;
 }
+
+.card-formulario{
+    background-color: #D8DBE2;
+
+}
+
+
+/*Asegura que el fondo de la tabla sea transparente */
+.card-body-paciente{
+    background: rgb(208, 169, 169); /* Color similar al host */
+    background: linear-gradient(90deg, rgb(208, 169, 169) 0%, rgba(216, 219, 226, 1) 35%, rgb(176, 88, 88) 100%);
+    /*border-radius: 5px; /* Esquinas redondeadas */
+    /*border: 25px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    /*border-color: red;*/
+}
+
+.card-body-especialista{
+    background: rgb(174, 208, 169); /* Color similar al host */
+    background: linear-gradient(90deg,  rgb(174, 208, 169) 0%, rgba(216, 219, 226, 1) 35%, rgb(98, 176, 88) 100%);
+    /*border-radius: 5px; /* Esquinas redondeadas */
+    /*border: 25px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    /*border-color: red;*/
+}
+
+.card-body-admin{
+    background: rgb(207, 208, 169); /* Color similar al host */
+    background: linear-gradient(90deg, rgb(207, 208, 169) 0%, rgba(216, 219, 226, 1) 35%, rgb(176, 174, 88) 100%);
+    /*border-radius: 5px; /* Esquinas redondeadas */
+    /*border: 25px; /* Esquinas redondeadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    /*border-color: red;*/
+}
+
+/* Asegura que el fondo de la tabla sea transparente */
+app-tabla-pacientes, app-tabla-especialistas, app-tabla-administradores {
+    background-color: transparent;
+}
+
+.btn-1{
+    background-color: rgba(250, 86, 86, 0.342);
+}
+.btn-2{
+    background-color: rgba(86, 250, 94, 0.342);
+}
+.btn-3{
+    background-color: rgba(243, 255, 138, 0.342);
+}

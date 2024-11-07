@@ -16,14 +16,14 @@ import { Router } from '@angular/router';
 import { getDownloadURL, Storage } from '@angular/fire/storage';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { NgClass } from '@angular/common';
-import { Administrador } from '../../entidades/administrador';
 import { AdministradoresService } from '../../services/administradores.service';
 import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
+import { RecaptchaModule, ReCaptchaV3Service } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, SpinnerComponent, NgClass, NgxSpinnerComponent],
+  imports: [ReactiveFormsModule, SpinnerComponent, NgClass, NgxSpinnerComponent, RecaptchaModule],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.css'
 })
@@ -46,8 +46,10 @@ export class RegistroComponent implements OnInit {
   eventoImagenEsp: any;
   claseSpinner = "spinner-desactivado";
   swal: SweetAlert = new SweetAlert(this.router);
+  selectedButton!: 'paciente' | 'doctor' | '';
 
   eventoImagenAdm: any;
+  captchaToken: string | null = null;
 
   constructor( 
     private fb: FormBuilder, 
@@ -61,7 +63,7 @@ export class RegistroComponent implements OnInit {
     public router: Router, 
     private spinner: NgxSpinnerService) {
 
-      this.tipoRegistro = "paciente";
+      this.tipoRegistro = "";
       this.especialidades = [];
       this.especialidadesObtenidas = false;
       this.limpiarEventosImagen();
@@ -79,7 +81,8 @@ export class RegistroComponent implements OnInit {
       mail: ['', [Validators.email, Validators.required]],
       password: ['', [Validators.minLength(6), Validators.required]],
       imagen1: ['', [tipoArchivoValidator(['jpg', 'jpeg', 'png']), Validators.required]],
-      imagen2: ['', [tipoArchivoValidator(['jpg', 'jpeg', 'png']), Validators.required]]
+      imagen2: ['', [tipoArchivoValidator(['jpg', 'jpeg', 'png']), Validators.required]],
+      captcha: ['', Validators.required]
     })
     this.formAdministrador = this.fb.group({
       dni: ['', [Validators.min(1000000), Validators.required]],
@@ -88,17 +91,19 @@ export class RegistroComponent implements OnInit {
       edad: ['', [Validators.min(18), Validators.required]],
       mail: ['', [Validators.email, Validators.required]],
       password: ['', [Validators.minLength(6), Validators.required]],
-      imagen: ['', [tipoArchivoValidator(['jpg', 'jpeg', 'png']), Validators.required]]
+      imagen: ['', [tipoArchivoValidator(['jpg', 'jpeg', 'png']), Validators.required]],
+      captcha: ['', Validators.required]
     })
     this.formEspecialista = this.fb.group({
       dni: ['', [Validators.min(1000000), Validators.required]],
       nombre: ['', [Validators.pattern("^[A-Za-zÁÉÍÓÚáéíóúÑñÜü -]{1,50}$"), Validators.required]],
       apellido: ['', [Validators.pattern("^[A-Za-zÁÉÍÓÚáéíóúÑñÜü -]{1,50}$"), Validators.required]],
       edad: ['', [Validators.min(18), Validators.required]],
-      especialidad: ['', [Validators.pattern("^[A-Za-zÁÉÍÓÚáéíóúÑñÜü -]{1,50}$"), Validators.required]],
+      especialidad: ['', Validators.required],
       mail: ['', [Validators.email, Validators.required]],
       password: ['', [Validators.minLength(6), Validators.required]],
       imagen: ['', [tipoArchivoValidator(['jpg', 'jpeg', 'png']), Validators.required]],
+      captcha: ['', Validators.required]
     })
     this.formEspecialidad = this.fb.group({
       nombre: ['', [Validators.pattern("^[A-Za-zÁÉÍÓÚáéíóúÑñÜü -]{1,50}$"), Validators.required]]
@@ -116,11 +121,30 @@ export class RegistroComponent implements OnInit {
     this.spinner.hide();
   }
 
+  ejecutarCaptchaEspecialista(token: any)
+  {
+    this.formEspecialista.patchValue({
+      captcha: token
+    });
+    this.captchaToken = token;
+  }
+
+  ejecutarCaptchaPaciente(token: any)
+  {
+    this.formPaciente.patchValue({
+      captcha: token
+    });
+    this.captchaToken = token;
+  }
+
+
   cambiarTipoRegistro(tipoRegistro: string)
   {
     this.tipoRegistro = tipoRegistro;
     this.formEspecialidad.reset();
     this.formPaciente.reset();
+    this.selectedButton = tipoRegistro === 'paciente' ? 'paciente' : 'doctor';
+    console.log('eligió: ' + this.selectedButton);
   }
 
   //ENVIAR FORMS 
@@ -258,12 +282,19 @@ export class RegistroComponent implements OnInit {
               urlImagen2: urlImagen2
             };
             console.log('Las imagenes se subieron correctamente.');
-            // Guardar datos del paciente en Firestore
-            this.pacientesService.guardarPaciente(paciente);
-            console.log(response);
-            this.spinner.hide();
-            this.swal.mostrarMensajeExitoYNavegar("Cuenta creada con exito", "A continuación, debe verificar su mail. Revise su bandeja de entrada.", "bienvenida");
 
+            if (this.captchaToken) {
+              // Aquí procesas el formulario junto con el token de CAPTCHA
+               // Guardar datos del paciente en Firestore
+              this.pacientesService.guardarPaciente(paciente);
+              console.log(response);
+              this.spinner.hide();
+              this.swal.mostrarMensajeExitoYNavegar("Cuenta creada con exito", "A continuación, debe verificar su mail. Revise su bandeja de entrada.", "bienvenida");
+              console.log('Formulario válido con CAPTCHA token:', this.captchaToken);
+            } else {
+              console.error('Captcha no resuelto');
+            }
+           
             // Reseteo de eventos de las imágenes
             this.limpiarEventosImagen();
             // Reseteo del formulario

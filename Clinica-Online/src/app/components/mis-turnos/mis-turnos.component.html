@@ -1,1 +1,397 @@
-<p>mis-turnos works!</p>
+<!--
+    <app-spinner [ngClass]="claseSpinner"></app-spinner>
+-->
+
+<h1 class="text-center" style="margin-top: 50px;" *ngIf="authService.tipoUsuario != 'administrador'">MIS TURNOS</h1>
+<h1 class="text-center" style="margin-top: 50px;" *ngIf="authService.tipoUsuario == 'administrador'">TURNOS</h1>
+<div class="container d-flex align-items-center justify-content-center h-100">
+
+    <div class="card-mis-turnos card p-4 col-md-10">
+        @if (autenticacionLista)
+        {
+            
+            <h2 class="mb-0 text-center" style="color: white;">Filtrar por:</h2>
+            <div class="d-flex align-items-center col-12 my-1">
+                
+
+                <div class="input-group mx-1">
+                    <button class="btn btn-outline-info" type="button" (click)="mostrarModalFiltroEspecialidades()"
+                        [disabled]="!turnosListos">Especialidad</button>
+                    <input type="text" class="form-control" value={{especialidadSeleccionada}} readonly>
+                </div>
+
+                <div class="input-group mx-1">
+                    @if (authService.tipoUsuario == "paciente" || authService.tipoUsuario == "administrador")
+                    {
+                    <button class="btn btn-outline-info" type="button" (click)="mostrarModalFiltroEspecialistas()"
+                        [disabled]="!turnosListos">Especialista</button>
+                    <input type="text" class="form-control" readonly value={{especialistaSeleccionado}}>
+                    }
+                    @if (authService.tipoUsuario == "especialista")
+                    {
+                    <button class="btn btn-outline-info" type="button" (click)="mostrarModalFiltroPacientes()"
+                        [disabled]="!turnosListos">Paciente</button>
+                    <input type="text" class="form-control" readonly value={{pacienteSeleccionado}}>
+                    }
+                </div>
+
+                <div class="mx-2">
+                    <button [disabled]="!turnosListos" (click)="limpiarFiltros()" class="btn btn-outline-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path
+                                d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card p-1 my-4 bg-info" style="overflow-y: auto; max-height: 400px;">
+                <table class="table table-info table-striped table-hover" style="cursor: pointer;">
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th scope="col">Especialidad</th>
+                            <th scope="col"
+                                *ngIf="authService.tipoUsuario == 'paciente' || authService.tipoUsuario =='administrador'">
+                                Especialista</th>
+                            <th scope="col"
+                                *ngIf="authService.tipoUsuario == 'especialista' || authService.tipoUsuario =='administrador'">
+                                Paciente</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Hora</th>
+                            <th scope="col">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider bg-info text-white">
+                        @if (turnosListos)
+                        {
+                            @if(hayTurnos)
+                            {
+                                @for (turno of turnos; track $index)
+                                {
+                                    <tr (click)="mostrarModalAccionesTurno(turno)" role="button" >
+                                        <td >{{turno.especialidad}}</td>
+                                        <td *ngIf="authService.tipoUsuario == 'paciente' || authService.tipoUsuario =='administrador'">
+                                            {{turno.nombreEspecialista + " " + turno.apellidoEspecialista}}</td>
+                                        <td
+                                            *ngIf="authService.tipoUsuario == 'especialista' ||authService.tipoUsuario =='administrador'">
+                                            {{turno.nombrePaciente + " " + turno.apellidoPaciente}}</td>
+                                        <td>{{turno.fecha}}</td>
+                                        <td>{{turno.hora | minutosAHora}}</td>
+                                        <td>{{turno.estado}}</td>
+                                    </tr>
+                                }
+                            }@else
+                            {
+                                @if (authService.tipoUsuario == "administrador")
+                                {
+                                    <td colspan="6" class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center w-100 h-100">
+                                            <div class="card bg-danger p-3">
+                                                @if (filtrosActivos)
+                                                {
+                                                <h3 class="text-white">Sin turnos asignados</h3>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                }@else
+                                {
+                                    <td colspan="5" class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center w-100 h-100">
+                                            <div class="card bg-danger p-3">
+                                                @if (filtrosActivos)
+                                                {
+                                                <h3 class="text-white">Sin turnos asignados</h3>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                }
+                            }
+                        } @else
+                        {
+                        <!-- <tr>
+                                <td colspan="5" class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
+                                        <app-spinner></app-spinner>
+                                    </div>
+                                </td>
+                            </tr> -->
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        @else
+        {
+            <div class="my-auto mx-auto text-center">
+                <h1>Cargando...</h1>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalFiltroEspecialidades>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                    Seleccione una especialidad</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-auto">
+                <ul class="list-group m-4">
+                    <li class="list-group-item active text-center" aria-current="true">Especialidades</li>
+                    @if (especialidades)
+                    {
+                    @for (especialidad of especialidades; track $index)
+                    {
+                    <li class="list-group-item">
+                        <button [disabled]="!turnosListos"
+                            (click)="establecerFiltro('especialidad', especialidad.nombre)" class="btn w-100"
+                            data-bs-dismiss="modal">
+                            {{especialidad.nombre}}
+                        </button>
+                    </li>
+                    }
+                    }
+                    @else {
+                    <app-spinner></app-spinner>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalFiltroEspecialistas>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                    Seleccione un especialista</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-auto">
+                <ul class="list-group m-4">
+                    <li class="list-group-item active text-center" aria-current="true">Especialistas</li>
+                    <app-tabla-especialistas *ngIf="turnosListos" [estado]="'aprobado'"
+                        (onEnviarId)="establecerFiltro('idEspecialista', $event)" data-bs-dismiss="modal"
+                        role="button"></app-tabla-especialistas>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalAccionesTurno>
+    <div class="modal-dialog modal-overlay">
+        <div class="modal-content card-modal-principal">
+            <div class="modal-header">
+                <h1 class="modal-title my-0 fs-5 text-white" id="staticBackdropLabel">Usted puede: </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body modalbody mx-auto d-flex flex-row">
+
+                @if (
+                (authService.tipoUsuario == "paciente" && !mostrarBotonesAcciones.verResena &&
+                !mostrarBotonesAcciones.cancelar && !mostrarBotonesAcciones.verCalificacion &&
+                !mostrarBotonesAcciones.completarEncuesta && !mostrarBotonesAcciones.calificarAtencion)
+                ||
+                (authService.tipoUsuario == "especialista" && !mostrarBotonesAcciones.verResena &&
+                !mostrarBotonesAcciones.cancelar && !mostrarBotonesAcciones.verCalificacion &&
+                !mostrarBotonesAcciones.aceptarTurno && !mostrarBotonesAcciones.rechazarTurno &&
+                !mostrarBotonesAcciones.finalizarTurno)
+                ||
+                (authService.tipoUsuario == "administrador" && !mostrarBotonesAcciones.verResena &&
+                !mostrarBotonesAcciones.cancelar)
+                )
+                {
+                    <h5 class="mx-4 p-4">No hay acciones para realizar</h5>
+                }
+
+                @if(mostrarBotonesAcciones.aceptarTurno && mostrarBotonesAcciones.rechazarTurno)
+                {
+                <div class="card card1 p-2 my-4">
+                    <button class="btn btn-success text-white my-2" style="height: 120px;" data-bs-dismiss="modal"
+                        (click)="cambiarEstadoTurno('aceptado')">Aceptar turno</button>
+                </div>
+                <div class="card card1 p-2 my-4">
+                    <textarea class="form-control" rows="3" placeholder="Motivos*"
+                    [(ngModel)]="motivosRechazo"></textarea>
+                    <button class="btn btn-dark text-white my-2" data-bs-dismiss="modal"
+                    (click)="rechazarTurno()" [disabled]="!motivosRechazo">Rechazar turno</button>
+                </div>
+                }
+
+                @if (mostrarBotonesAcciones.finalizarTurno)
+                {
+                    <div class="card card1 p-2 my-4">
+                        <textarea class="form-control" rows="3" placeholder="Completar Reseña*"
+                        [(ngModel)]="datosResena"></textarea>
+                        <button class="btn btn-dark text-white my-2" data-bs-dismiss="modal"
+                        (click)="finalizarTurno()" [disabled]="!datosResena">Finalizar Turno</button>
+                    </div>
+                }
+
+                @if (mostrarBotonesAcciones.cancelar)
+                {
+                <div class="card card1 p-2 my-4">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Motivos*"
+                        [(ngModel)]="motivosCancelacion"></textarea>
+                    <button class="btn btn-danger text-white my-2" data-bs-dismiss="modal" (click)="cancelarTurno()"
+                        [disabled]="!motivosCancelacion">Cancelar turno</button>
+                </div>
+                }
+
+                @if (mostrarBotonesAcciones.verResena)
+                {
+                    <div class="card card1 px-4 my-4" style="max-width: 220px;">
+                        <div class="modal-header">
+                            <h5 class="my-0 text-white text-center">Reseña médica</h5>
+                        </div>
+                        <p class="text-white">{{ turnoSeleccionado.resena}}</p>
+
+                    </div>
+                }
+
+                @if(mostrarBotonesAcciones.completarEncuesta)
+                {
+
+                <div class="card card1 p-2 my-4 text-white">
+                    <div class="modal-header">
+                        <h5 class="my-0 text-center">Encuesta</h5>
+                    </div>
+                    <form [formGroup]="formEncuesta" (ngSubmit)="enviarEncuesta()" class="m-3">
+                        <div style="max-height: 150px; max-width: 300px; overflow-y: auto;">
+
+                            <div *ngFor="let pregunta of preguntasEncuesta">
+                                <div class="mb-3">
+                                    <label>{{ pregunta.number + ") " + pregunta.question }}</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                            [formControlName]="'question' + pregunta.number" [value]="'Sí'"
+                                            id="pregunta{{pregunta.number}}Si">
+                                        <label class="form-check-label" for="pregunta{{pregunta.number}}Si">Sí</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio"
+                                            [formControlName]="'question' + pregunta.number" [value]="'No'"
+                                            id="pregunta{{pregunta.number}}No">
+                                        <label class="form-check-label" for="pregunta{{pregunta.number}}No">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning my-2 w-100" data-bs-dismiss="modal"
+                            [disabled]="!formEncuesta.valid">Enviar encuesta</button>
+                    </form>
+                </div>
+                }
+
+                @if (mostrarBotonesAcciones.calificarAtencion)
+                {
+                <div class="card card1 p-2 my-4 text-white" style="min-width: 220px;">
+                    <div class="modal-header">
+                        <h5 class="my-0 text-white text-center">Calificar atención</h5>
+                    </div>
+                    <form [formGroup]="formCalificacion" (ngSubmit)="enviarCalificacion()" class="m-3">
+                        <div class="d-flex flex-row align-items-center justify-content-center my-2">
+                            @for (estrella of estrellas; track estrella; let i = $index)
+                            {
+                            <div class="m-1">
+
+                                @if (estrella == true)
+                                {
+                                <svg (click)="establecerEstrellas(i)" xmlns="http://www.w3.org/2000/svg" width="20"
+                                    height="20" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                </svg>
+                                }
+                                @else {
+                                <svg (click)="establecerEstrellas(i)" xmlns="http://www.w3.org/2000/svg" width="20"
+                                    height="20" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+                                </svg>
+                                }
+                            </div>
+                            }
+
+                        </div>
+                        <textarea class="form-control my-2" rows="3" placeholder="Comentario*"
+                            formControlName="comentario"></textarea>
+
+
+                        <button class="btn btn-primary my-2 w-100" data-bs-dismiss="modal"
+                            [disabled]="!formCalificacion.valid">Enviar</button>
+                    </form>
+                </div>
+                }
+
+                @if(mostrarBotonesAcciones.verCalificacion)
+                {
+                <div class="card card1 p-2 my-4 text-white">
+
+                    <h5 class="text-center">Calificación</h5>
+                    <div class="d-flex flex-row align-items-center justify-content-center my-0">
+
+                        @for (estrella of this.estrellas; track estrella; let i = $index)
+                        {
+                        <div class="mx-1">
+
+                            @if (i <= turnoSeleccionado.calificacion.estrellas-1) { <svg
+                                xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                                </svg>
+                                }
+                                @else {
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                    class="bi bi-star" viewBox="0 0 16 16">
+                                    <path
+                                        d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z" />
+                                </svg>
+                                }
+                        </div>
+                        }
+                    </div>
+                    <div class="card p-2">
+                        <label><i>{{turnoSeleccionado.calificacion.comentario}}</i></label>
+                    </div>
+                </div>
+                }
+
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalFiltroPacientes>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                    Seleccione un paciente</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body mx-auto">
+                <ul class="list-group m-4">
+                    <li class="list-group-item active text-center" aria-current="true">Pacientes</li>
+                    <app-tabla-pacientes *ngIf="turnosListos" (onEnviarId)="establecerFiltro('idPaciente', $event)"
+                        data-bs-dismiss="modal" role="button"></app-tabla-pacientes>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

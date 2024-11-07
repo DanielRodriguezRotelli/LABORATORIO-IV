@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { StorageService } from '../../services/storage.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, NgxSpinnerModule],
+  imports: [ReactiveFormsModule, NgxSpinnerModule, SpinnerComponent, NgClass],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -18,7 +19,16 @@ export class LoginComponent implements OnInit{
 
   formLogin!: FormGroup;
   swal: SweetAlert = new SweetAlert(this.router);
+  usuariosRapidos: Array<any> = [
+    {tipo: "Paciente", mail: "pacienteariadna@gmail.com", password: "123456", imagePath: "pacientes/pacienteariadna@gmail.com/1"},
+    {tipo: "Paciente", mail: "pacientemaria@hotmail.com", password: "123456", imagePath: "pacientes/pacientemaria@hotmail.com/1"},
+    {tipo: "Paciente", mail: "pacienteantonio@gmail.com", password: "123456", imagePath: "pacientes/pacienteantonio@gmail.com/1"},
+    {tipo: "Especialista", mail: "especialistagutierrez@gmail.com", password: "123456", imagePath: "especialistas/especialistagutierrez@gmail.com"},
+    {tipo: "Especialista", mail: "doctoraruggero@clinica.com", password: "123456", imagePath: "especialistas/doctoraruggero@clinica.com"},
+    {tipo: "Admin", mail: "administrador@gmail.com", password: "123456", imagePath: "administradores/administrador@gmail.com"}
+  ];
   imagenesBotonesObtenidas = false;
+  claseSpinner = "spinner-desactivado";
 
 
   constructor(
@@ -35,7 +45,33 @@ export class LoginComponent implements OnInit{
       user: ['', Validators.required],
       password: ['', Validators.required]
     })
+
+    for(let i = 0 ; i <this.usuariosRapidos.length ; i++)
+    {
+      this.storageService.obtenerImagen(this.usuariosRapidos[i].imagePath).then((imagePath) => {
+        this.usuariosRapidos[i].imagePath = imagePath;
+
+        console.log(this.usuariosRapidos[i].imagePath);
+
+        if(i == this.usuariosRapidos.length-1)
+          {
+            this.imagenesBotonesObtenidas =true;
+          }
+      });
+    }
+
     this.spinner.hide();
+  }
+
+
+  mostrarSpinner()
+  {
+    this.claseSpinner = "spinner-activado";
+  }
+
+  ocultarSpinner()
+  {
+    this.claseSpinner = "spinner-desactivado";
   }
 
   
@@ -46,7 +82,13 @@ export class LoginComponent implements OnInit{
     {
       this.authService.logIn(this.user?.value, this.password?.value).then((response) =>
       {
-        if (response.user.email == 'administrador@gmail.com' || response.user.email == 'pacienteariadna@gmail.com' || response.user.email == 'cardiologogutierrez@gmail.com') {
+        if (response.user.email == 'administrador@gmail.com' || 
+            response.user.email == 'pacienteariadna@gmail.com' || 
+            response.user.email == 'pacientemaria@hotmail.com' ||
+            response.user.email == 'pacienteantonio@gmail.com' ||
+            response.user.email == 'doctoraruggero@clinica.com' ||
+            response.user.email == 'pacientecesar@argentina.com' ||
+            response.user.email == 'especialistagutierrez@gmail.com') {
           console.log(response);
           let log = {
             email: this.user?.value
@@ -82,30 +124,16 @@ export class LoginComponent implements OnInit{
     }
   }
 
-
-  accesoRapido(opcion: string)
+  accesoRapido(usuario: any)
   {
     let user;
     let password;
-    switch (opcion)
-    {
-      case "paciente":
-        user = "pacienteariadna@gmail.com";
-        password = "123456";
-        break;
-      case "especialista":
-        user = "cardiologogutierrez@gmail.com";
-        password = "999999";
-        
-        break;
-      case "administrador":
-        user = "administrador@gmail.com";
-        password = "123456";
-        break;
-    }
+    user = usuario.mail;
+    password = usuario.password;
     this.formLogin.patchValue({ user: user, password: password })
   }
 
+  
   get user()
   {
     return this.formLogin.get('user');

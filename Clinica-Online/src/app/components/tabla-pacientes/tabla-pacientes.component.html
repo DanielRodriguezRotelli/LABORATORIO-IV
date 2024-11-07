@@ -1,35 +1,34 @@
-@if(pacientesObtenidos)
-{
-    <div [ngStyle]="{'max-height.px': maxHeight}" class="table-responsive">
-        <table class="table table-striped">
-            <thead>
+@if(pacientesObtenidos){
+    <div class="table-responsive">
+        <table class="table table-danger table-hover table-stripped">
+            <thead >
                 <tr>
-                    <th scope="col" *ngIf="tipoVista == 1">DNI</th>
-                    <th scope="col" >Nombre</th>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
-                    <th scope="col" *ngIf="tipoVista == 1">Edad</th>
+                    <th scope="col" >Edad</th>
+                    <th scope="col">Obra social</th>
                     <th scope="col" *ngIf="tipoVista == 1">Mail</th>
+
                 </tr>
             </thead>
-            <tbody class="table-group-divider">
+            <tbody>
                 @for (paciente of pacientes; track $index){
-                    @if(paciente.id)
-                    {
+                    @if(paciente.id){
                         <tr (click)="enviarId(paciente.id)" >
-                            <th scope="row" *ngIf="tipoVista == 1">{{paciente.dni}}</th>
+                            <th scope="row">{{paciente.dni}}</th>
                             <td>{{paciente.nombre}}</td>
                             <td>{{paciente.apellido}}</td>
-                            <td *ngIf="tipoVista == 1">{{paciente.edad}}</td>
+                            <td>{{paciente.edad}}</td>
+                            <td>{{paciente.obraSocial}}</td>
                             <td *ngIf="tipoVista == 1">{{paciente.mail}}</td>
-                            <td></td>
                         </tr>
                     }
                 }
             </tbody>
         </table>
     </div>
-}@else
-{
+}
+@else{
     <app-spinner></app-spinner>
 }
-

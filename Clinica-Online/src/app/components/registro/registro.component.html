@@ -8,41 +8,18 @@
     {
       @if(tipoRegistro == "")
       {
-        <div class="py-5 text-center">
-          <h2>Usted desea registrarse como:</h2>
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-              <label class="btn btn-outline-primary" for="btnradio1"
-                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio2"
-                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
-                  <!--
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio3"
-                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
-                  -->
-          </div>
-      </div>
+        <div class="d-flex flex-lg-row flex-column h-100 justify-content-center align-items-center">
+          <button class="btn-paciente  btn-paciente-grande m-4" (click)="cambiarTipoRegistro('paciente')"><img src="../../../assets/img/paciente.jpg" class="img-fluid boton-imagen"></button>
+          <button class="btn-doctor btn-doctor-grande m-4" (click)="cambiarTipoRegistro('especialista')" ><img src="../../../assets/img/doctor.jpg" class="img-fluid boton-imagen"></button>
+        </div>
       }
       @if (tipoRegistro == "paciente")
       {
-        <div class="py-5 text-center">
-          <h2>Usted desea registrarse como:</h2>
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-              <label class="btn btn-outline-primary" for="btnradio1"
-                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio2"
-                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
-              <!--
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio3"
-                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
-                  -->
-          </div>
-      </div>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <button class="btn-paciente-mediano m-4 border-green"  (click)="cambiarTipoRegistro('paciente')"><img src="../../../assets/img/paciente.jpg"></button>
+          <button class="btn-doctor-chico  m-4 border-red" (click)="cambiarTipoRegistro('especialista')"><img src="../../../assets/img/doctor.jpg"></button>
+        </div>
+
         <div class="col-12">
           <h1 class="display-3 m-4 text-center">Paciente</h1>
           <form [formGroup]="formPaciente" (ngSubmit)="enviarFormPaciente()">
@@ -141,7 +118,7 @@
               </div>
             </div>
             <div class="d-flex justify-content-center flex-column p-2 align-items-center my-4">
-              
+              <re-captcha (resolved)="ejecutarCaptchaPaciente($event)" siteKey="6LcoDnYqAAAAAGPh6aMfmMe3R1lnGYCKZE_ojCu3"></re-captcha>
               <button type="submit" class="btn w-50 mx-auto my-4" [disabled]="formPaciente.invalid">
                 Enviar
               </button>
@@ -258,23 +235,10 @@
 
       @if (tipoRegistro == "especialista")
       {
-        <div class="py-5 text-center">
-          <h2>Usted desea registrarse como:</h2>
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-              <label class="btn btn-outline-primary" for="btnradio1"
-                  (click)="cambiarTipoRegistro('paciente')">Paciente</label>
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio2"
-                  (click)="cambiarTipoRegistro('especialista')">Especialista</label>
-
-                  <!--
-              <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-              <label class="btn btn-outline-primary" for="btnradio3"
-                  (click)="cambiarTipoRegistro('administrador')">Administrador</label>
-                  -->
-          </div>
-      </div>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+          <button class="btn-paciente-chico  m-4 border-red" (click)="cambiarTipoRegistro('paciente')"><img src="../../../assets/img/paciente.jpg"></button>
+          <button class="btn-doctor-mediano   m-4 border-green" (click)="cambiarTipoRegistro('especialista')"><img src="../../../assets/img/doctor.jpg"></button>
+        </div>
 
         <h1 class="display-3 m-4 text-center">Especialista</h1>
 
@@ -402,6 +366,8 @@
                 </div>
             </div>
             <div class="my-4 p-2 mx-auto w-50 d-flex flex-column align-items-center">
+              <re-captcha class="mx-auto" (resolved)="ejecutarCaptchaEspecialista($event)" siteKey="6LcoDnYqAAAAAGPh6aMfmMe3R1lnGYCKZE_ojCu3"></re-captcha>
+
               <button type="submit" class="btn w-100 mt-4" [disabled]="formEspecialista.invalid">
                 Enviar
               </button>

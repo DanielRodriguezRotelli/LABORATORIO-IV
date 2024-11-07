@@ -13,11 +13,15 @@ import { EspecialistasService } from '../../services/especialistas.service';
 import { Modal } from 'bootstrap';
 import { NgClass, NgIf } from '@angular/common';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { Disponibilidad } from '../../entidades/disponibilidad';
+import { TurnosService } from '../../services/turnos.service';
+import { Tiempo } from '../../clases/tiempo';
+import { MinutosAHoraPipe } from '../../pipes/minutos-ahora.pipe';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, NgClass, NgIf, SpinnerComponent],
+  imports: [ReactiveFormsModule, FormsModule, NgClass, NgIf, SpinnerComponent, MinutosAHoraPipe],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
 })
@@ -36,13 +40,16 @@ export class MiPerfilComponent {
   formDisponibilidad!: FormGroup;
   swal: SweetAlert = new SweetAlert(this.router);
   especialidadSeleccionada: string = "";
+  //especialidad: string ="";
   dias: Array<string> = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
   horarios: Array<number> = [];
   claseSpinner: string = "spinner-desactivado";
   turnos!: Array<any> | null;
   suscripcionTurnos!: Subscription;
   tieneHistoriaClinica = false;
+
   constructor(
+    public turnosService: TurnosService,
     public router: Router, 
     public fb: FormBuilder, 
     public especialidadesService: EspecialidadesService, 
@@ -61,15 +68,18 @@ export class MiPerfilComponent {
     })
 
     this.formDisponibilidad = this.fb.group({
+      especialidad: ['', Validators.required],
       dia: ['', Validators.required],
       horaInicio: ['', Validators.required],
       horaFin: ['', Validators.required]
     })
 
-    for (let i = 480; i <= 1140; i = i + 30)
-    {
+    for (let i = 480; i <= 1140; i += 30) {
       this.horarios.push(i);
     }
+    
+    console.log(this.horarios); // Ejemplo de salida: ["08:00 am", "08:30 am", "09:00 am", ... "07:00 pm"]
+    
   }
 
   ngOnDestroy(): void
@@ -132,13 +142,13 @@ export class MiPerfilComponent {
                 this.imagenActual2 = url2;
               }
             })
-            /*
+            
             this.suscripcionTurnos = this.turnosService.obtenerTurnosByField('idPaciente', response?.id).subscribe({
               next: ((turnos) => {
                 this.turnos = turnos;
               })
             });
-            */
+            
           });
 
           break;
@@ -172,79 +182,58 @@ export class MiPerfilComponent {
       }
     })
   }
+
   mostrarModalCargarDisponibilidad()
   {
     const modal: any = new Modal(this.modalCargarDisponibilidad.nativeElement);
     modal.show();
   }
+
   mostrarModalAgregarEspecialidad()
   {
     const modal: any = new Modal(this.modalAgregarEspecialidad.nativeElement);
     modal.show();
   }
-  mostrarModalHistoriaClinica()
-  {
-    this.tieneHistoriaClinica = false;
-    if(this.turnos)
-    {
+  
 
-      for(let i=0 ; i<this.turnos.length ; i++)
-      {
-        if(this.turnos[i].historiaClinica)
-          {
-            this.tieneHistoriaClinica = true;
-            break;
-          }
-        }
-    }
-    else
-    {
-      this.tieneHistoriaClinica = false;
-    }
-      const modal: any = new Modal(this.modalHistoriaClinica.nativeElement);
-    modal.show();
+  enviarFormAñadirEspecialidadAEspecialista(){
+    
   }
+  
+  enviarFormEspecialidad() {
+    if (this.formEspecialidad.valid) {
+      const nuevaEspecialidad: Especialidad = {nombre: this.nombreEspecialidad?.value};
 
-  descargarPDF()
-  {
-    window.open('pdf-historia-clinica');
-  }
-  descargarAtenciones()
-  {
-    window.open('pdf-atenciones');
-  }
-  enviarFormEspecialidad()
-  {
-    if (this.formEspecialidad.valid)
-    {
-      let especialidad = this.nombreEspecialidad?.value;
-      let especialidadExistente = false;
-      this.especialidades.forEach(especialidad =>
-      {
-        if (this.nombreEspecialidad?.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() == especialidad.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase())
-        {
-          this.swal.mostrarMensajeError("Error", "Esa especialidad ya está en la lista");
-          especialidadExistente = true;
-        }
-      });
-      if (!especialidadExistente)
-      {
-        this.especialidadesService.guardarEspecialidad(especialidad);
+      console.log('especialidad: ' + nuevaEspecialidad.nombre);
+
+      let especialidadExistente = this.especialidades.some(especialidad =>
+        nuevaEspecialidad.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() === 
+        especialidad.nombre.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+      );
+  
+      if (especialidadExistente) {
+        this.swal.mostrarMensajeError("Error", "Esa especialidad ya está en la lista");
+      } else {
+        this.especialidadesService.guardarEspecialidad(nuevaEspecialidad);
         this.formEspecialidad.reset();
+        this.swal.mostrarMensajeExito("Éxito", "La especialidad ha sido guardada correctamente.");
       }
-    } else
-    {
+    } else {
       this.formEspecialidad.markAllAsTouched();
     }
   }
 
-  /*
+  close(){
+    this.formEspecialidad.reset();
+  }
+  
   enviarFormDisponibilidad()
   {
 
     if (this.formDisponibilidad.valid)
     {
       let disponibilidad: Disponibilidad = {
+        especialidad: this.especialidadDeDisponibilidad?.value,
         dia: this.dia?.value,
         horaInicio: parseInt(this.horaInicio?.value),
         horaFin: parseInt(this.horaFin?.value)
@@ -266,7 +255,7 @@ export class MiPerfilComponent {
     {
       this.formEspecialidad.markAllAsTouched();
     }
-  }*/
+  }
 
   seleccionarEspecialidad(especialidad: string)
   {
@@ -293,7 +282,6 @@ export class MiPerfilComponent {
         this.cargarDatos();
         this.ocultarSpinner();
         this.swal.mostrarMensajeExito("Exito", "Especialidad agregada con éxito");
-
       });
     }
     this.especialidadSeleccionada = "";
@@ -304,6 +292,10 @@ export class MiPerfilComponent {
     return this.formEspecialidad.get('nombre');
   }
 
+  get especialidadDeDisponibilidad()
+  {
+    return this.formDisponibilidad.get('especialidad');
+  }
   get dia()
   {
     return this.formDisponibilidad.get('dia');

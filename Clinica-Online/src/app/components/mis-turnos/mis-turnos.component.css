@@ -1,0 +1,85 @@
+:host {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgb(169, 188, 208);
+    background: linear-gradient(90deg, rgba(169, 188, 208, 1) 0%, rgba(216, 219, 226, 1) 35%, rgba(88, 164, 176, 1) 100%);
+}
+
+.card-mis-turnos{
+    position: center;
+    background-color: #4b4b4b;
+    min-height: 80%;
+    border-radius: 3rem;
+}
+
+.spinner-activado {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner-desactivado{
+    display: none;
+}
+
+.btn-sumar-datos {
+    height: 40px;
+    width: 40px;
+    border: none;
+    --bs-btn-color: #ffffff;
+    --bs-btn-bg: #1ca1b6;
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-hover-bg: #188c9e;
+    --bs-btn-active-color: #ffffff;
+    --bs-btn-active-bg: #157786;
+    --bs-btn-active-border-color: #157786;
+    --bs-btn-disabled-border-color: #157786;
+    --bs-btn-disabled-color: #ffffff;
+    --bs-btn-disabled-bg: #157786;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    padding: 0.2rem;
+}
+
+.table thead th{
+    background-color: #0dcaf0; /* Color de fondo rojo */
+    color: white; /* Color del texto en blanco */
+  }
+
+
+.modal-overlay {
+    margin-top: 300px;
+    min-width: 1000px;
+    height: 50vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+
+}
+  
+.card-modal-principal {
+background-color: #8fa8c0;
+padding: 20px;
+margin: 5px;
+border-radius: 15px;
+box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+width: 90%; /* Ancho del modal ajustado para pantallas más pequeñas */
+text-align: center;
+}
+
+.modalbody .card1{
+    margin: 20px; /* Ajusta este valor según necesites */
+    background-color: #9da0a3;
+}

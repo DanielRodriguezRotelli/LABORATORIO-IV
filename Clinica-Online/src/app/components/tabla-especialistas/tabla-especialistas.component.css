@@ -4,3 +4,31 @@
     
     overflow-y: auto; 
 }
+
+
+.table thead th{
+    background-color: green; /* Color de fondo rojo */
+    color: white; /* Color del texto en blanco */
+}
+
+/* Estilo para las filas impares */
+.table-striped tbody tr{
+    cursor: pointer; /* Cambia el cursor a una mano al pasar el mouse */
+}
+
+/* Estilo para las filas impares */
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #215583 !important; /* Color para filas impares */
+    cursor: pointer; /* Cambia el cursor a una mano al pasar el mouse */
+}
+
+/* Estilo para las filas pares */
+.table-responsive .table-stripped tbody tr:nth-child(even) {
+    background-color: #346ba1; /* Fondo claro para las filas */
+    color: #333; /* Color de texto */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el mouse */
+}
+
+.table-responsive .table tbody tr:hover {
+    background-color: var(--bs-primary); /* Utiliza la variable de Bootstrap */
+}

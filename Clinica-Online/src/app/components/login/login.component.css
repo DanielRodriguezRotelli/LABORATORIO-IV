@@ -31,3 +31,49 @@
 .ng-invalid:not(form)  {
     border-right: 5px solid hsl(0, 100%, 62%); /* red */
   }
+
+
+  /* Contenedor de accesos rápidos en la parte inferior */
+.accesos-rapidos-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;  /* Ajusta según el espacio deseado en la parte inferior */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;  /* Espacio entre botones */
+    margin: 0 10px; /* Espacio horizontal entre botones */
+
+}
+.accesos-rapidos-container .card {
+    background-color: transparent; /* Cambia el color de fondo */
+    border: none; /* Quita el borde de la card, opcional */
+    box-shadow: none; /* Quita la sombra, si deseas un fondo completamente transparente */
+    margin-bottom: 10px;
+}
+
+
+/* Estilos para los botones de acceso rápido */
+.btn-acceso-rapido {
+    flex: 0 0 100px;  /* Esto establece un tamaño base de 100px */
+    width: 100px;  /* Ancho fijo */
+    height: 100px; /* Alto fijo para mantenerlo cuadrado */
+    padding: 0px;
+    border-radius: 8px; /* Opcional: redondear las esquinas */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2px; /* Espacio horizontal entre botones */
+    background-color: gray; /* Cambia el color de fondo */
+}
+
+/* Asegura que las imágenes dentro del botón se ajusten al tamaño del botón */
+.btn-acceso-rapido img {
+    width: 90px; /* Tamaño de la imagen dentro del botón */
+    height: 90px;
+    object-fit: cover; /* Asegura que la imagen cubra el espacio sin distorsionarse */
+    border-radius: 6px; /* Opcional: redondeo interno para la imagen */
+}
+

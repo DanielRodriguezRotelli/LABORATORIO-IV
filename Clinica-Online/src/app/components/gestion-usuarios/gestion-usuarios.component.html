@@ -2,29 +2,26 @@
   ><p style="color: #edf2f4; font-family: Roboto">Cargando...</p>
 </ngx-spinner>
 
-
 <div class="d-flex flex-column align-items-center col-12">
-<div class="col-12 col-md-8">
-    <div class="card my-4">
-      <div class="card-body">
-        <h5 class="card-title">Pacientes</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Listado</h6>
-        <app-tabla-pacientes [tipoVista]="1" (onEnviarId)="recibirIdPaciente($event)"></app-tabla-pacientes>
+  <div class="col-12 col-md-8 ">
+
+    <div class="card my-4 card-body-paciente" style="border: 2px solid red; border-radius: 5px;">
+      <div  style="width: 98%; margin-left: 8px;">
+        <h5 class="card-title text-center" style="color: red;">PACIENTES</h5>
+        <app-tabla-pacientes  [tipoVista]="1" (onEnviarId)="recibirIdPaciente($event)"></app-tabla-pacientes>
       </div>
     </div> 
 
-    <div class="card my-4 ">
-      <div class="card-body">
-        <h5 class="card-title">Especialistas</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Listado</h6>
-        <app-tabla-especialistas [tipoVista]="1" [maxHeight]="200" (onEnviarId)="recibirIdEspecialista($event)"></app-tabla-especialistas>
+    <div class="card my-4 card-body-especialista" style="border: 2px solid green; border-radius: 5px;">
+      <div style="width: 98%; margin-left: 8px;" >
+        <h5 class="card-title text-center" style="color: green">ESPECIALISTAS</h5>
+        <app-tabla-especialistas [tipoVista]="1" (onEnviarId)="recibirIdEspecialista($event)"></app-tabla-especialistas>
       </div>
     </div>
 
-    <div class="card my-4">
-      <div class="card-body">
-        <h5 class="card-title">Administradores</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Listado</h6>
+    <div class="card my-4 card-body-admin" style="border: 2px solid yellow; border-radius: 5px;">
+      <div style="width: 98%; margin-left: 8px;" >
+        <h5 class="card-title text-center" style="color: yellow">ADMINISTRADORES</h5>
         <app-tabla-administradores (onEnviarId)="recibirIdAdministrador($event)"></app-tabla-administradores>
       </div>
     </div>
@@ -35,14 +32,14 @@
     <h1>Registrar usuario</h1>
     <div class="btn-group mb-4" role="group" aria-label="Basic radio toggle button group">
       <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
-      <label class="btn btn-outline-primary" for="btnradio1" (click)="cambiarTipoRegistro('paciente')">Paciente</label>
+      <label class="btn btn-1 btn-outline-danger" for="btnradio1" (click)="cambiarTipoRegistro('paciente')">Paciente</label>
 
       <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-      <label class="btn btn-outline-primary" for="btnradio2"
+      <label class="btn btn-2 btn-outline-success" for="btnradio2"
         (click)="cambiarTipoRegistro('especialista')">Especialista</label>
 
-      <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-      <label class="btn btn-outline-primary" for="btnradio3"
+      <input type="radio" class="btn-check " name="btnradio" id="btnradio3" autocomplete="off">
+      <label class="btn btn-3 btn-outline-warning" for="btnradio3"
         (click)="cambiarTipoRegistro('administrador')">Administrador</label>
     </div>
 
@@ -390,9 +387,9 @@
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalEspecialistaSeleccionado>
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content bg-secondary">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{especialistaSeleccionado?.nombre}}
+        <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">{{especialistaSeleccionado?.nombre}}
           {{especialistaSeleccionado?.apellido}}</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>

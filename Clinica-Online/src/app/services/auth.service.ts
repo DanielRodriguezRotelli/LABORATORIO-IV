@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FirebaseError, initializeApp } from '@angular/fire/app';
 import { Auth, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { SweetAlert } from '../clases/sweetAlert';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { AdministradoresService } from './administradores.service';
 import { PacientesService } from './pacientes.service';
 import { Router } from '@angular/router';
@@ -24,6 +24,7 @@ export class AuthService {
   public tipoUsuario: string = "";
   swal: SweetAlert = new SweetAlert(this.router);
   private userLoadedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  userLoaded$ = this.userLoadedSubject.asObservable(); // Observable para suscripción externa
   public secondaryApp: any;
 
   constructor(
@@ -53,47 +54,11 @@ export class AuthService {
     {
       if (user && user.emailVerified)
       {
+        console.log("Usuario autenticado encontrado:", user);
         if (user.email)
         {
-          this.administradoresService.getAdminByMail(user.email).then(res =>
-          {
-            if (res.docs.length > 0)
-            {
-              this.usuarioLogeado = res.docs[0].data();
-              this.usuarioLogeado.id = res.docs[0].id;
-
-              console.log('usuario Admin: ' + this.usuarioLogeado);
-              this.tipoUsuario = "administrador";
-              this.userLoadedSubject.next(true);
-            }
-          })
-
-          this.pacientesService.getPacienteByMail(user.email).then(res =>
-          {
-            if (res.docs.length > 0)
-            {
-              this.usuarioLogeado = res.docs[0].data();
-              this.usuarioLogeado.id = res.docs[0].id;
-              console.log('usuario Paciente:' + this.usuarioLogeado);
-              this.tipoUsuario = "paciente";
-              this.userLoadedSubject.next(true);
-
-            }
-          })
-
-          this.especialistasService.getEspecialistaByMail(user.email).then(res =>
-          {
-            if (res.docs.length > 0)
-            {
-              this.usuarioLogeado = res.docs[0].data();
-              this.usuarioLogeado.id = res.docs[0].id;
-
-              console.log('usuario Especialista : ' + this.usuarioLogeado);
-              this.tipoUsuario = "especialista";
-              this.userLoadedSubject.next(true);
-
-            }
-          })
+          console.log('usuario Email: ' + user.email);
+          this.loadUserData(user.email);
         }
         else
         {
@@ -104,13 +69,45 @@ export class AuthService {
     });
   }
 
+  private loadUserData(email: string) {
+    Promise.all([
+      this.administradoresService.getAdminByMail(email),
+      this.pacientesService.getPacienteByMail(email),
+      this.especialistasService.getEspecialistaByMail(email)
+    ]).then(([adminRes, pacienteRes, especialistaRes]) => {
+      if (adminRes.docs.length > 0) {
+        this.usuarioLogeado = adminRes.docs[0].data();
+        this.usuarioLogeado.id = adminRes.docs[0].id;
+        console.log('usuario Admin: ' + this.usuarioLogeado);
+        this.tipoUsuario = "administrador";
+      } else if (pacienteRes.docs.length > 0) {
+        this.usuarioLogeado = pacienteRes.docs[0].data();
+        this.usuarioLogeado.id = pacienteRes.docs[0].id;
+        console.log('usuario Paciente:' + this.usuarioLogeado);
+        this.tipoUsuario = "paciente";
+      } else if (especialistaRes.docs.length > 0) {
+        this.usuarioLogeado = especialistaRes.docs[0].data();
+        this.usuarioLogeado.id = especialistaRes.docs[0].id;
+        console.log('usuario Especialista : ' + this.usuarioLogeado);
+        this.tipoUsuario = "especialista";
+      }
+      this.userLoadedSubject.next(true);
+    });
+  }
 
+
+  /*
   esperarCargarUsuario(): Promise<void> {
     return new Promise<void>((resolve) => {
+
+      // Verificar el estado inicial
+    console.log("Estado inicial de userLoadedSubject:", this.userLoadedSubject.getValue());
+
       if (this.userLoadedSubject.getValue()) {
         resolve();
       } else {
         const subscription = this.userLoadedSubject.subscribe((loaded) => {
+          console.log("userLoadedSubject emitió:", loaded); // Imprimir cada cambio en loaded
           if (loaded) {
             resolve();
             subscription.unsubscribe();
@@ -118,8 +115,31 @@ export class AuthService {
         });
       }
     });
+  }*/
+
+    // Método para esperar la carga del usuario
+  esperarCargarUsuario(): Promise<void> {
+    console.log("Esperando carga de usuario en esperarCargarUsuario...");
+
+    return new Promise((resolve) => {
+      this.userLoaded$.subscribe((loaded) => {
+        console.log("userLoadedSubject emitió:", loaded);
+        if (loaded) {
+          resolve();
+        }
+      });
+    });
   }
 
+  /*
+  // Simulación del inicio de sesión (ajusta según la lógica real)
+  iniciarSesion() {
+    console.log("Simulando inicio de sesión...");
+    setTimeout(() => {
+      console.log('Usuario autenticado. Emitiendo true en userLoadedSubject');
+      this.userLoadedSubject.next(true); // Marca como cargado
+    }, 1000); // Simulación de un retraso en la autenticación
+  }*/
 
   authStateReady(): Promise<void>
   {
@@ -166,6 +186,7 @@ export class AuthService {
     return this.especialistasService.obtenerEspecialistaPorEmail(userMail)
       .then(res => {
         if (res) {
+          console.log(res);
           if (res.estado === "aprobado") {
             return signInWithEmailAndPassword(this.auth, userMail, userPassword);
           } else {
@@ -182,23 +203,7 @@ export class AuthService {
         const email = userCredential.user.email;
         if (email) {
           // Usamos Promise.all para esperar todas las promesas y asignar tipoUsuario
-          return Promise.all([
-            this.administradoresService.getAdminByMail(email).then(res => {
-              if (res.docs.length > 0) {
-                this.tipoUsuario = 'administrador';
-              }
-            }),
-            this.pacientesService.getPacienteByMail(email).then(res => {
-              if (res.docs.length > 0) {
-                this.tipoUsuario = 'paciente';
-              }
-            }),
-            this.especialistasService.getEspecialistaByMail(email).then(res => {
-              if (res.docs.length > 0) {
-                this.tipoUsuario = 'especialista';
-              }
-            })
-          ]).then(() => userCredential); // Retornamos userCredential después de asignar tipoUsuario
+          this.loadUserData(email);
         }
         return userCredential;
       })

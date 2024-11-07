@@ -19,12 +19,7 @@ export class AppComponent implements OnInit{
     public authService: AuthService, 
     public router: Router){}
 
-  ngOnInit() {
-    // Espera a que el usuario se cargue antes de continuar
-    this.authService.esperarCargarUsuario().then(() => {
-      console.log("Usuario cargado:", this.authService.usuarioLogeado);
-    });
-  }
+  ngOnInit() {}
 
 
   logOut()

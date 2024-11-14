@@ -10,13 +10,13 @@ export class Tiempo {
         const dia = String(fecha.getDate()).padStart(2, '0');
         const mes = String(fecha.getMonth() + 1).padStart(2, '0');
         const año = fecha.getFullYear();
-        return `${dia}/${mes}/${año}`;
+        return `${año}-${mes}-${dia}`;
     }
 
     public getDia(fechaFormateada: string)
     {
-        let [dia, mes] = fechaFormateada.split('/').map(Number);
-        let anio = new Date().getFullYear();
+        let [anio, mes, dia] = fechaFormateada.split('-').map(Number);
+        //let anio = new Date().getFullYear();
         let fecha = new Date(anio, mes - 1, dia);
 
         let nombreDia = new Intl.DateTimeFormat('es-ES', { weekday: 'long' }).format(fecha);
@@ -36,10 +36,11 @@ export class Tiempo {
             const dia = new Date(hoy);
             dia.setDate(hoy.getDate() + i);
 
+            const anoStr = (dia.getFullYear());
             const diaStr = ('0' + dia.getDate()).slice(-2);
             const mesStr = ('0' + (dia.getMonth() + 1)).slice(-2);
 
-            proximosDias.push(`${diaStr}/${mesStr}`);
+            proximosDias.push(`${anoStr}-${mesStr}-${diaStr}`);
         }
 
         return proximosDias;
@@ -50,18 +51,11 @@ export class Tiempo {
         let hora = Math.floor(minutos / 60);
         let minutosRestantes = minutos % 60;
 
-        let ampm = hora >= 12 ? 'pm' : 'am';
-        let hora12 = hora % 12;
-        if (hora12 === 0)
-        {
-            hora12 = 12;
-        }
-
-        let horaFormateada = String(hora12).padStart(2, '0');
+        // Aseguramos que siempre haya dos dígitos para la hora y los minutos
+        let horaFormateada = String(hora).padStart(2, '0');
         let minutosFormateados = String(minutosRestantes).padStart(2, '0');
 
-        return `${horaFormateada}:${minutosFormateados} ${ampm}`;
-
+        return `${horaFormateada}:${minutosFormateados}`;
     }
 
     public getHoraActual()
@@ -81,7 +75,7 @@ export class Tiempo {
 
     public horaAMinutos(hora: string): number
     {
-        const regex = /^(\d{1,2}):(\d{2}) (am|pm)?$/i;
+        const regex = /^(\d{1,2}):(\d{2})$/;
         const match = hora.match(regex);
 
         if (!match)
@@ -90,20 +84,12 @@ export class Tiempo {
         }
         let [time, ampm] = hora.split(' ');
 
-        let [hora12, minutos] = time.split(':').map(Number);
-        if (typeof hora12 === 'number' && !isNaN(hora12) && typeof minutos === 'number' && !isNaN(minutos)) {
+        let [hora24, minutos] = time.split(':').map(Number);
+        if (typeof hora24 === 'number' && !isNaN(hora24) && typeof minutos === 'number' && !isNaN(minutos)) {
             
-            if (ampm.toLowerCase() === 'pm' && hora12 !== 12)
-            {
-                hora12 += 12;
-            } else if (ampm.toLowerCase() === 'am' && hora12 === 12)
-            {
-                hora12 = 0;
-            }
+            return (hora24 * 60) + minutos; // Convierte a minutos desde medianoche
         }
-
-        console.log((hora12 * 60) + minutos);
-        return (hora12 * 60) + minutos;
+        return 0; // Devuelve 0 si hubo algún error en la conversión
     }
 
     public fechaADate(fecha: string): Date

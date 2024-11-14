@@ -8,6 +8,7 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { enviromentConfig } from './enviromentConfig';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +19,6 @@ export const appConfig: ApplicationConfig = {
     provideStorage(() => getStorage()), 
     importProvidersFrom(RecaptchaV3Module),
     {provide: RECAPTCHA_V3_SITE_KEY, useValue: "6LeCBXYqAAAAAFoAyW_0pHPfqSdVR5BSiJh-AOfe"},
+    provideAnimations()
     ]
 };

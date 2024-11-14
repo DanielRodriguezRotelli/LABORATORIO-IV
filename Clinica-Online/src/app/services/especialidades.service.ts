@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, deleteDoc, doc, Firestore } from '@angular/fire/firestore';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { Especialidad } from '../entidades/especialidad';
 
 @Injectable({
@@ -17,10 +17,13 @@ export class EspecialidadesService {
   private guardarEspecialidadSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   // BehaviorSubject para notificar sobre el estado de la operación de obtención de especialidades
   public obtenerEspecialidadesSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
-    constructor(private firestore: Firestore){}
+    
+  constructor(private firestore: Firestore){}
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
- }
+  }
+
   guardarEspecialidad(especialidad: Especialidad)
   {
     let col = collection(this.firestore, 'especialidades');
@@ -34,6 +37,7 @@ export class EspecialidadesService {
       this.guardarEspecialidadSubject.next(false);
     });
   }
+
   obtenerEspecialidades()
   {
     let col = collection(this.firestore, 'especialidades');
@@ -44,6 +48,7 @@ export class EspecialidadesService {
       this.obtenerEspecialidadesSubject.next(true);
     })
   }
+
   eliminarEspecialidad(id: string) {
     const especialidadDocRef = doc(this.firestore, `especialidades/${id}`);
     deleteDoc(especialidadDocRef).then(() => {
@@ -51,5 +56,11 @@ export class EspecialidadesService {
     }).catch(error => {
       console.error('Error al eliminar la especialidad: ', error);
     });
+  }
+
+  getEspecialidades(): Observable<Especialidad[]>
+  {
+    let col = collection(this.firestore, 'especialidades');
+    return collectionData(col, {idField: 'id'}) as Observable<Especialidad[]>;
   }
 }

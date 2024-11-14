@@ -3,7 +3,7 @@ Este es el segundo trabajo práctico de Laboratorio IV de la Tecnicatura Univers
 
 ## Bienvenida
 Esta pagina muestra las caracteristicas generales de la clinica.
-![](https://github.com/DanielRodriguezRotelli/LABORATORIO-IV/tree/master/Clinica-Online/src/assets/pantallas/bienvenida.jpg)
+![alt text](bienvenida.jpg)
 
 ## Login
 Para entrar en la aplicación se tiene que registrar el usuario según su rol y el administrador es el único que puede dar de alta a otro administrador. Un especialista debe ser habilitado por un administrador y además los usuarios tienen que validar su correo electrónico después de registrarse para poder loguearse.

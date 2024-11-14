@@ -9,11 +9,10 @@
     <div class="card-mis-turnos card p-4 col-md-10">
         @if (autenticacionLista)
         {
-            
+            <!-- FILTROS -->
             <h2 class="mb-0 text-center" style="color: white;">Filtrar por:</h2>
             <div class="d-flex align-items-center col-12 my-1">
                 
-
                 <div class="input-group mx-1">
                     <button class="btn btn-outline-info" type="button" (click)="mostrarModalFiltroEspecialidades()"
                         [disabled]="!turnosListos">Especialidad</button>
@@ -46,6 +45,80 @@
                 </div>
             </div>
 
+            @if (authService.tipoUsuario == "paciente" || authService.tipoUsuario == "especialista")
+            {
+                <div class="d-flex align-items-center col-12 my-1">
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info" (click)="establecerFiltro('fecha', fechaSeleccionada)"
+                            [disabled]="!turnosListos || !fechaSeleccionada">Fecha</button>
+                        <input type="text" class="form-control" placeholder="dd/mm" [(ngModel)]="fechaSeleccionada">
+                    </div>
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info" (click)="establecerFiltro('hora', horaSeleccionada)"
+                            [disabled]="!turnosListos || !horaSeleccionada">Hora</button>
+                        <input type="text" class="form-control" placeholder="hh:mm" [(ngModel)]="horaSeleccionada">
+                    </div>
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info" (click)="establecerFiltro('estado', estadoSeleccionado)"
+                            [disabled]="!turnosListos || !estadoSeleccionado">Estado</button>
+                        <input type="text" class="form-control" [(ngModel)]="estadoSeleccionado">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center col-12 my-1">
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info"
+                            (click)="establecerFiltro('historiaClinica.peso', pesoSeleccionado)"
+                            [disabled]="!turnosListos || !pesoSeleccionado">Peso</button>
+                        <input type="number" class="form-control" placeholder="kg" [(ngModel)]="pesoSeleccionado">
+                    </div>
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info"
+                            (click)="establecerFiltro('historiaClinica.altura', alturaSeleccionada)"
+                            [disabled]="!turnosListos || !alturaSeleccionada">Altura</button>
+                        <input type="number" class="form-control" placeholder="cm" [(ngModel)]="alturaSeleccionada">
+                    </div>
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info"
+                            (click)="establecerFiltro('historiaClinica.temperatura', temperaturaSeleccionada)"
+                            [disabled]="!turnosListos || !temperaturaSeleccionada">Temperatura</button>
+                        <input type="number" class="form-control" placeholder="C°" [(ngModel)]="temperaturaSeleccionada">
+                    </div>
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info"
+                            (click)="establecerFiltro('historiaClinica.presion', presionSeleccionada)"
+                            [disabled]="!turnosListos || !presionSeleccionada">Presion</button>
+                        <input type="number" class="form-control" placeholder="mmHg/80" [(ngModel)]="presionSeleccionada">
+                    </div>
+                </div>
+                <div class="d-flex align-items-center col-12 my-1">
+                    <button class="btn btn-sumar-datos rounded-circle" (click)="agregarDatoDinamicoFiltro()"
+                        [disabled]="!datosDinamicosFiltros.includes(false)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-plus"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                        </svg>
+                    </button>
+                    @for (datoDinamico of datosDinamicosFiltros; track datoDinamico; let i = $index)
+                    {
+                    @if (datoDinamico)
+                    {
+                    <div class="input-group mx-1">
+                        <button class="btn btn-outline-info"
+                            (click)="establecerFiltro('historiaClinica.'+datosDinamicoSeleccionados[i].clave, datosDinamicoSeleccionados[i].valor)"
+                            (click)="setearClaveDinamica(i)"
+                            [disabled]="!turnosListos || !datosDinamicoSeleccionados[i].clave || !datosDinamicoSeleccionados[i].valor">Ok</button>
+                        <input type="text" class="form-control" placeholder="Ej.: caries"
+                            [(ngModel)]="datosDinamicoSeleccionados[i].clave" [readOnly]="datosDinamicoSeleccionados[i].setted">
+                        <input type="text" class="form-control" placeholder="Ej.: 4"
+                            [(ngModel)]="datosDinamicoSeleccionados[i].valor">
+                    </div>
+                    }
+                    }
+                </div>
+            }
+
+            <!-- Tabla de turnos -->
             <div class="card p-1 my-4 bg-info" style="overflow-y: auto; max-height: 400px;">
                 <table class="table table-info table-striped table-hover" style="cursor: pointer;">
                     <thead class="bg-info text-white">
@@ -187,6 +260,7 @@
     </div>
 </div>
 
+<!-- ACCIONES -->
 <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalAccionesTurno>
     <div class="modal-dialog modal-overlay">
@@ -205,7 +279,7 @@
                 (authService.tipoUsuario == "especialista" && !mostrarBotonesAcciones.verResena &&
                 !mostrarBotonesAcciones.cancelar && !mostrarBotonesAcciones.verCalificacion &&
                 !mostrarBotonesAcciones.aceptarTurno && !mostrarBotonesAcciones.rechazarTurno &&
-                !mostrarBotonesAcciones.finalizarTurno)
+                !mostrarBotonesAcciones.finalizarTurno && !mostrarBotonesAcciones.completarHistoriaClinica)
                 ||
                 (authService.tipoUsuario == "administrador" && !mostrarBotonesAcciones.verResena &&
                 !mostrarBotonesAcciones.cancelar)
@@ -227,6 +301,82 @@
                     (click)="rechazarTurno()" [disabled]="!motivosRechazo">Rechazar turno</button>
                 </div>
                 }
+
+                @if (mostrarBotonesAcciones.completarHistoriaClinica)
+                {
+                <div class="card card1 p-2 my-4">
+                    <div class="modal-header">
+                        <h1 class="modal-title text-white fs-5" id="staticBackdropLabel">
+                            Historia Clínica</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form [formGroup]="formHistoriaClinica">
+
+                        <div class="input-group my-2">
+                            <span class="input-group-text">Altura (cm)</span>
+                            <input type="number" class="form-control" formControlName="altura">
+                        </div>
+                        @if (altura?.hasError('min'))
+                        {
+                        <ng-container>
+                            <small class="text-danger">Debe ser mayor que 1</small>
+                        </ng-container>
+                        }
+                        <div class="input-group my-2">
+                            <span class="input-group-text">Peso (kg)</span>
+                            <input type="number" class="form-control" formControlName="peso">
+                        </div>
+                        @if (peso?.hasError('min'))
+                        {
+                        <ng-container>
+                            <small class="text-danger">Debe ser mayor que 1</small>
+                        </ng-container>
+                        }
+                        <div class="input-group my-2">
+                            <span class="input-group-text">Temperatura (C°)</span>
+                            <input type="number" class="form-control" formControlName="temperatura">
+                        </div>
+                        @if (temperatura?.hasError('min'))
+                        {
+                        <ng-container>
+                            <small class="text-danger">Debe ser mayor que 1</small>
+                        </ng-container>
+                        }
+                        <div class="input-group my-2">
+                            <span class="input-group-text">Presión (mmHg/80)</span>
+                            <input type="number" class="form-control" formControlName="presion">
+                        </div>
+                        @if (presion?.hasError('min'))
+                        {
+                        <ng-container>
+                            <small class="text-danger">Debe ser mayor que 1</small>
+                        </ng-container>
+                        }
+                        @for (datoDinamico of datosDinamicos; track datoDinamico; let i=$index)
+                        {
+                        @if (datoDinamico)
+                        {
+                        <div class="input-group my-2">
+                            <input type="text" class="form-control w-25" [formControlName]="'claveDinamica'+(i+1)">
+                            <input type="text" class="form-control w-75" [formControlName]="'valorDinamico'+(i+1)">
+                        </div>
+                        }
+                        }
+                        <button class="btn btn-sumar-datos rounded-circle" (click)="agregarDatoDinamico()"
+                            [disabled]="!datosDinamicos.includes(false)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor"
+                                class="bi bi-plus" viewBox="0 0 16 16">
+                                <path
+                                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                            </svg>
+                        </button>
+                        <button class="btn btn-primary text-white my-2" data-bs-dismiss="modal"
+                            (click)="enviarHistoriaClinica()" [disabled]="!formHistoriaClinica.valid" type="submit">
+                            Guardar</button>
+                    </form>
+                </div>
+                }
+
 
                 @if (mostrarBotonesAcciones.finalizarTurno)
                 {

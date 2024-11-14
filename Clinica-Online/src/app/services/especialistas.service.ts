@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { addDoc, collection, collectionData, deleteDoc, doc, docData, Firestore, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
 import { Especialista } from '../entidades/especialista';
 import { Disponibilidad } from '../entidades/disponibilidad';
 
@@ -149,6 +149,7 @@ export class EspecialistasService {
       console.error('Error al desaprobar el especialista: ', error);
     });
   }
+
   agregarEspecialidad(id: string, especialidad: string): Promise<void>
   {
     return new Promise<void>((resolve, reject) =>
@@ -188,6 +189,7 @@ export class EspecialistasService {
     });
   }
 
+  /*
   cargarDisponibilidad(id: string, disponibilidad: Disponibilidad): Promise<void>
   {
     return new Promise<void>((resolve, reject) =>
@@ -201,27 +203,27 @@ export class EspecialistasService {
           const data = docSnap.data();
           let disponibilidades = data['disponibilidades'] || [];
 
-            if (disponibilidades)
-            {
-              let reemplazo = false;
-        // Reemplazar la disponibilidad existente
-        disponibilidades = disponibilidades.map((disp: Disponibilidad) => {
-          if (disp.dia === disponibilidad.dia) {
-            reemplazo = true;
-            return disponibilidad;
-          }
-          return disp;
-        });
+          if (disponibilidades)
+          {
+            let reemplazo = false;
+            // Reemplazar la disponibilidad existente
+            disponibilidades = disponibilidades.map((disp: Disponibilidad) => {
+              if (disp.dia === disponibilidad.dia) {
+                reemplazo = true;
+                return disponibilidad;
+              }
+              return disp;
+            });
 
-        // Si no se encontró reemplazo, agregar la nueva disponibilidad
-        if (!reemplazo) {
-          disponibilidades.push(disponibilidad);
-        }
+            // Si no se encontró reemplazo, agregar la nueva disponibilidad
+            if (!reemplazo) {
+              disponibilidades.push(disponibilidad);
             }
-            else
-            {
-              disponibilidades = [disponibilidad];
-            }
+          }
+          else
+          {
+            disponibilidades = [disponibilidad];
+          }
 
           updateDoc(especialistaDocRef, { disponibilidades: disponibilidades }).then(() =>
           {
@@ -245,7 +247,130 @@ export class EspecialistasService {
         reject(error);
       });
     });
+  } */
+
+  crearDisponibilidad(id: string, disponibilidad: Disponibilidad): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const especialistaDocRef = doc(this.firestore, `especialistas/${id}`);
+  
+      getDoc(especialistaDocRef).then(docSnap => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          let disponibilidades = data['disponibilidades'] || [];
+  
+          // Verificar que no haya solapamiento en el mismo día
+          const solapamiento = disponibilidades.some((disp: Disponibilidad) => {
+            return disp.dia === disponibilidad.dia &&
+              ((disp.horaInicio < disponibilidad.horaFin && disponibilidad.horaInicio < disp.horaFin));
+          });
+  
+          if (!solapamiento) {
+            disponibilidades.push(disponibilidad);
+  
+            updateDoc(especialistaDocRef, { disponibilidades: disponibilidades }).then(() => {
+              console.log('Disponibilidad agregada con éxito');
+              resolve();
+            }).catch(error => {
+              console.error('Error al agregar la disponibilidad: ', error);
+              reject(error);
+            });
+          } else {
+            reject(new Error('Ya existe una disponibilidad para este día en el rango de horario indicado'));
+          }
+        } else {
+          const error = 'El documento no existe';
+          console.error(error);
+          reject(error);
+        }
+      }).catch(error => {
+        console.error('Error al obtener el documento: ', error);
+        reject(error);
+      });
+    });
   }
+    
+
+  actualizarDisponibilidad(id: string, disponibilidad: Disponibilidad): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const especialistaDocRef = doc(this.firestore, `especialistas/${id}`);
+  
+      getDoc(especialistaDocRef).then(docSnap => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          let disponibilidades = data['disponibilidades'] || [];
+  
+          // Buscar la disponibilidad exacta (mismo día y horario)
+          let encontrada = false;
+          disponibilidades = disponibilidades.map((disp: Disponibilidad) => {
+            if (disp.dia === disponibilidad.dia &&
+                disp.horaInicio === disponibilidad.horaInicio &&
+                disp.horaFin === disponibilidad.horaFin) {
+              encontrada = true;
+              return disponibilidad;  // Reemplazar disponibilidad específica
+            }
+            return disp;
+          });
+  
+          if (encontrada) {
+            updateDoc(especialistaDocRef, { disponibilidades: disponibilidades }).then(() => {
+              console.log('Disponibilidad actualizada con éxito');
+              resolve();
+            }).catch(error => {
+              console.error('Error al actualizar la disponibilidad: ', error);
+              reject(error);
+            });
+          } else {
+            reject(new Error('No se encontró una disponibilidad para este día y horario'));
+          }
+        } else {
+          const error = 'El documento no existe';
+          console.error(error);
+          reject(error);
+        }
+      }).catch(error => {
+        console.error('Error al obtener el documento: ', error);
+        reject(error);
+      });
+    });
+  }
+
+  eliminarDisponibilidad(id: string, disponibilidad: Disponibilidad): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const especialistaDocRef = doc(this.firestore, `especialistas/${id}`);
+      
+      getDoc(especialistaDocRef).then(docSnap => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          let disponibilidades = data['disponibilidades'] || [];
+          
+          // Filtrar la disponibilidad a eliminar
+          disponibilidades = disponibilidades.filter((disp : Disponibilidad )=> 
+            disp.dia !== disponibilidad.dia || disp.horaInicio !== disponibilidad.horaInicio);
+  
+          // Actualizar las disponibilidades en Firestore
+          updateDoc(especialistaDocRef, { disponibilidades }).then(() => {
+            resolve();
+          }).catch(error => {
+            reject(error);
+          });
+  
+        } else {
+          reject('El documento no existe');
+        }
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  }
+  
+  
+  getDisponibilidades(especialistaId: string): Observable<Disponibilidad[]> {
+    const especialistaRef = doc(this.firestore, `especialistas/${especialistaId}`);
+    return docData(especialistaRef).pipe(
+      map((data: any) => data?.disponibilidades || [])
+    );
+  }
+  
 
   esEspecialista(email: string): Promise<boolean>
   {

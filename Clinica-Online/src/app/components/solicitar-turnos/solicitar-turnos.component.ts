@@ -20,6 +20,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { MinutosAHoraPipe } from '../../pipes/minutos-ahora.pipe';
 
+
 @Component({
   selector: 'app-solicitar-turnos',
   standalone: true,
@@ -27,23 +28,31 @@ import { MinutosAHoraPipe } from '../../pipes/minutos-ahora.pipe';
   templateUrl: './solicitar-turnos.component.html',
   styleUrl: './solicitar-turnos.component.css'
 })
-export class SolicitarTurnosComponent implements OnInit{
-
+export class SolicitarTurnosComponent implements OnInit
+{
   public obtenerEspecialidadesSub!: Subscription;
   public obtenerEspecialistasSub!: Subscription;
   public especialidades!: Array<Especialidad>;
   public especialistas!: Array<Especialista>;
-  public especialistasFiltrados!: Array<Especialista>;
+  public especialdadesFiltradas!: Array<string>;
   public secuenciaCard!: string;
-  public arrayTurnosEspecialista!: Array<{ fecha: string, horarios: { inicio: number, fin: number }}>;
+  public arrayTurnosEspecialista!:
+    Array<{
+      fecha: string,
+      horarios: { inicio: number, fin: number }
+    }>;
   public tiempo: Tiempo = new Tiempo();
   public swal: SweetAlert = new SweetAlert(this.router);
   public horariosFechaSeleccionada!: Array<number>;
   public esAdmin = false;
   public horariosCargados = false;
-  public opcionesSeleccionadas: {especialidad?: string, especialista?: Especialista, fecha?: string, hora?: number} = {};
+  public opcionesSeleccionadas: {
+    especialidad?: string,
+    especialista?: Especialista,
+    fecha?: string,
+    hora?: number
+  } = {};
   public idPaciente: string = "";
-
   constructor(
     public administradoresService: AdministradoresService, 
     public pacientesService: PacientesService, 
@@ -68,7 +77,7 @@ export class SolicitarTurnosComponent implements OnInit{
         }
         else
         {
-          this.secuenciaCard = "especialidades"
+          this.secuenciaCard = "especialistas"
         }
       });
     }
@@ -88,6 +97,17 @@ export class SolicitarTurnosComponent implements OnInit{
       if (status)
       {
         this.especialistas = this.especialistasService.coleccionEspecialistas;
+        console.log('especialistas:', this.especialistas);
+        this.especialistas.forEach(especialista =>
+          {
+            this.storageService.obtenerImagen(`especialistas/${especialista.mail}`).then((url) =>
+            {
+              if (url)
+              {
+                especialista.imagen = url;
+              }
+            })
+          });
       }
     });
   }
@@ -106,12 +126,12 @@ export class SolicitarTurnosComponent implements OnInit{
       switch (this.secuenciaCard)
       {
         case "pacientes":
-          this.secuenciaCard = "especialidades";
-          break;
-        case "especialidades":
           this.secuenciaCard = "especialistas";
           break;
         case "especialistas":
+          this.secuenciaCard = "especialidades";
+          break;
+        case "especialidades":
           this.secuenciaCard = "fechas";
           break;
         case "fechas":
@@ -123,17 +143,17 @@ export class SolicitarTurnosComponent implements OnInit{
     {
       switch (this.secuenciaCard)
       {
-        case "especialidades":
+        case "especialistas":
           if (this.esAdmin)
           {
             this.secuenciaCard = "pacientes";
           }
           break;
-        case "especialistas":
-          this.secuenciaCard = "especialidades";
+        case "especialidades":
+          this.secuenciaCard = "especialistas";
           break;
         case "fechas":
-          this.secuenciaCard = "especialistas";
+          this.secuenciaCard = "especialidades";
           break;
         case "horarios":
           this.secuenciaCard = "fechas";
@@ -141,36 +161,29 @@ export class SolicitarTurnosComponent implements OnInit{
       }
     }
   }
+  
+  seleccionarEspecialista(especialista: Especialista)
+  {
+    this.cambiarSecuencia(true);
+    this.opcionesSeleccionadas.especialista = especialista;
+    
+    this.especialdadesFiltradas = especialista.especialidades;
+    console.log("Especialidades del especialista seleccionado:", this.especialdadesFiltradas);
+  }
+
 
   seleccionarEspecialidad(nombreEspecialidad: string)
   {
     this.cambiarSecuencia(true);
     this.opcionesSeleccionadas.especialidad = nombreEspecialidad;
-    this.especialistasFiltrados = this.especialistas.filter((especialista) =>
-    {
-      return especialista.especialidades.includes(nombreEspecialidad);
-    });
-
-    console.log(this.especialistasFiltrados);
-    this.especialistas.forEach(especialista =>
-    {
-      this.storageService.obtenerImagen(`especialistas/${especialista.mail}`).then((url) =>
-      {
-        if (url)
-        {
-          especialista.imagen = url;
-        }
-      })
-    });
-
-  }
-
-  seleccionarEspecialista(especialista: Especialista)
-  {
-    this.opcionesSeleccionadas.especialista = especialista;
-    this.cambiarSecuencia(true);
+    
     this.cargarFechasTurnos();
-    this.cargarHorariosTurnos(especialista, this.opcionesSeleccionadas.especialidad || '');
+    // Verificar si especialista está definido antes de llamar a cargarHorariosTurnos
+    if (this.opcionesSeleccionadas.especialista) {
+      this.cargarHorariosTurnos(this.opcionesSeleccionadas.especialista, nombreEspecialidad);
+    } else {
+      console.error("El especialista no está definido.");
+    }
   }
 
   seleccionarFecha(turno: { fecha: string, horarios: { inicio: number, fin: number } })
@@ -207,7 +220,7 @@ export class SolicitarTurnosComponent implements OnInit{
     this.swal.mostrarMensajeConfirmar(
       "Confirmar turno",
       `Confirma solicitar turno con ${this.opcionesSeleccionadas.especialista?.nombre} ${this.opcionesSeleccionadas.especialista?.apellido} 
-      el día ${this.opcionesSeleccionadas.fecha} a las ${this.tiempo.minutosAHora(this.opcionesSeleccionadas.hora)}?
+      el día ${this.opcionesSeleccionadas.fecha} a las ${this.tiempo.minutosAHora(this.opcionesSeleccionadas.hora)} hs?
       `
     ).then((res) =>
     {
@@ -238,7 +251,6 @@ export class SolicitarTurnosComponent implements OnInit{
                 this.turnosService.guardarTurno(turno);
                 this.swal.mostrarMensajeExito("Turno solicitado", "¡El turno fue solicitado con éxito!");
                 this.cambiarSecuencia(false);
-                this.goToMisTurnos();
               }
             }
           })
@@ -268,7 +280,6 @@ export class SolicitarTurnosComponent implements OnInit{
                 this.turnosService.guardarTurno(turno);
                 this.swal.mostrarMensajeExito("Turno solicitado", "¡El turno fue solicitado con éxito!");
                 this.cambiarSecuencia(false);
-                this.goToMisTurnos();
               }
             })
           }
@@ -308,8 +319,6 @@ export class SolicitarTurnosComponent implements OnInit{
     }
   }
 
-
-
   cargarFechasTurnos()
   {
     let proximos15Dias = this.tiempo.getProximosDias(15);
@@ -317,6 +326,7 @@ export class SolicitarTurnosComponent implements OnInit{
       fecha,
       horarios: { inicio: 0, fin: 0 }
     }));
+    console.log('turnos:',this.arrayTurnosEspecialista);
   }
 
   onImageError(event: Event): void
@@ -329,8 +339,15 @@ export class SolicitarTurnosComponent implements OnInit{
     this.router.navigate(['/turnos/mis-turnos']);
   }
 
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
+  

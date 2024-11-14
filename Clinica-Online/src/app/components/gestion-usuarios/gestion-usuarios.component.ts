@@ -173,6 +173,11 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
     }
   }
 
+  irADescargarExcel(ruta: string)
+  {
+    window.open(ruta);
+  }
+
   mostrarSpinner()
   {
     this.claseSpinner = "spinner-activado";
@@ -183,6 +188,7 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
     this.claseSpinner = "spinner-desactivado";
   }
 
+  
   recibirIdEspecialista(id: string)
   {
     this.especialistaSeleccionadoCargado = false;
@@ -255,6 +261,7 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
     //this.mostrarModalPacienteSeleccionado();
   }
 
+  
 
   objectKeys(obj: any)
   {

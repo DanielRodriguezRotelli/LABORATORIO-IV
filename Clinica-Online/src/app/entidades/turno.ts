@@ -10,6 +10,7 @@ export interface Turno{
     nombrePaciente: string,
     apellidoPaciente: string,
     estado?: string,
-    motivosCancelacion?: string
-    resena?: string
+    motivosCancelacion?: string,
+    resena?: string,
+    historiaClinica?: string
 }

@@ -36,6 +36,11 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
   public fechaSeleccionada!: string;
   public horaSeleccionada!: string;
   public estadoSeleccionado!: string;
+  public pesoSeleccionado!: string;
+  public alturaSeleccionada!: string;
+  public temperaturaSeleccionada!: string;
+  public presionSeleccionada!: string;
+  public datosDinamicoSeleccionados = [{ setted: false, clave: '', valor: '' }, { setted: false, clave: '', valor: '' }, { setted: false,clave: '', valor: '' }];
   public hayTurnos = false;
   public turnosListos = false;
   public autenticacionLista = false;
@@ -52,7 +57,9 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     rechazarTurno: false,
     aceptarTurno: false,
     finalizarTurno: false,
-    verResena: false
+    completarHistoriaClinica: false,
+    verResena: false,
+    verHistoriaClinica: false,
   }
   public turnoSeleccionado!: any;
   public filtrosActivos: { [key: string]: string } = {};
@@ -72,8 +79,12 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     ]
 
   public estrellas = [false, false, false, false, false];
+  public datosDinamicos: Array<any> = [false, false, false];
+  public datosDinamicosFiltros = [false, false, false];
   public formEncuesta!: FormGroup;
   public formCalificacion!: FormGroup;
+  public formHistoriaClinica!: FormGroup;
+  public historiaClinicaCompleta: boolean = false;
 
   public swal: SweetAlert = new SweetAlert(this.router);
 
@@ -122,6 +133,18 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
       this.formCalificacion = this.fb.group({
         comentario: ['', [Validators.required]],
         estrellas: ['', [Validators.required]]
+      });
+      this.formHistoriaClinica = this.fb.group({
+        altura: ['', [Validators.required, Validators.min(1)]],
+        peso: ['', [Validators.required, Validators.min(1)]],
+        temperatura: ['', [Validators.required, Validators.min(1)]],
+        presion: ['', [Validators.required, Validators.min(1)]],
+        claveDinamica1: [''],
+        valorDinamico1: [''],
+        claveDinamica2: [''],
+        valorDinamico2: [''],
+        claveDinamica3: [''],
+        valorDinamico3: [''],
       });
     }).catch(error => {
       console.error("Error en esperarCargarUsuario:", error); // Manejo de errores
@@ -229,8 +252,9 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
       rechazarTurno: false,
       aceptarTurno: false,
       finalizarTurno: false,
+      completarHistoriaClinica: false,
       verResena: false,
-      //verHistoriaClinica: false
+      verHistoriaClinica: false,
     }
     console.log(turno);
     this.formCalificacion.reset();
@@ -248,10 +272,14 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     {
       this.mostrarBotonesAcciones.verCalificacion = true;
     }
-    if (turno.estado == "realizado" && !turno.encuesta && this.authService.tipoUsuario == "paciente")
-    {
-      this.mostrarBotonesAcciones.completarEncuesta = true;
-      this.mostrarBotonesAcciones.calificarAtencion = true;
+    if (turno.estado == "realizado" && this.authService.tipoUsuario == "paciente")
+    { 
+      if (!turno.calificacion) {
+        this.mostrarBotonesAcciones.calificarAtencion = true;
+      }
+      if (!turno.encuesta) {
+        this.mostrarBotonesAcciones.completarEncuesta = true;
+      }
     }
     if (turno.estado == "realizado" && !turno.calificacion && this.authService.tipoUsuario == "paciente")
     {
@@ -267,9 +295,15 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     {
       this.mostrarBotonesAcciones.finalizarTurno = true;
     }
-    if(turno.estado == "realizado" && turno.resena)
+
+    if (turno.estado == "realizado" && this.authService.tipoUsuario == "especialista" && !turno.historiaClinica) {
+      this.mostrarBotonesAcciones.completarHistoriaClinica = true;
+    }
+    
+    if(turno.estado == "realizado" && turno.resena && turno.historiaClinica)
     {
       this.mostrarBotonesAcciones.verResena = true;
+      this.mostrarBotonesAcciones.verHistoriaClinica = true;
     }
 
     console.log(this.mostrarBotonesAcciones);
@@ -386,6 +420,21 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     this.fechaSeleccionada = '';
     this.horaSeleccionada = '';
     this.estadoSeleccionado = '';
+    this.pesoSeleccionado = '';
+    this.alturaSeleccionada = '';
+    this.temperaturaSeleccionada = '';
+    this.presionSeleccionada = '';
+
+    for(let i=0 ; i<this.datosDinamicosFiltros.length ; i++)
+    {
+      this.datosDinamicosFiltros[i] = false;
+    }
+    for(let i=0 ; i<this.datosDinamicoSeleccionados.length ; i++)
+    {
+      this.datosDinamicoSeleccionados[i].clave = '';
+      this.datosDinamicoSeleccionados[i].valor = '';
+      this.datosDinamicoSeleccionados[i].setted = false;
+    }
 
     this.traerTurnos();
   }
@@ -425,6 +474,10 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     this.filtrarTurnos(fields, values);
   }
 
+  setearClaveDinamica(indice: number)
+  {
+    this.datosDinamicoSeleccionados[indice].setted = true;
+  }
 
   filtrarTurnos(fields: string[], values: string[])
   {
@@ -501,6 +554,30 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
 
   }
 
+  agregarDatoDinamico()
+  {
+    for (let i = 0; i < this.datosDinamicos.length; i++)
+    {
+      if (!this.datosDinamicos[i])
+      {
+        this.datosDinamicos[i] = true;
+        break;
+      }
+    }
+  }
+
+  agregarDatoDinamicoFiltro()
+  {
+    for (let i = 0; i < this.datosDinamicosFiltros.length; i++)
+    {
+      if (!this.datosDinamicosFiltros[i])
+      {
+        this.datosDinamicosFiltros[i] = true;
+        break;
+      }
+    }
+  }
+
 
   finalizarTurno()
   {
@@ -516,10 +593,47 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
       ]).then(() =>
       {
         this.ocultarSpinner();
+        this.datosResena = '';
         this.swal.mostrarMensajeExito('¡Turno finalizado con éxito!', 'Presione Ok para continuar');
   
       });
     }
+  }
+
+  enviarHistoriaClinica()
+  {
+    let historiaClinica: any = {
+      altura: this.altura?.value,
+      peso: this.peso?.value,
+      temperatura: this.temperatura?.value,
+      presion: this.presion?.value
+    };
+
+    if (this.claveDinamica1?.value && this.valorDinamico1?.value)
+    {
+      historiaClinica[this.claveDinamica1.value.toLowerCase()] = this.valorDinamico1.value;
+    }
+
+    if (this.claveDinamica2?.value && this.valorDinamico2?.value)
+    {
+      historiaClinica[this.claveDinamica2.value.toLowerCase()] = this.valorDinamico2.value;
+    }
+    if (this.claveDinamica3?.value && this.valorDinamico3?.value)
+    {
+      historiaClinica[this.claveDinamica3.value.toLowerCase()] = this.valorDinamico3.value;
+    }
+    console.log(historiaClinica);
+
+    this.mostrarSpinner();
+    Promise.all([
+      this.turnosService.setTurnoField(this.turnoSeleccionado.id, 'historiaClinica', historiaClinica),
+      this.historiaClinicaCompleta = true,
+    ]).then(() =>
+    {
+      this.ocultarSpinner();
+      this.swal.mostrarMensajeExito('¡Historia Clinica guardada con éxito!', 'Presione Ok para continuar');
+
+    });
   }
 
 
@@ -572,6 +686,47 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
   get estrellasCalificacion()
   {
     return this.formCalificacion.get('estrellas');
+  }
+
+  get peso()
+  {
+    return this.formHistoriaClinica.get('peso');
+  }
+  get temperatura()
+  {
+    return this.formHistoriaClinica.get('temperatura');
+  }
+  get altura()
+  {
+    return this.formHistoriaClinica.get('altura');
+  }
+  get presion()
+  {
+    return this.formHistoriaClinica.get('presion');
+  }
+  get claveDinamica1()
+  {
+    return this.formHistoriaClinica.get('claveDinamica1');
+  }
+  get claveDinamica2()
+  {
+    return this.formHistoriaClinica.get('claveDinamica2');
+  }
+  get claveDinamica3()
+  {
+    return this.formHistoriaClinica.get('claveDinamica3');
+  }
+  get valorDinamico1()
+  {
+    return this.formHistoriaClinica.get('valorDinamico1');
+  }
+  get valorDinamico2()
+  {
+    return this.formHistoriaClinica.get('valorDinamico2');
+  }
+  get valorDinamico3()
+  {
+    return this.formHistoriaClinica.get('valorDinamico3');
   }
 
 }

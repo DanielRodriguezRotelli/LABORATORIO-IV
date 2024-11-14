@@ -7,21 +7,30 @@
 
     <div class="card my-4 card-body-paciente" style="border: 2px solid red; border-radius: 5px;">
       <div  style="width: 98%; margin-left: 8px;">
-        <h5 class="card-title text-center" style="color: red;">PACIENTES</h5>
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title text-center" style="color: red;">PACIENTES</h5>
+          <button class="btn my-2 btn-ok" style="max-width: 120px; margin-left: 450px;" (click)="irADescargarExcel('pdf-pacientes')">Descargar</button>
+        </div>
         <app-tabla-pacientes  [tipoVista]="1" (onEnviarId)="recibirIdPaciente($event)"></app-tabla-pacientes>
       </div>
     </div> 
 
     <div class="card my-4 card-body-especialista" style="border: 2px solid green; border-radius: 5px;">
       <div style="width: 98%; margin-left: 8px;" >
-        <h5 class="card-title text-center" style="color: green">ESPECIALISTAS</h5>
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title text-center" style="color: green">ESPECIALISTAS</h5>
+          <button class="btn my-2 btn-ok" style="max-width: 120px; margin-left: 450px;" (click)="irADescargarExcel('pdf-especialistas')">Descargar</button>
+        </div>
         <app-tabla-especialistas [tipoVista]="1" (onEnviarId)="recibirIdEspecialista($event)"></app-tabla-especialistas>
       </div>
     </div>
 
     <div class="card my-4 card-body-admin" style="border: 2px solid yellow; border-radius: 5px;">
       <div style="width: 98%; margin-left: 8px;" >
-        <h5 class="card-title text-center" style="color: yellow">ADMINISTRADORES</h5>
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title text-center" style="color: yellow">ADMINISTRADORES</h5>
+          <button class="btn my-2 btn-ok" style="max-width: 120px; margin-left: 450px;" (click)="irADescargarExcel('pdf-administradores')">Descargar</button>
+        </div>
         <app-tabla-administradores (onEnviarId)="recibirIdAdministrador($event)"></app-tabla-administradores>
       </div>
     </div>
@@ -383,7 +392,7 @@
 
 </div>
 
-
+<!-- MODAL ESPECIALISTA -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
   aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalEspecialistaSeleccionado>
   <div class="modal-dialog">
@@ -415,7 +424,7 @@
 
 
 
-
+<!-- MODAL NUEVA ESPECIALIDAD -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

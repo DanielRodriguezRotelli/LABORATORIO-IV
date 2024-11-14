@@ -117,17 +117,32 @@ export class AuthService {
     });
   }*/
 
-    // Método para esperar la carga del usuario
+  // Método para esperar la carga del usuario
   esperarCargarUsuario(): Promise<void> {
-    console.log("Esperando carga de usuario en esperarCargarUsuario...");
+    return new Promise<void>((resolve) => {
 
-    return new Promise((resolve) => {
-      this.userLoaded$.subscribe((loaded) => {
-        console.log("userLoadedSubject emitió:", loaded);
+      // Tiempo límite de 5 segundos
+      const timeoutId = setTimeout(() => {
+        console.warn("Timeout al esperar carga de usuario");
+        resolve();
+      }, 5000);
+
+      // Si el usuario ya está cargado, resolvemos de inmediato y limpiamos el timeout
+      if (this.userLoadedSubject.getValue()) {
+        clearTimeout(timeoutId);
+        resolve();
+        return;
+      } 
+      
+      // Si no está cargado, esperamos al cambio en el observable
+      const subscription = this.userLoadedSubject.subscribe((loaded) => {
         if (loaded) {
+          clearTimeout(timeoutId);
           resolve();
+          subscription.unsubscribe();
         }
       });
+      
     });
   }
 

@@ -75,8 +75,17 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    max-width: 600px; /* Puedes ajustar el ancho máximo según tus necesidades */
+    width: 50%;
+    max-width: 800px; /* Puedes ajustar el ancho máximo según tus necesidades */
     margin-bottom: 1rem; /* Añade algo de margen inferior para darle espacio */
     z-index: 1000; /* Para asegurarte de que esté por encima de otros elementos, si es necesario */
 }
+
+.custom-modal-width {
+    max-width: 50%; /* Puedes ajustar el porcentaje según necesites */
+}
+
+.card-modal-principal {
+    background-color: #8fa8c0;
+}
+

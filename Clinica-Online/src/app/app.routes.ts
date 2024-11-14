@@ -41,4 +41,19 @@ export const routes: Routes = [
         loadComponent: () => import('./components/solicitar-turnos/solicitar-turnos.component').then(m => m.SolicitarTurnosComponent),
         canActivate: [pacienteGuard]
     },
+    {
+        path: 'pdf-historia-clinica',
+        loadComponent: () => import('./components/pdf-historia-clinica/pdf-historia-clinica.component').then(m => m.PdfHistoriaClinicaComponent)
+    },
+    {
+        path: 'pdf-pacientes',
+        loadComponent: () => import('./components/pdf-pacientes/pdf-pacientes.component').then(m => m.PdfPacientesComponent)
+    },
+    {
+        path: 'pdf-especialistas',
+        loadComponent: () => import('./components/pdf-especialistas/pdf-especialistas.component').then(m => m.PdfEspecialistasComponent)
+    },
+    {
+        path: 'pdf-administradores',
+        loadComponent: () => import('./components/pdf-administradores/pdf-administradores.component').then(m => m.PdfAdministradoresComponent)    },
 ];

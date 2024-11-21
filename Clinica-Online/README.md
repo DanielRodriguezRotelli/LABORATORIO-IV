@@ -7,7 +7,8 @@ Esta pagina muestra las caracteristicas generales de la clinica.
 
 ## Login
 Para entrar en la aplicación, el usuario tiene que loguearse con su correo electronico y su contraseña. Si todavía, no esta registrado en el sistma, puede hacerlo entrando en "Registrarse" en la barra de navegación.
-![alt text](login.jpg)
+
+![alt text](image.png)
 
 ## Registro
 Hay 3 tipos de roles para los usuarios: paciente, especialista, o administrador.

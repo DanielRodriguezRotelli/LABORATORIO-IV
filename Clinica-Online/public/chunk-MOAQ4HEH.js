@@ -1,0 +1,1 @@
+import{E as a}from"./chunk-XL3YBMFF.js";var p=(()=>{class t{transform(r){let e=Math.floor(r/60),o=r%60,i=String(e).padStart(2,"0"),n=String(o).padStart(2,"0");return`${i}:${n}`}static{this.\u0275fac=function(e){return new(e||t)}}static{this.\u0275pipe=a({name:"minutosAHora",type:t,pure:!0,standalone:!0})}}return t})();export{p as a};

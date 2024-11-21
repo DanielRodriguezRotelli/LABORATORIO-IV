@@ -1,0 +1,1 @@
+import{E as i}from"./chunk-XL3YBMFF.js";var n=(()=>{class e{transform(r){return r!=null?r.replace(/\w\S*/g,t=>t.charAt(0).toUpperCase()+t.substr(1).toLowerCase()):r}static{this.\u0275fac=function(t){return new(t||e)}}static{this.\u0275pipe=i({name:"capitalize",type:e,pure:!0,standalone:!0})}}return e})();export{n as a};

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { logueadoGuard } from './guards/logueado.guard';
 import { especialistaGuard } from './guards/especialista.guard';
 import { pacienteGuard } from './guards/paciente.guard';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
 
@@ -42,18 +43,9 @@ export const routes: Routes = [
         canActivate: [pacienteGuard]
     },
     {
-        path: 'pdf-historia-clinica',
-        loadComponent: () => import('./components/pdf-historia-clinica/pdf-historia-clinica.component').then(m => m.PdfHistoriaClinicaComponent)
+        path: 'informes',
+        loadComponent: () => import('./components/informes/informes.component').then(m => m.InformesComponent),
+        canActivate: [adminGuard]
     },
-    {
-        path: 'pdf-pacientes',
-        loadComponent: () => import('./components/pdf-pacientes/pdf-pacientes.component').then(m => m.PdfPacientesComponent)
-    },
-    {
-        path: 'pdf-especialistas',
-        loadComponent: () => import('./components/pdf-especialistas/pdf-especialistas.component').then(m => m.PdfEspecialistasComponent)
-    },
-    {
-        path: 'pdf-administradores',
-        loadComponent: () => import('./components/pdf-administradores/pdf-administradores.component').then(m => m.PdfAdministradoresComponent)    },
+    
 ];

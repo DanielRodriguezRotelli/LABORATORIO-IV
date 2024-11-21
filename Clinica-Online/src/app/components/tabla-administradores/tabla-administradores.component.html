@@ -1,6 +1,6 @@
 @if(administradoresObtenidos){
     <div class="table-responsive">
-        <table class="table table-warning table-hover table-stripped">
+        <table class="table table-hover table-stripped">
             <thead>
                 <tr>
                     <th scope="col">DNI</th>
@@ -15,8 +15,8 @@
                     @if(administrador.id){
                         <tr (click)="enviarId(administrador.id)">
                             <th scope="row">{{administrador.dni}}</th>
-                            <td>{{administrador.nombre}}</td>
-                            <td>{{administrador.apellido}}</td>
+                            <td>{{administrador.nombre | capitalize}}</td>
+                            <td>{{administrador.apellido | capitalize}}</td>
                             <td>{{administrador.edad}}</td>
                             <td>{{administrador.mail}}</td>
                             <td></td>

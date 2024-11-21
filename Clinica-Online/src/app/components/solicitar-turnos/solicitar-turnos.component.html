@@ -29,7 +29,7 @@
                             <div class="d-flex flex-column justify-content-center align-items-center m-4">
                             <h3>{{especialista.nombre}} {{especialista.apellido}}</h3>
                             <!-- Botón rectangular con imagen rectangular -->
-                            <button class="btn rounded-circle btn-especialista-redondo  p-2 m-2" (click)="seleccionarEspecialista(especialista)">
+                            <button class="btn rounded-circle btn-especialista-redondo  p-2 m-2" (click)="seleccionarEspecialista(especialista)" appBorderSelectionBlue>
                                 @if(especialista.imagen)
                                 {
                                     <img class="especialista-imagen-redondo" src={{especialista.imagen}}>
@@ -67,7 +67,7 @@
                         {
                             <!--<h3>{{especialidad}}</h3>
                             <!-- Botón rectangular con imagen y texto -->
-                            <button class="btn btn-especialidad-cuadrado p-3 m-3 d-flex flex-column align-items-center" (click)="seleccionarEspecialidad(especialidad)">
+                            <button class="btn btn-especialidad-cuadrado p-3 m-3 d-flex flex-column align-items-center" (click)="seleccionarEspecialidad(especialidad)" appBorderSelectionBlue>
                                 <img  class="w-100 h-100  img-especialidad-cuadrado" [src]="'../../../assets/especialidades/' + especialidad + '.png'" (error)="onImageError($event)">
                             </button>
                         }
@@ -89,7 +89,7 @@
 
                             @for (turno of arrayTurnosEspecialista; track $index) 
                             {
-                                <button class="btn btn-fecha-rectangular m-2" (click)="seleccionarFecha(turno)">
+                                <button class="btn btn-fecha-rectangular m-2" (click)="seleccionarFecha(turno)" appBorderSelectionBlue>
                                 {{turno.fecha }}
                                 </button>
                             }
@@ -123,7 +123,7 @@
 
                             @for (horario of horariosFechaSeleccionada; track $index) 
                             {
-                                <button class="btn btn-hora-rectangular m-2" (click)="seleccionarHorario(horario)">
+                                <button class="btn btn-hora-rectangular m-2" (click)="seleccionarHorario(horario)" appBorderSelectionBlue>
                                 {{horario | minutosAHora}}
                                 </button>
                             }

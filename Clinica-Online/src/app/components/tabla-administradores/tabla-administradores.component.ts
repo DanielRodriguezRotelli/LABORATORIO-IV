@@ -3,11 +3,12 @@ import { Administrador } from '../../entidades/administrador';
 import { Subscription } from 'rxjs';
 import { AdministradoresService } from '../../services/administradores.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-tabla-administradores',
   standalone: true,
-  imports: [SpinnerComponent],
+  imports: [SpinnerComponent, CapitalizePipe],
   templateUrl: './tabla-administradores.component.html',
   styleUrl: './tabla-administradores.component.css'
 })

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { addDoc, and, collection, collectionData, doc, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
-import { BehaviorSubject, of, Subscription } from 'rxjs';
+import { addDoc, and, collection, collectionData, CollectionReference, doc, docData, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { BehaviorSubject, from, map, Observable, of, Subscription } from 'rxjs';
 import { Turno } from '../entidades/turno';
 
 @Injectable({
@@ -11,6 +11,7 @@ export class TurnosService {
   public coleccionTurnos: any[] = [];
   public turnos: any[] = [];
   private sub!:Subscription;
+  private turnosCollection! : CollectionReference;
   
 
   // BehaviorSubject para notificar sobre el estado de la operación de guardado
@@ -18,13 +19,13 @@ export class TurnosService {
   // BehaviorSubject para notificar sobre el estado de la operación de obtención de especialidades
   public obtenerTurnosSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
-    constructor(private firestore: Firestore){}
+  constructor(private firestore: Firestore){
+    this.turnosCollection = collection(this.firestore, 'turnos');
+  }
 
   ngOnDestroy(): void {
-
     this.sub.unsubscribe();
-
- }
+  }
 
   guardarTurno(turno: Turno)
   {
@@ -49,17 +50,6 @@ export class TurnosService {
     });
   }
 
-  // obtenerTurnos()
-  // {
-  //   let col = collection(this.firestore, 'turnos');
-  //   const observable = collectionData(col, {idField: 'id'});
-
-  //   this.sub = observable.subscribe((respuesta) =>{
-  //     this.coleccionTurnos= respuesta;
-  //     this.obtenerTurnosSubject.next(true);
-  //   })
-  // }
-
   getTurnos()
   {
     let col = collection(this.firestore, 'turnos');
@@ -79,21 +69,7 @@ export class TurnosService {
     return collectionData(filteredQuery, {idField: 'id'});
   }
 
-  // obtenerTurnosByField(field: string, value: any)
-  // {
-  //   const filteredQuery = query(
-  //     collection(this.firestore, 'turnos'),
-  //     and(
-  //       where(field, '==', value),
-  //     )
-  //   );
-  //   const observable = collectionData(filteredQuery, {idField: 'id'});
-
-  //   this.sub = observable.subscribe((respuesta) =>{
-  //     this.coleccionTurnos= respuesta;
-  //     this.obtenerTurnosSubject.next(true);
-  //   })
-  // }
+  
   obtenerTurnosPorPacienteYFields(idPaciente: string, fields: string[], values: string[])
   {
     if (fields.length !== values.length) {
@@ -197,16 +173,36 @@ export class TurnosService {
     return updateDoc(turnoDocRef, { estado: 'rechazado', motivosRechazo: motivos })
   }
 
-  /*
-  guardarResena(id: string, datos: string)
-  {
-    const turnoDocRef = doc(this.firestore, `turnos/${id}`);
-    return updateDoc(turnoDocRef, { estado: 'realizado', resena: datos })
-  }*/
 
   calificarTurno(id: string, comentario: string, estrellas: number)
   {
     const turnoDocRef = doc(this.firestore, `turnos/${id}`);
     return updateDoc(turnoDocRef, {calificacion: {estrellas: estrellas, comentario: comentario}})
   }
+
+  obtenerResenaDeTurno(idTurno: string) {
+    const docRef = doc(this.firestore, `reseñas/${idTurno}`);
+    return docData(docRef, { idField: 'id' }); // Devuelve un Observable con los datos del documento
+  }
+
+  //--------------------------------------
+  
+  obtenerTurnosPorPaciente(idPaciente: string): Observable<Turno[]> {
+    const col = collection(this.firestore, 'turnos');
+    const q = query(col, where('idPaciente', '==', idPaciente));
+    return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
+  }
+
+  obtenerTurnosPorEspecialista(idEspecialista: string): Observable<Turno[]> {
+    const col = collection(this.firestore, 'turnos');
+    const q = query(col, where('idEspecialista', '==', idEspecialista));
+    return collectionData(q, { idField: 'id' }) as Observable<Turno[]>;
+  }
+
+  obtenerTodosLosTurnos(): Observable<Turno[]> {
+    const col = collection(this.firestore, 'turnos');
+    return collectionData(col, { idField: 'id' }) as Observable<Turno[]>;
+  }
+  
+
 }

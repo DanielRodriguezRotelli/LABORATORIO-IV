@@ -1,1 +1,88 @@
-<p>pacientes works!</p>
+<app-spinner [ngClass]="claseSpinner"></app-spinner>
+
+<h1 class="display-4 text-center">Pacientes</h1>
+<div class="container d-flex align-items-center justify-content-center h-100">
+
+    <div class="flex-wrap d-flex align-items-center justify-content-center" style="max-height: 700px; overflow-y: auto; ">
+        @if(pacientes && turnos)
+        {
+            @if( filtrarPacientes().length > 0)
+            {
+                @for (paciente of filtrarPacientes(); track paciente; let i=$index) 
+                {
+                    <button 
+                        class="fab-button"
+                        (click)="mostrarModalDetallesTurnos(paciente)" appHighlightOnHover>
+                        <img [src]="paciente.urlImagen1" alt="{{ paciente.nombre }}" class="fab-image">
+                        <span class="fab-label">{{ paciente.nombre | capitalize }}</span>
+                    </button>
+                }
+            } 
+            @else {
+                <div class="card bg-danger p-3 my-4">
+                    <h1 class="text-white">No atendió ningún paciente</h1>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalDetallesTurnos style="margin-top: 220px;">
+    <div class="modal-dialog modal-turnos flex-wrap d-flex align-items-center justify-content-center">
+        @if (pacienteSeleccionado) 
+        {
+            <div class="modal-content modal-turnos">
+                <div class="modal-header">
+                    
+                    <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">
+                        Turnos de: {{pacienteSeleccionado.nombre}} {{pacienteSeleccionado.apellido}}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="overflow-y: auto; max-height: 450px;">
+                    <div class="card-text">
+                        @for (turno of filtrarTurnosRealizados(pacienteSeleccionado); track $index;) 
+                        {
+                            <div class="card my-2">
+                                <ul class="my-auto">
+                                    <h3 class="card-title text-center">{{turno.especialidad}} - {{turno.fecha}} - {{turno.hora | minutosAHora}}</h3>
+                                    @if (turno.historiaClinica) 
+                                    {
+                                        @for (key of objectKeys(turno.historiaClinica); track $index) 
+                                        {
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item rounded-3">
+                                                    <strong>{{ key | capitalize }}:</strong> {{ turno.historiaClinica[key] }}
+                                                </li>
+                                            </ul>
+                                            
+                                        }
+                                    }
+                                </ul>
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <button class="btn mx-auto" (click)="mostrarModalResena(turno)">Ver Reseña</button>
+                                </div>
+                            </div>  
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalResena style="margin-top: 280px; margin-left: 120px;">
+    <div class="modal-dialog" >
+        <div class="modal-content modal-resena" style="width: 250px; ">
+            <div class="modal-header" style="background-color: primary;">
+                <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">
+                    Reseña del turno</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="card card1 px-4 my-4" style="width: 220px; margin-left: 12px;">
+                <p >{{ turnoSeleccionado?.resena}}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,11 +4,13 @@ import { Especialista } from '../../entidades/especialista';
 import { Subscription } from 'rxjs';
 import { EspecialistasService } from '../../services/especialistas.service';
 import { NgIf, NgStyle } from '@angular/common';
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
+import { ArrayToStringPipe } from '../../pipes/array-to-string.pipe';
 
 @Component({
   selector: 'app-tabla-especialistas',
   standalone: true,
-  imports: [SpinnerComponent, NgIf],
+  imports: [SpinnerComponent, NgIf, CapitalizePipe, ArrayToStringPipe],
   templateUrl: './tabla-especialistas.component.html',
   styleUrl: './tabla-especialistas.component.css'
 })

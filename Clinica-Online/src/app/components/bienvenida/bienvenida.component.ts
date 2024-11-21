@@ -9,29 +9,29 @@ import { RouterLink } from '@angular/router';
   templateUrl: './bienvenida.component.html',
   styleUrl: './bienvenida.component.css',
   animations: [
-    trigger ('abajoHaciaArriba', [
-      state('abajo', style({
-        transform: 'translateY(100%)',
-        opacity: 0.8,
-        overflow: '0'
-      })),
+    trigger ('arribaHaciaAbajo', [
       state('arriba', style({
+        transform: 'translateY(-2000px)',
+        opacity: 0.8,
+        overflow: 'hidden'
+      })),
+      state('abajo', style({
         transform: 'translateY(0)',
         opacity: 1
       })),
-      transition('abajo => arriba', [animate('1s')]),
+      transition('arriba => abajo', [animate('2s')]),
     ])
   ]
 })
 export class BienvenidaComponent implements OnInit{
   
-  public estadoAnimacion: string = 'abajo';
+  public estadoAnimacion: string = 'arriba';
   ngOnInit(): void
   {
     setTimeout(() => {
-      this.estadoAnimacion = 'arriba';
+      this.estadoAnimacion = 'abajo';
       
-    }, 0.5);
+    }, 500);
   }
 }
 

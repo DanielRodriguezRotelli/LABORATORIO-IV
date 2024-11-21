@@ -24,11 +24,14 @@ import { getDownloadURL } from '@firebase/storage';
 import { NgClass } from '@angular/common';
 import { TablaAdministradoresComponent } from '../tabla-administradores/tabla-administradores.component';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { TurnosService } from '../../services/turnos.service';
+import * as XLSX from 'xlsx';
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-gestion-usuarios',
   standalone: true,
-  imports: [ReactiveFormsModule, TablaPacientesComponent, TablaEspecialistasComponent, SpinnerComponent, NgClass, TablaAdministradoresComponent, NgxSpinnerModule],
+  imports: [ReactiveFormsModule, TablaPacientesComponent, TablaEspecialistasComponent, SpinnerComponent, NgClass, TablaAdministradoresComponent, NgxSpinnerModule, CapitalizePipe],
   templateUrl: './gestion-usuarios.component.html',
   styleUrl: './gestion-usuarios.component.css'
 })
@@ -68,8 +71,10 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
   turnosPaciente!: Array<any>;
   suscripcionPacientes!: Subscription;
   pacientes!: Paciente[];
+  realizoTurno: boolean = false;
 
   constructor(
+    public turnosService: TurnosService,
     public administradoresService: AdministradoresService, 
     public especialidadesService: EspecialidadesService, 
     public fb: FormBuilder, 
@@ -107,6 +112,7 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
       next: (res) =>
       {
         this.pacientes = res;
+  
       }
     })
 
@@ -172,11 +178,7 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
       this.suscripcionPacientes.unsubscribe();
     }
   }
-
-  irADescargarExcel(ruta: string)
-  {
-    window.open(ruta);
-  }
+  
 
   mostrarSpinner()
   {
@@ -234,6 +236,7 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
     })
     this.mostrarModalAdministradorSeleccionado();
   }
+
   recibirIdPaciente(id: string)
   {
     this.pacienteSeleccionadoCargado = false;
@@ -258,8 +261,90 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
           }
         })
     })
-    //this.mostrarModalPacienteSeleccionado();
+    this.mostrarModalPacienteSeleccionado();
   }
+
+
+
+  descargarExcelPaciente(dniPaciente: any)
+  {
+    console.log('turnos: ', this.turnosPaciente);
+    console.log('Generando Excel para:', this.pacienteSeleccionado);
+    
+    if (!this.turnosPaciente || this.turnosPaciente.length === 0) {
+      console.error('No hay turnos disponibles para este paciente.');
+      return;
+    }
+
+    // Prepara los datos para el Excel
+    const data = this.turnosPaciente.map(turno => ({
+      DNI: this.pacienteSeleccionado?.dni,
+      Nombre: this.pacienteSeleccionado?.nombre,
+      Apellido: this.pacienteSeleccionado?.apellido,
+      'Obra Social': this.pacienteSeleccionado?.obraSocial,
+      Mail: this.pacienteSeleccionado?.mail,
+      Fecha: turno.fecha,
+      Especialidad: turno.especialidad,
+      Especialista: `${turno.nombreEspecialista} ${turno.apellidoEspecialista}`,
+      'Historia Clínica': Object.entries(turno.historiaClinica || {})
+        .map(([key, value]) => `${key}: ${value}`)
+        .join(', '),
+    }));
+
+    // Convierte la tabla a una hoja de Excel
+    const ws:  XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+
+    // Crea un libro de Excel y añade la hoja
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'TurnosPaciente');
+
+     // Genera y descarga el archivo Excel
+     XLSX.writeFile(wb, `turnos-paciente-${dniPaciente}.xlsx`);
+  }
+
+  descargarExcelPacientes()
+  {
+    console.log('Pacientes: ',this.pacientes);
+
+    const datos = this.pacientes.map(paciente => ({
+      Dni: paciente.dni,
+      Nombre: paciente.nombre,
+      Apellido: paciente.apellido,
+      Email: paciente.mail,
+      Edad: paciente.edad,
+      ObraSocial: paciente.obraSocial
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(datos);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, 'pacientes.xlsx');
+  }
+
+  descargarExcelEspecialistas()
+  {
+    let data = document.getElementById('tabla-de-especialistas');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(data);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, 'especialistas.xlsx');
+  }
+
+  descargarExcelAdministradores()
+  {
+    let data = document.getElementById('tabla-de-administradores');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(data);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, 'administradores.xlsx');
+  }
+
 
   
 
@@ -278,6 +363,42 @@ export class GestionUsuariosComponent implements OnInit, OnDestroy{
   {
     const modal: any = new Modal(this.modalAdministradorSeleccionado.nativeElement);
     modal.show();
+  }
+
+  mostrarModalPacienteSeleccionado()
+  {
+    this.mostrarSpinner();
+    if (this.suscripcionTurnos)
+    {
+      this.suscripcionTurnos.unsubscribe();
+    }
+    this.suscripcionTurnos = this.turnosService.obtenerTurnosByField('idPaciente', this.idPacienteSeleccionado).subscribe({
+      next: (res) =>
+      {
+        this.realizoTurno = false;
+        this.turnosPaciente = res;
+        this.tieneTurnoRealizado(this.turnosPaciente);
+        console.log('realizo turno?: ', this.realizoTurno);
+        this.ocultarSpinner();
+      }
+    })
+    const modal: any = new Modal(this.modalPacienteSeleccionado.nativeElement);
+    // this.tieneTurnoRealizado(this.turnosPaciente);
+    modal.show();
+  }
+
+  
+  tieneTurnoRealizado(turnosPaciente: Array<any>) :void
+  {
+    console.log('turnos del paciente: ', this.turnosPaciente);
+    for (let i = 0; i < turnosPaciente.length; i++) 
+      {
+        if (turnosPaciente[i].estado === 'realizado') 
+          {
+              this.realizoTurno = true;
+          }  
+      }
+
   }
 
   

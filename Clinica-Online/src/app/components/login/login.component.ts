@@ -7,16 +7,33 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import { StorageService } from '../../services/storage.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { NgClass } from '@angular/common';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { LogsService } from '../../services/logs.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, NgxSpinnerModule, SpinnerComponent, NgClass],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  animations: [
+    trigger ('arribaHaciaAbajo', [
+      state('arriba', style({
+        transform: 'translateY(-2000px)',
+        opacity: 0.8,
+        overflow: 'hidden'
+      })),
+      state('abajo', style({
+        transform: 'translateY(0)',
+        opacity: 1
+      })),
+      transition('arriba => abajo', [animate('2s')]),
+    ])
+  ]
 })
 export class LoginComponent implements OnInit{
 
+  public estadoAnimacion: string = 'arriba';
   formLogin!: FormGroup;
   swal: SweetAlert = new SweetAlert(this.router);
   usuariosRapidos: Array<any> = [
@@ -36,10 +53,16 @@ export class LoginComponent implements OnInit{
     protected authService: AuthService, 
     public router: Router, 
     public storageService: StorageService,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,
+    private logsService: LogsService) { }
     
   ngOnInit(): void
   {
+    setTimeout(() => {
+      this.estadoAnimacion = 'abajo';
+      
+    }, 500);
+    
     this.spinner.show();
     this.formLogin = this.fb.group({
       user: ['', Validators.required],
@@ -88,6 +111,7 @@ export class LoginComponent implements OnInit{
             response.user.email == 'pacienteantonio@gmail.com' ||
             response.user.email == 'doctoraruggero@clinica.com' ||
             response.user.email == 'pacientecesar@argentina.com' ||
+            response.user.email == 'daniel.rodriguez.rotelli@gmail.com' ||
             response.user.email == 'especialistagutierrez@gmail.com') {
           console.log(response);
           let log = {
@@ -106,10 +130,8 @@ export class LoginComponent implements OnInit{
           }
           else{
             console.log(response);
-            let log = {
-              email: this.user?.value
-            }
-            //this.logsService.guardarLog(log);
+            let log = {email: this.user?.value}
+            this.logsService.guardarLog(log);
             this.swal.mostrarMensajeExitoYNavegar("Sesión iniciada", "Serás redirigido a la página de bienvenida", "bienvenida");
             this.spinner.hide();
           }

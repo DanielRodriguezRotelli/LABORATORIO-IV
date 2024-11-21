@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { Tiempo } from '../../clases/tiempo';
 import { Especialidad } from '../../entidades/especialidad';
 import { Subscription } from 'rxjs';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SweetAlert } from '../../clases/sweetAlert';
 import { PacientesService } from '../../services/pacientes.service';
 import { AuthService } from '../../services/auth.service';
@@ -16,11 +16,12 @@ import { TablaEspecialistasComponent } from '../tabla-especialistas/tabla-especi
 import { TablaPacientesComponent } from '../tabla-pacientes/tabla-pacientes.component';
 import { MinutosAHoraPipe } from '../../pipes/minutos-ahora.pipe';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { EstadoTurnoDirective } from '../../directives/estado-turno.directive';
 
 @Component({
   selector: 'app-mis-turnos',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, NgIf, NgFor, FormsModule, TablaEspecialistasComponent, TablaPacientesComponent, MinutosAHoraPipe, SpinnerComponent],
+  imports: [ReactiveFormsModule, NgClass, NgIf, NgFor, FormsModule, TablaEspecialistasComponent, TablaPacientesComponent, MinutosAHoraPipe, SpinnerComponent, EstadoTurnoDirective],
   templateUrl: './mis-turnos.component.html',
   styleUrl: './mis-turnos.component.css'
 })
@@ -88,6 +89,7 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
 
   public swal: SweetAlert = new SweetAlert(this.router);
 
+
   constructor(
     public pacientesService: PacientesService, 
     public authService: AuthService, 
@@ -95,7 +97,7 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     public fb: FormBuilder, 
     public especialistasService: EspecialistasService, 
     public turnosService: TurnosService, 
-    public especialidadesService: EspecialidadesService) { }
+    public especialidadesService: EspecialidadesService) {}
 
   ngOnInit(): void {
     console.log('Entrando en OnInit del componente');
@@ -146,6 +148,7 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
         claveDinamica3: [''],
         valorDinamico3: [''],
       });
+
     }).catch(error => {
       console.error("Error en esperarCargarUsuario:", error); // Manejo de errores
       this.ocultarSpinner();
@@ -424,6 +427,7 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     this.alturaSeleccionada = '';
     this.temperaturaSeleccionada = '';
     this.presionSeleccionada = '';
+    this.valorBusquedaGlobal ='';
 
     for(let i=0 ; i<this.datosDinamicosFiltros.length ; i++)
     {
@@ -473,6 +477,7 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
 
     this.filtrarTurnos(fields, values);
   }
+
 
   setearClaveDinamica(indice: number)
   {
@@ -553,6 +558,107 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
     }
 
   }
+
+
+  valorBusquedaGlobal: string = '';
+
+  filtrarPorBusquedaGlobal() {
+    if (!this.valorBusquedaGlobal || !this.turnosListos) {
+      return;
+    }
+  
+    const valorBusqueda = this.valorBusquedaGlobal.toLowerCase().trim();
+  
+    // Filtros personalizados para cada tipo de usuario
+    if (this.authService.tipoUsuario === "paciente") {
+      this.suscripcionActual = this.turnosService.obtenerTurnosPorPaciente(this.authService.usuarioLogeado.id).subscribe({
+        next: (turnos) => {
+          this.turnos = turnos.filter(turno => this.cumpleBusquedaGlobal(turno, valorBusqueda));
+          this.turnosListos = true;
+          this.hayTurnos = this.turnos.length > 0;
+          this.ocultarSpinner();
+        }
+      });
+    } else if (this.authService.tipoUsuario === "especialista") {
+      this.suscripcionActual = this.turnosService.obtenerTurnosPorEspecialista(this.authService.usuarioLogeado.id).subscribe({
+        next: (turnos) => {
+          this.turnos = turnos.filter(turno => this.cumpleBusquedaGlobal(turno, valorBusqueda));
+          this.turnosListos = true;
+          this.hayTurnos = this.turnos.length > 0;
+          this.ocultarSpinner();
+        }
+      });
+    } else if (this.authService.tipoUsuario === "administrador") {
+      this.suscripcionActual = this.turnosService.obtenerTodosLosTurnos().subscribe({
+        next: (turnos) => {
+          this.turnos = turnos.filter(turno => this.cumpleBusquedaGlobal(turno, valorBusqueda));
+          this.turnosListos = true;
+          this.hayTurnos = this.turnos.length > 0;
+          this.ocultarSpinner();
+        }
+      });
+    }
+  }
+
+  cumpleBusquedaGlobal(turno: any, valorBusqueda: string): boolean 
+  {
+    console.log('valor ingresado: ',valorBusqueda);
+
+    if (!valorBusqueda) return true; // Si no hay búsqueda, no filtramos
+  
+    valorBusqueda = valorBusqueda.toLowerCase().trim(); // Normaliza el valor de búsqueda
+  
+    // Función para convertir el valor de minutos a formato "hh:mm"
+    const convertirAHora = (minutos: number): string => {
+      const horas = Math.floor(minutos / 60);
+      const minutosRestantes = minutos % 60;
+      return `${String(horas).padStart(2, '0')}:${String(minutosRestantes).padStart(2, '0')}`;
+    };
+
+
+    const campos = [
+      turno.especialidad?.toLowerCase(),
+      turno.nombreEspecialista?.toLowerCase(),
+      turno.apellidoEspecialista?.toLowerCase(),
+      turno.nombrePaciente?.toLowerCase(),
+      turno.apellidoPaciente?.toLowerCase(),
+      turno.estado?.toLowerCase(),
+      turno.fecha?.toString(),
+      turno.hora? convertirAHora(turno.hora) : '', 
+      turno.historiaClinica?.peso?.toString() ?? '',
+      turno.historiaClinica?.altura?.toString() ?? '',
+      turno.historiaClinica?.presion?.toString() ?? '',
+      turno.historiaClinica?.temperatura?.toString() ?? '',
+      turno.resena?.toLowerCase() ?? '',
+    ];
+  
+    // Imprime los campos para verificar
+    console.log('Campos a evaluar:', campos);
+
+    // Verificar si la búsqueda coincide con las claves o valores dinámicos en historiaClinica
+    if (turno.historiaClinica) {
+      for (const [clave, valor] of Object.entries(turno.historiaClinica)) {
+        const claveString = clave.toLowerCase();
+        const valorString = valor?.toString().toLowerCase() ?? '';  // Convertimos el valor a string
+
+        // Comparamos si la clave o el valor contiene el valor de búsqueda
+        if (claveString.includes(valorBusqueda) || valorString.includes(valorBusqueda)) {
+          return true;
+        }
+      }
+    }
+  
+     // Recorremos los campos y verificamos si alguno contiene la cadena de búsqueda
+    return campos.some(campo => {
+      if (campo !== undefined && campo !== null) {
+        const campoString = campo.toString();  // Convertimos el campo a string
+        return campoString.includes(valorBusqueda);  // Comparamos si el campo contiene el valor de búsqueda
+      }
+      return false;
+    });
+  }
+  
+
 
   agregarDatoDinamico()
   {
@@ -728,5 +834,7 @@ export class MisTurnosComponent implements OnInit, OnDestroy {
   {
     return this.formHistoriaClinica.get('valorDinamico3');
   }
+
+  
 
 }

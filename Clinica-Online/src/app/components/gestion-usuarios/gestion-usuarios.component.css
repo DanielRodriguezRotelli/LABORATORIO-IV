@@ -75,3 +75,54 @@ app-tabla-pacientes, app-tabla-especialistas, app-tabla-administradores {
 .btn-3{
     background-color: rgba(243, 255, 138, 0.342);
 }
+
+
+.fab-container {
+
+
+}
+  
+.fab-button {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 56px;
+height: 56px;
+background-color: #007bff;
+color: white;
+border-radius: 50%;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+border: none;
+outline: none;
+}
+
+.fab-button:hover {
+background-color: #0056b3;
+}
+
+
+.card1 {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #007bff;
+}
+
+.card1:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #0056b3;
+}
+
+.pacientes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual tamaño */
+    gap: 16px; /* Espacio entre las cards */
+    padding: 16px; /* Margen interno alrededor de la cuadrícula */
+}
+
+.card-modal {
+    background-color: #C1CCD9;
+}
+
+.card-modal-nueva-especialidad{
+    background-color: #C1CCD9;
+}

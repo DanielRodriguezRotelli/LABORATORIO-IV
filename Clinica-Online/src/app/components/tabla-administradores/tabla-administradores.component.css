@@ -6,7 +6,7 @@
 }
 
 .table thead th{
-    background-color: rgb(212, 212, 26); /* Color de fondo rojo */
+    background-color: #007bff; /* Color de fondo rojo */
     color: white; /* Color del texto en blanco */
 }
 

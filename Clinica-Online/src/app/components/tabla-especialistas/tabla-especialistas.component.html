@@ -1,7 +1,7 @@
 @if(especialistasObtenidos){
     <div class="table-responsive">
-        <table class="table table-success table-hover" style="cursor: pointer;">
-            <thead >
+        <table class="table  table-hover" style="cursor: pointer;">
+            <thead  style="background-color: primary;">
                 <tr>
                     <th scope="col" *ngIf="tipoVista == 1">DNI</th>
                     <th scope="col" >Nombre</th>
@@ -19,11 +19,11 @@
                             @if(nombreEspecialidad != null && this.tieneEspecialidad(especialista, nombreEspecialidad) || nombreEspecialidad == null){
                                 <tr (click)="enviarId(especialista.id)" >
                                     <th scope="row" *ngIf="tipoVista == 1">{{especialista.dni}}</th>
-                                    <td>{{especialista.nombre}}</td>
-                                    <td>{{especialista.apellido}}</td>
+                                    <td>{{especialista.nombre | capitalize }}</td>
+                                    <td>{{especialista.apellido | capitalize }}</td>
                                     <td *ngIf="tipoVista == 1">{{especialista.edad}}</td>
                                     <td *ngIf="tipoVista == 1">{{especialista.mail}}</td>
-                                    <td *ngIf="tipoVista == 1">{{especialista.especialidades}}</td>
+                                    <td >{{especialista.especialidades | arrayToString}}</td>
                                     <td *ngIf="tipoVista == 1">{{especialista.estado}}</td>
                                     <td></td>
                                 </tr>

@@ -43,36 +43,6 @@
                                     <br>{{disponibilidad.dia}} de {{disponibilidad.horaInicio | minutosAHora}} a {{disponibilidad.horaFin | minutosAHora}} - {{disponibilidad.especialidad}} 
                                 }
                             </h4>
-
-                            <!-- LISTADO DE DISPONIBILIDADES EN TABLA
-                            <h4 class="list-group-item rounded-3" *ngIf="authService.tipoUsuario == 'especialista'">
-                                <strong>Disponibilidad: </strong>
-                                <div class="card p-1 my-4 bg-info" style="overflow-y: auto; max-height: 400px; background-color: white;">
-                                    <table class="table table-info table-striped table-hover" style="cursor: pointer;">
-                                        <thead class="bg-info text-white">
-                                            <tr>
-                                                <th scope="col">Especialidad</th>
-                                                <th scope="col">Día</th>
-                                                <th scope="col">Desde</th>
-                                                <th scope="col">Hasta</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="table-group-divider bg-info text-white">
-                                            @for (disponibilidad  of usuarioActual.disponibilidades; track $index)
-                                            {
-                                                <tr (click)="mostrarModalModificarDisponibilidad(disponibilidad)" role="button" >
-                                                    <td >{{disponibilidad.especialidad}}</td>
-                                                    <td>{{disponibilidad.dia}}</td>
-                                                    <td>{{disponibilidad.horaInicio | minutosAHora}}</td>
-                                                    <td>{{disponibilidad.horaFin | minutosAHora}}</td>
-                                                </tr>
-                                            }  
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </h4>
-                            -->
-
                         </ul>
                     </div>
                 </div>
@@ -111,6 +81,10 @@
                 <button class="btn btn-lg my-2 btn-ok" style="max-width: 200px;" (click)="mostrarModalHistoriaClinica()">
                     Historia clínica
                 </button>
+
+                <button class="btn btn-lg my-2 btn-ok" style="max-width: 200px;" (click)="mostrarModalAtenciones()">
+                    Atenciones
+                </button>
                 </div>
             </div>  
         }
@@ -125,7 +99,7 @@
                 <div class="modal-header d-flex justify-content-between align-items-center">
                     
                         <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">Historia Clínica</h1>
-                        <button class="btn my-2 btn-ok" style="max-width: 120px; margin-left: 450px;" (click)="descargarPDF()">Descargar</button>
+                        <button class="btn my-2 btn-ok" style="max-width: 120px; margin-left: 450px;" (click)="mostrarModalPDFHistoriaClinica()">Generar PDF</button>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     
                 </div>
@@ -148,7 +122,7 @@
                                             {
                                                 <ul class="list-group list-group-flush">
                                                     <li class="list-group-item rounded-3 my-1">
-                                                        {{ key}}: {{ turno.historiaClinica[key] }}
+                                                        {{key | capitalize}}: {{ turno.historiaClinica[key] }}
                                                     </li>
                                                 </ul>
                                             }
@@ -171,21 +145,66 @@
         </div>
     </div>
 
+    <!-- MODAL ATENCIONES -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #modalAtenciones
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" >
+            <div class="modal-content " style="background-color: #8fa8c0;">
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    
+                        <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">Atenciones de:</h1>
+                        <button class="btn my-2 btn-ok" style="max-width: 120px; margin-left: 450px;" (click)="mostrarModalPDFAtenciones()">Generar PDF</button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
+                </div>
+                
+                <div class="modal-body" style="overflow-y: auto; max-height: 450px;">
+                    @if (autenticacionLista)
+                    {
+                        <!-- FILTRO DE ESPECIALISTA -->
+                        <h2 class="mb-0 text-center" style="color: white;">Elija el especialista:</h2>
+                        <div class="d-flex align-items-center col-12 my-1">
+            
+                            <div class="input-group mx-1">
+                                @if (authService.tipoUsuario == "paciente")
+                                {
+                                <button class="btn btn-outline-info" type="button" (click)="mostrarModalFiltroEspecialistas()"
+                                    [disabled]="!turnosListos">Especialista</button>
+                                <input type="text" class="form-control" readonly value={{especialistaSeleccionado}}>
+                                }
+                            </div>
+            
+                            <div class="mx-2">
+                                <button [disabled]="!turnosListos" (click)="limpiarFiltros()" class="btn btn-outline-info">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                        class="bi bi-trash3" viewBox="0 0 16 16">
+                                        <path
+                                            d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--FORM CARGA DISPONIBILIDAD-->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #modalCargarDisponibilidad
-        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="margin-top: 200px;">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content card-modal-principal">
 
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva disponibilidad</h1>
+                    <h1 class="modal-title fs-5 text-white " id="staticBackdropLabel">Nueva disponibilidad</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
                     <form [formGroup]="formDisponibilidad" (ngSubmit)="enviarFormCrearDisponibilidad()">
 
-                        <label class="form-label" for="dia">Especialidad</label>
+                        <label class="form-label text-white" for="dia">Especialidad</label>
                         <select class="form-select mb-2" id="especialidad" formControlName="especialidad">
                             @for (especialidad of usuarioActual.especialidades; track $index)
                             {
@@ -194,7 +213,7 @@
                         </select>
 
                         <!-- Día -->
-                        <label class="form-label" for="dia">Día</label>
+                        <label class="form-label text-white" for="dia">Día</label>
                         <select class="form-select mb-2" id="dia" formControlName="dia">
                             @for (dia of dias; track $index)
                             {
@@ -203,7 +222,7 @@
                         </select>
 
                         <!-- Horario de inicio -->
-                        <label class="form-label" for="horaInicio">Horario de inicio</label>
+                        <label class="form-label text-white" for="horaInicio">Horario de inicio</label>
                         <select class="form-select mb-2" id="horaInicio" formControlName="horaInicio">
                             @for (hora of horarios; track $index)
                             {
@@ -218,7 +237,7 @@
                         </select>
 
                         <!-- Horario de fin -->
-                        <label class="form-label" for="horaFin">Horario de fin</label>
+                        <label class="form-label text-white" for="horaFin">Horario de fin</label>
                         <select class="form-select mb-2" id="horaFin" formControlName="horaFin" [disabled]="true">
                             @for (hora of horarios; track $index)
                             {
@@ -244,21 +263,21 @@
 
     <!--FORM MODIFICACION DISPONIBILIDAD-->
     <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalModificarDisponibilidad>
+        aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalModificarDisponibilidad style="margin-top: 180px;">
         <div class="modal-dialog modal-lg custom-modal-width modal-overlay">
             <div class="modal-content card-modal-principal">
 
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modificar disponibilidad</h1>
+                    <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">Modificar disponibilidad</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body modalbody mx-auto d-flex flex-row">
-                    <h4 class="list-group-item rounded-3" *ngIf="authService.tipoUsuario == 'especialista'">
+                    <h4 class="list-group-item rounded-3 text-white" *ngIf="authService.tipoUsuario == 'especialista'">
                         <strong>Elija la disponibilidad a modificar: </strong>
                         <div class="card p-1 my-4 bg-info" style="overflow-y: auto; max-height: 400px; background-color: white;">
                             <table class="table table-info table-striped table-hover" style="cursor: pointer;">
-                                <thead class="bg-info text-white">
+                                <thead class="bg-info">
                                     <tr>
                                         <th scope="col">Especialidad</th>
                                         <th scope="col">Día</th>
@@ -270,10 +289,10 @@
                                     @for (disponibilidad  of usuarioActual.disponibilidades; track $index)
                                     {
                                         <tr (click)="traerDisponibilidad(disponibilidad)" role="button" >
-                                            <td >{{disponibilidad.especialidad}}</td>
-                                            <td>{{disponibilidad.dia}}</td>
-                                            <td>{{disponibilidad.horaInicio | minutosAHora}}</td>
-                                            <td>{{disponibilidad.horaFin | minutosAHora}}</td>
+                                            <td  >{{disponibilidad.especialidad}}</td>
+                                            <td >{{disponibilidad.dia}}</td>
+                                            <td >{{disponibilidad.horaInicio | minutosAHora}}</td>
+                                            <td >{{disponibilidad.horaFin | minutosAHora}}</td>
                                         </tr>
                                     }  
                                 </tbody>
@@ -286,24 +305,24 @@
                         <form [formGroup]="formDisponibilidad" (ngSubmit)="enviarFormModificarDisponibilidad()">
 
 
-                            <label class="form-label" for="dia">Especialidad</label>
-                            <select class="form-select mb-2" id="especialidad" formControlName="especialidad">
+                            <label class="form-label text-white" for="dia">Especialidad</label>
+                            <select class="form-select mb-2 text-white" id="especialidad" formControlName="especialidad">
                                 @for (especialidad of usuarioActual.especialidades; track $index)
                                 {
                                 <option value={{especialidad}}>{{especialidad}}</option>
                                 }
                             </select>
 
-                            <label class="form-label" for="dia">Día</label>
-                            <select class="form-select mb-2" id="dia" formControlName="dia">
+                            <label class="form-label text-white" for="dia">Día</label>
+                            <select class="form-select mb-2 text-white" id="dia" formControlName="dia">
                                 @for (dia of dias; track $index)
                                 {
                                 <option value={{dia}}>{{dia}}</option>
                                 }
                             </select>
 
-                            <label class="form-label" for="horaInicio">Horario de inicio</label>
-                            <select class="form-select mb-2" id="horaInicio" formControlName="horaInicio">
+                            <label class="form-label text-white" for="horaInicio">Horario de inicio</label>
+                            <select class="form-select mb-2 text-white" id="horaInicio" formControlName="horaInicio">
                                 @for (hora of horarios; track $index)
                                 {
                                     @if(dia?.value != "Sábado" || (dia?.value == "Sábado" && hora <= 810))
@@ -317,7 +336,7 @@
                             </select>
 
 
-                            <label class="form-label" for="horaFin">Horario de fin</label>
+                            <label class="form-label text-white" for="horaFin">Horario de fin</label>
                             <select class="form-select mb-2" id="horaFin" formControlName="horaFin" [disabled]="true">
                                 @for (hora of horarios; track $index)
                                 {
@@ -343,17 +362,17 @@
 
     <!--MODAL BORRAR DISPONIBILIDAD-->
     <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalBorrarDisponibilidad>
+        aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalBorrarDisponibilidad style="margin-top: 180px;">
         <div class="modal-dialog modal-lg custom-modal-width modal-overlay">
             <div class="modal-content card-modal-principal">
 
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Borrar disponibilidad</h1>
+                    <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">Borrar disponibilidad</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body modalbody mx-auto d-flex flex-row">
-                    <h4 class="list-group-item rounded-3" *ngIf="authService.tipoUsuario == 'especialista'">
+                    <h4 class="list-group-item rounded-3 text-white" *ngIf="authService.tipoUsuario == 'especialista'">
                         <strong>Elija la disponibilidad que quiere borrar: </strong>
                         <div class="card p-1 my-4 bg-info" style="overflow-y: auto; max-height: 400px; background-color: white;">
                             <table class="table table-info table-striped table-hover" style="cursor: pointer;">
@@ -385,12 +404,13 @@
     </div>
 
 
+    <!--MODAL AGREGAR DISPONIBILIDAD-->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #modalAgregarEspecialidad data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" style="margin-top: 180px;">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content card-modal-principal">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar especialidad</h1>
+                    <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">Agregar especialidad</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="close()"></button>
                 </div>
                 <div class="modal-body">
@@ -428,17 +448,17 @@
         </div>
     </div>
 
-
-    <div class="modal fade" id="modalAnadirEspecialidad" tabindex="-1" aria-labelledby="modalAnadirEspecialidad" aria-hidden="true">
+    <!--MODAL NUEVA DISPONIBILIDAD-->
+    <div class="modal fade" id="modalAnadirEspecialidad" tabindex="-1" aria-labelledby="modalAnadirEspecialidad" aria-hidden="true" style="margin-top: 200px;">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content card-modal-principal">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalAnadirEspecialidad">Nueva especialidad</h1>
+                    <h1 class="modal-title fs-5 text-white" id="modalAnadirEspecialidad">Nueva especialidad</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
 
                 <form [formGroup]="formEspecialidad" (ngSubmit)="enviarFormEspecialidad()">
-                    <div class="modal-body">
+                    <div class="modal-body text-white">
                         Ingrese el nombre de la nueva especialidad
                         <input type="text" class="form-control" id="nombreEspecialidad" formControlName="nombre">
                         @if(nombreEspecialidad?.hasError('pattern'))
@@ -460,6 +480,150 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PDF HISTORIA CLINICA -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #modalPDFHistoriaClinica
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" >
+            <div class="modal-content " style="background-color: #8fa8c0;">
+                @if (turnos && usuarioActual) 
+                {
+                    <div class="informe-container" >
+                        <div class="modal-header ">
+                            <button class="btn my-2 btn-ok" style="max-width: 150px; margin-left: 20px;" (click)="downloadPDFHistoriaClinica()">Descargar PDF</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                        </div>
+                        <div class="modal-body" id="htmlDataHistoriaClinica">
+                            
+                            <div class="mx-auto d-flex flex-row">
+                                <img class="logo" src="../../../assets/img/logo.png" width="100" height="100" alt="Logo" style="margin-left: 20px;">
+                                <h2 class="fecha-actual" style="margin-left: 450px; margin-top: 20px;">{{fechaActual}}</h2>
+                            </div>
+                            <h2 class="text-center">HISTORIA CLINICA</h2>
+                            <div class="mx-auto d-flex flex-row">
+                                <h2 style="margin-left: 25px;">{{usuarioActual.nombre | capitalize}} {{usuarioActual.apellido | capitalize}}</h2>
+                                <h2 style="margin-left: 250px;">DNI: {{usuarioActual.dni}}</h2>
+                            </div>
+                    
+                            @for (turno of turnos; track $index) 
+                            {
+                                @if (turno.idPaciente == usuarioActual.id && turno.historiaClinica) 
+                                {
+                                    <div class="card p-2 m-4">
+                                        <h1 class="card-title text-center">{{turno.especialidad | capitalize}} | {{turno.fecha}}</h1>
+                    
+                                        <h4 class="card-subtitle mb-2 text-muted text-center">
+                                            Esp. {{turno.nombreEspecialista}} {{turno.apellidoEspecialista}}
+                                        </h4>
+                    
+                                        @for (key of objectKeys(turno.historiaClinica); track $index) {
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item rounded-3 my-1">
+                                                    <h4>{{ key | capitalize }}: {{ turno.historiaClinica[key] }}</h4>
+                                                </li>
+                                            </ul>
+                                        }
+                                    </div>
+                                }
+                            }
+                            @if(!tieneHistoriaClinica) {
+                                <h1 class="mx-4 p-4 text-primary text-center">Por el momento, no tiene historia clinica</h1>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PDF ATENCIONES -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" #modalPDFAtenciones
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" >
+            <div class="modal-content " style="background-color: #8fa8c0;">
+                @if (turnosAtenciones && usuarioActual && especialistaSeleccionado) 
+                {
+                    <div class="informe-container" >
+                        <div class="modal-header ">
+                            <button class="btn my-2 btn-ok" style="max-width: 150px; margin-left: 20px;" (click)="downloadPDFAtenciones()">Descargar PDF</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                        </div>
+                        <div class="modal-body" id="htmlDataAtenciones">
+                            
+                            <div class="mx-auto d-flex flex-row">
+                                <img class="logo" src="../../../assets/img/logo.png" width="100" height="100" alt="Logo" style="margin-left: 20px;">
+                                <h2 class="fecha-actual" style="margin-left: 450px; margin-top: 20px;">{{fechaActual}}</h2>
+                            </div>
+                            <h1 class="text-center">ATENCIONES</h1>
+                            <div class="mx-auto d-flex flex-row">
+                                <h2 style="margin-left: 25px;">Especialista: {{especialistaSeleccionado | capitalize}}</h2>
+                            </div>
+                            <div class="mx-auto d-flex flex-row">
+                                <h2 style="margin-left: 25px;">Paciente: {{usuarioActual.nombre | capitalize}} {{usuarioActual.apellido | capitalize}}</h2>
+                                <h2 style="margin-left: 150px;">DNI: {{usuarioActual.dni}}</h2>
+                            </div>
+            
+                            @for (turno of turnosAtenciones; track $index) 
+                            {    
+                                @if (turno.idPaciente == usuarioActual.id && turno.historiaClinica) 
+                                {
+                                    <div class="card p-2 m-4">
+                                        <h1 class="card-title text-center">{{turno.especialidad}}</h1>
+                    
+                                        <h4 class="card-subtitle mb-2 text-muted text-center">
+                                            {{turno.fecha}} - {{turno.hora | minutosAHora}}hs
+                                        </h4>
+                    
+                                        @if (turno.historiaClinica) 
+                                        {
+                                            @for (key of objectKeys(turno.historiaClinica); track $index) {
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item rounded-3 my-1">
+                                                        <h4>{{ key | capitalize}}: {{ turno.historiaClinica[key] }}</h4>
+                                                    </li>
+                                                </ul>
+                                            }
+                                        }
+                                    </div>
+                                } 
+                            }
+                        </div>
+                    </div>
+                }@else 
+                {
+                    <h1 class="mx-4 p-4 text-primary text-center">Por el momento, no tiene atenciones realizadas</h1>
+                }
+             
+                @if((this.turnosAtenciones && this.turnosAtenciones.length <= 0) || !tieneHistoriaClinica) {
+                    <h1 class="mx-4 p-4 text-primary text-center">Por el momento, no tiene atenciones realizadas</h1>
+                }
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FILTRO DE ESPECIALISTAS -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true" #modalFiltroEspecialistas>
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: #6e8397; margin-top: 300px;">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5 text-white" id="staticBackdropLabel">
+                        Seleccione un especialista</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body mx-auto">
+                    <ul class="list-group m-4">
+                        <li class="list-group-item active text-center" aria-current="true">Especialistas</li>
+                        <app-tabla-especialistas *ngIf="turnosListos" [estado]="'aprobado'"
+                            (onEnviarId)="establecerFiltro('idEspecialista', $event)" data-bs-dismiss="modal"
+                            role="button"></app-tabla-especialistas>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

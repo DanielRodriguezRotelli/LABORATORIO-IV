@@ -4,11 +4,12 @@ import { Subscription } from 'rxjs';
 import { PacientesService } from '../../services/pacientes.service';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { NgIf, NgStyle } from '@angular/common';
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 @Component({
   selector: 'app-tabla-pacientes',
   standalone: true,
-  imports: [SpinnerComponent, NgStyle, NgIf],
+  imports: [SpinnerComponent, NgStyle, NgIf, CapitalizePipe],
   templateUrl: './tabla-pacientes.component.html',
   styleUrl: './tabla-pacientes.component.css'
 })

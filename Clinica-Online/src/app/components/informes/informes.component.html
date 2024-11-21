@@ -1,0 +1,189 @@
+<app-spinner [ngClass]="claseSpinner"></app-spinner>
+
+<h1 class="text-center" style="margin-top: 50px;">INFORMES</h1>
+<div class="container d-flex  justify-content-center h-100" style="margin-top: 10px;">
+
+    <div class="card-informes card p-4 col-md-10 m-4 bg-secondary" style="margin-top: 10px;">
+        <div class="col-6 mx-auto mt-4 mb-2">
+            @if (!opcionSeleccionada) 
+            {
+                <div class="card card-letrero p-3 m-4" style="border: 1px solid white; border-radius: 3rem;">
+                    <h3 class="text-center text-white">Por favor, seleccione una opción</h3>
+                </div>
+            }
+            <div class="input-group">            
+                <span class="input-group-text text-white">Ver</span>
+                <select class="form-select" [(ngModel)]="opcionSeleccionada" (change)="verEstadistica()">
+                    @for (tipoDeEstadistica of tiposDeEstadistica; track $index) 
+                    {
+                        <option [value]='tipoDeEstadistica.id'>{{tipoDeEstadistica.nombre}}</option>
+                    }
+                </select>
+                <button class="btn mx-1" (click)="downloadPDF()" [disabled]="!opcionSeleccionada">Descargar PDF</button>
+            </div>
+        </div>
+        @if (opcionSeleccionada) 
+        {
+            <div class="card p-1 my-4"   id="cardGrafico"> 
+            
+                <!-- Log de ingresos -->
+                @if (opcionSeleccionada == '1') 
+                {   
+                    <h1 class="text-center">Logs de ingresos al sistema</h1>
+                    <div class="chart-wrapper mx-auto">
+                        <div class="chart-container">
+                            <ngx-charts-advanced-pie-chart
+                            [view]="[700,400]"
+                            [scheme]="colorScheme"
+                            [results]="data1"
+                            [animations]="true"
+                            (select)="onSelect($event)">
+                        </ngx-charts-advanced-pie-chart>
+                        </div>
+                    </div>
+                    <div class="card m-2">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Usuario</th>
+                                <th scope="col">Fecha y hora</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                @for (log of logs; track $index) 
+                                {
+                                    <tr>
+                                        <td>{{log.email}}</td>
+                                        <td>{{log.date | formatoFecha}}</td>
+                                    </tr>
+                                }
+                                </tbody>
+                          </table>
+                    </div>
+                }
+                <!-- Cantidad de turnos por especialidad -->
+                @if (opcionSeleccionada == '2') 
+                {
+                    <h1 class="text-center">Cantidad de turnos por especialidad</h1>
+                    <div class="chart-wrapper mx-auto">
+                        <div class="chart-container">
+                            <ngx-charts-pie-chart
+                            [view]="[800,500]"
+                            [scheme]="colorScheme"
+                            [results]="data2"
+                            [gradient]="true"
+                            [legend]="true"
+                            [labels]="true"
+                            [doughnut]="false"
+                            (select)="onSelect($event)"
+                            (activate)="onActivate($event)"
+                            (deactivate)="onDeactivate($event)">
+                            </ngx-charts-pie-chart>
+                        </div>
+                    </div>
+                }
+                <!-- Cantidad de turnos por día -->
+                @if (opcionSeleccionada == '3') 
+                {
+                    <h1 class="text-center">Cantidad de turnos por día</h1>
+                    <div class="chart-wrapper">
+                        <div class="chart-container">
+                            <ngx-charts-bar-vertical
+                            [scheme]="colorScheme"
+                            [results]="data3"
+                            [xAxis]="true"
+                            [yAxis]="true"
+                            [legend]="true"
+                            [showXAxisLabel]="true"
+                            [showYAxisLabel]="true"
+                            [xAxisLabel]="'Fechas'"
+                            [yAxisLabel]="'Cantidad'"
+                            [legendTitle]="'Fechas'"
+                            (select)="onSelect($event)">
+                            </ngx-charts-bar-vertical>
+                        </div>
+                    </div>
+                   
+                }
+                <!-- Cantidad de turnos solicitados -->
+                @if (opcionSeleccionada == '4') 
+                {
+                    @if (secuencia4[0])
+                    {
+                        <h1 class="text-center m-2">Seleccione un lapso de tiempo</h1>
+                        <div class="card m-4 d-flex flex-row p-4">
+                            <div class="input-group m-2">
+                                <span class="input-group-text">Fecha de inicio:</span>
+                                <input type="text" class="form-control" placeholder="dd/mm" [(ngModel)]="fechaInicio">
+                            </div>
+                            <div class="input-group m-2">
+                                <span class="input-group-text">Fecha de fin:</span>
+                                <input type="text" class="form-control" placeholder="dd/mm" [(ngModel)]="fechaFin">
+                            </div>
+                        </div>
+                        <button class="btn btn-success mx-auto m-4 btn-lg" (click)="filtrarTurnosPorRango( fechaInicio, fechaFin)">OK</button>
+                    }
+                    @if(secuencia4[1])
+                    {
+                        <h1 class="text-center">Cantidad de turnos solicitados</h1>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <ngx-charts-tree-map
+                                [view]="[800,500]"
+                                [scheme]="colorScheme"
+                                [results]="data4"
+                                [animations]="true"
+                                (select)="onSelect($event)">
+                                </ngx-charts-tree-map>
+                            </div>
+                        </div>
+                    }
+                }
+
+                <!-- Cantidad de turnos finalizados -->
+                @if (opcionSeleccionada == '5') 
+                {
+                    @if (secuencia5[0])
+                    {
+                        <h1 class="text-center m-2">Seleccione un lapso de tiempo</h1>
+                        <div class="card m-4 d-flex flex-row p-4">
+                            <div class="input-group m-2">
+                                <span class="input-group-text">Fecha de inicio:</span>
+                                <input type="text" class="form-control" placeholder="dd/mm" [(ngModel)]="fechaInicio">
+                            </div>
+                            <div class="input-group m-2">
+                                <span class="input-group-text">Fecha de fin:</span>
+                                <input type="text" class="form-control" placeholder="dd/mm" [(ngModel)]="fechaFin">
+                            </div>
+                        </div>
+                        <button class="btn btn-success mx-auto m-4 btn-lg" (click)="filtrarTurnosTerminadosPorRango( fechaInicio, fechaFin)">OK</button>
+                    }
+                    @if(secuencia5[1])
+                    {
+                        <h1 class="text-center">Cantidad de turnos finalizados</h1>
+                        <div class="chart-wrapper">
+                            <div class="chart-container">
+                                <ngx-charts-bar-horizontal
+                                [view]="[800,500]"
+                                [scheme]="colorScheme"
+                                [results]="data5"
+                                [gradient]="false"
+                                [xAxis]="true"
+                                [yAxis]="true"
+                                [legend]="true"
+                                [showXAxisLabel]="true"
+                                [showYAxisLabel]="true"
+                                [xAxisLabel]="xAxisLabel"
+                                [yAxisLabel]="yAxisLabel"
+                                (select)="onSelect($event)"
+                                (activate)="onActivate($event)"
+                                (deactivate)="onDeactivate($event)">
+                              </ngx-charts-bar-horizontal>
+                            </div>
+                        </div>
+                    }
+                } 
+            </div>   
+        }
+    </div>
+</div>

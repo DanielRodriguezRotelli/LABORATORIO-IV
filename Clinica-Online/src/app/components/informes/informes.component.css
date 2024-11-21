@@ -1,0 +1,55 @@
+:host {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: rgb(169, 188, 208);
+    background: linear-gradient(90deg, rgba(169, 188, 208, 1) 0%, rgba(216, 219, 226, 1) 35%, rgba(88, 164, 176, 1) 100%);
+}
+
+.card-informes{
+    border-radius: 3rem;
+    min-height: 60vh;
+    border-color: white;
+}
+
+.spinner-activado {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner-desactivado{
+    display: none;
+}
+
+button {
+    --bs-btn-color: #188c9e;
+    --bs-btn-bg: #394149;
+    --bs-btn-border-color: #188c9e;
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-hover-bg: #188c9e;
+    --bs-btn-active-color: #ffffff;
+    --bs-btn-active-bg: #157786;
+    --bs-btn-active-border-color: #157786;
+}
+
+.input-group-text{
+    background: #188c9e;
+}
+
+.card-letrero{
+    background: #188c9e;
+}
+
+#cardGrafico {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+}

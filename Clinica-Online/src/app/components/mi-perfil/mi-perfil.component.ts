@@ -17,12 +17,16 @@ import { Disponibilidad } from '../../entidades/disponibilidad';
 import { TurnosService } from '../../services/turnos.service';
 import { Tiempo } from '../../clases/tiempo';
 import { MinutosAHoraPipe } from '../../pipes/minutos-ahora.pipe';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { TablaEspecialistasComponent } from '../tabla-especialistas/tabla-especialistas.component';
+import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, NgClass, NgIf, SpinnerComponent, MinutosAHoraPipe, CommonModule],
+  imports: [ReactiveFormsModule, FormsModule, NgClass, NgIf, SpinnerComponent, MinutosAHoraPipe, CommonModule, TablaEspecialistasComponent, CapitalizePipe],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.css'
   
@@ -37,6 +41,10 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
   @ViewChild('modalModificarDisponibilidad') modalModificarDisponibilidad!: ElementRef;
   @ViewChild('modalBorrarDisponibilidad') modalBorrarDisponibilidad!: ElementRef;
   @ViewChild('modalHistoriaClinica') modalHistoriaClinica!: ElementRef;
+  @ViewChild('modalPDFHistoriaClinica') modalPDFHistoriaClinica!: ElementRef;
+  @ViewChild('modalAtenciones') modalAtenciones!: ElementRef;
+  @ViewChild('modalPDFAtenciones') modalPDFAtenciones!: ElementRef;
+  @ViewChild('modalFiltroEspecialistas') modalFiltroEspecialistas!: ElementRef;
   obtenerEspecialidadesSub!: Subscription;
   especialidades: Array<Especialidad> = [];
   especialidadesObtenidas: boolean = false;
@@ -49,8 +57,19 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
   horarios: Array<number> = [];
   claseSpinner: string = "spinner-desactivado";
   turnos!: Array<any> | null;
+  turnosAtenciones!: Array<any> | null;
   suscripcionTurnos!: Subscription;
   tieneHistoriaClinica = false;
+  fechaActual!: string;
+  tituloInforme!: string;
+  tiempo: Tiempo = new Tiempo();
+  autenticacionLista: boolean = false;
+  suscripcionActual!: Subscription;
+  turnosListos = false;
+  hayTurnos = false;
+  filtrosActivos: { [key: string]: string } = {};
+  especialistaSeleccionado!: any;
+  idEspecialistaSeleccionado!: any;
   
   // Variables para almacenar las disponibilidades filtradas
   disponibilidadesExistentes: any[] = []; // Aquí guardarás las disponibilidades del usuario
@@ -181,6 +200,38 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
 
   ngOnInit(): void {
 
+    console.log('Entrando en OnInit del componente');
+    this.mostrarSpinner();
+    this.authService.esperarCargarUsuario().then(() => {
+      console.log('Autenticación completada. Ocultando spinner y continuando');
+      this.ocultarSpinner();
+      this.autenticacionLista = true;
+
+      console.log('Estado de usuarioLogeado:', this.authService.usuarioLogeado);
+      if (this.authService.usuarioLogeado && this.authService.usuarioLogeado.id) {
+        this.traerTurnos();
+      } else {
+        console.error('usuario no Logeado o su ID son undefined.');
+      }
+
+      this.traerTurnos();
+      this.especialidadesService.obtenerEspecialidades();
+      this.obtenerEspecialidadesSub = this.especialidadesService.obtenerEspecialidadesSubject.subscribe(status => {
+        console.log("Estado de obtenerEspecialidadesSubject:", status); // Verificar el estado de especialidades
+        if (status) {
+          this.especialidades = this.especialidadesService.coleccionEspecialidades;
+          console.log("especialidades obtenidas");
+          this.especialidadesObtenidas = true;
+        }
+      this.chequearSiTieneHistoriaClinica(this.authService.usuarioLogeado);
+      console.log('Tiene historia Clinica?: ', this.tieneHistoriaClinica);
+      });
+    }).catch(error => {
+      console.error("Error en esperarCargarUsuario:", error); // Manejo de errores
+      this.ocultarSpinner();
+    });
+
+    /*
     this.especialidadesService.obtenerEspecialidades();
     this.obtenerEspecialidadesSub = this.especialidadesService.obtenerEspecialidadesSubject.subscribe(status =>
     {
@@ -190,9 +241,73 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
         console.log("especialidades obtenidas");
         this.especialidadesObtenidas = true;
       }
-    })
-  }
+    })*/
+    this.fechaActual = this.tiempo.getFechaActual();
+    
   
+  }
+
+  
+
+  traerTurnos()
+  {
+    this.mostrarSpinner();
+    if (this.suscripcionActual)
+    {
+      this.suscripcionActual.unsubscribe();
+    }
+    if (this.authService.tipoUsuario != "administrador")
+    {
+      let campoId;
+      if (this.authService.tipoUsuario == "paciente")
+      {
+        campoId = "idPaciente";
+      }
+      else
+      {
+        campoId = "idEspecialista";
+      }
+      console.log('usuarioLogeado.id:', this.authService.usuarioLogeado.id);
+      this.suscripcionActual = this.turnosService.obtenerTurnosByField(campoId, this.authService.usuarioLogeado.id).subscribe({
+        next: (res) =>
+        {
+          this.turnos = res;
+          this.turnosAtenciones = res;
+          this.turnosListos = true;
+          if (res.length > 0)
+          {
+            this.hayTurnos = true;
+          }
+          else
+          {
+            this.hayTurnos = false;
+          }
+          this.ocultarSpinner();
+        }
+      });
+    }
+    else
+    {
+      this.suscripcionActual = this.turnosService.getTurnos().subscribe({
+        next: (res) =>
+        {
+          this.turnos = res;
+          this.turnosAtenciones = res;
+          this.turnosListos = true;
+          if (res.length > 0)
+          {
+            this.hayTurnos = true;
+          }
+          else
+          {
+            this.hayTurnos = false;
+          }
+          this.ocultarSpinner();
+        }
+      })
+    }
+  }
+
 
   traerDisponibilidadesExistentes(){
     this.especialistasService.getDisponibilidades(this.usuarioActual.id).subscribe(
@@ -249,6 +364,11 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
   }
 
 
+  mostrarModalFiltroEspecialistas()
+  {
+    const modal: any = new Modal(this.modalFiltroEspecialistas.nativeElement);
+    modal.show();
+  }
 
   mostrarModalCargarDisponibilidad()
   {
@@ -279,15 +399,47 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
 
   mostrarModalHistoriaClinica()
   {
+    const modal: any = new Modal(this.modalHistoriaClinica.nativeElement);
+    modal.show();
+  }
+
+  mostrarModalPDFHistoriaClinica()
+  {
+    const modal: any = new Modal(this.modalPDFHistoriaClinica.nativeElement);
+    modal.show();
+  }
+
+  mostrarModalAtenciones()
+  {
+    const modal: any = new Modal(this.modalAtenciones.nativeElement);
+    modal.show();
+  }
+
+  mostrarModalPDFAtenciones()
+  {
+    if (!this.especialistaSeleccionado) {
+      this.swal.mostrarMensajeError("Error", "Debe elegir un especialista.");
+      return;
+    }
+    console.log('ID Especialista Seleccionado: ', this.idEspecialistaSeleccionado);
+    const modal: any = new Modal(this.modalPDFAtenciones.nativeElement);
+    modal.show();
+  }
+
+  chequearSiTieneHistoriaClinica(paciente: any)
+  {
     this.tieneHistoriaClinica = false;
-    if(this.turnos)
+    if(this.turnos && paciente)
     {
       for(let i=0 ; i<this.turnos.length ; i++)
       {
-        if(this.turnos[i].historiaClinica)
-          {
-            this.tieneHistoriaClinica = true;
-            break;
+        if (this.turnos[i].idPaciente == paciente.id) 
+        {
+          if(this.turnos[i].historiaClinica)
+            {
+              this.tieneHistoriaClinica = true;
+              break;
+            }
           }
         }
     }
@@ -295,25 +447,9 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
     {
       this.tieneHistoriaClinica = false;
     }
-    const modal: any = new Modal(this.modalHistoriaClinica.nativeElement);
-    modal.show();
+
   }
 
-  
-  descargarPDF()
-  {
-    window.open('pdf-historia-clinica');
-  }
-
-
-  descargarAtenciones()
-  {
-    window.open('pdf-atenciones');
-  }
-  
-
-  
-  //enviarFormAñadirEspecialidadAEspecialista(){}
   
   enviarFormEspecialidad() {
     if (this.formEspecialidad.valid) {
@@ -495,6 +631,171 @@ export class MiPerfilComponent  implements OnInit, OnDestroy{
     this.especialidadSeleccionada = "";
   }
 
+  downloadPDFHistoriaClinica(): void
+  {
+    this.mostrarSpinner();
+    const DATA: any = document.getElementById('htmlDataHistoriaClinica');
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 3
+    };
+
+    html2canvas(DATA, options).then((canvas) =>
+    {
+      const img = canvas.toDataURL('image/PNG');
+      console.log("ok");
+      const bufferX = 15;
+      const bufferY = 15;
+      const imgProps = (doc as any).getImageProperties(img);
+      const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
+      return doc;
+    }).then((docResult) =>
+    {
+      docResult.save(`histoia clinica ${this.authService.usuarioLogeado.nombre} ${this.authService.usuarioLogeado.apellido} DNI ${this.authService.usuarioLogeado.dni}.pdf`);
+      this.ocultarSpinner();
+    })
+
+  }
+
+  downloadPDFAtenciones()
+  {
+    this.mostrarSpinner();
+    const DATA: any = document.getElementById('htmlDataAtenciones');
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 3
+    };
+    html2canvas(DATA, options).then((canvas) => {
+      const img = canvas.toDataURL('image/PNG');
+      console.log("ok");
+      const bufferX = 15;
+      const bufferY = 15;
+      const imgProps = (doc as any).getImageProperties(img);
+      const pdfWidth = doc.internal.pageSize.getWidth() -2 * bufferX;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      doc.addImage(img, 'PNG', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
+      return doc;
+    }).then((docResult) => {
+      docResult.save(`atenciones-${this.especialistaSeleccionado}.pdf`);
+      this.ocultarSpinner();
+    })
+
+  }
+
+  limpiarFiltros()
+  {
+    this.filtrosActivos = {};
+    this.especialistaSeleccionado = '';
+    this.traerTurnos();
+  }
+
+  establecerFiltro(filter: string, field: any)
+  {
+    switch (filter)
+    {
+      case 'especialidad':
+        this.especialidadSeleccionada = field;
+        break;
+      case 'idEspecialista':
+        console.log(field);
+        this.especialistasService.obtenerEspecialistaPorId(field).then((res) =>
+        {
+          this.especialistaSeleccionado = `${res?.nombre} ${res?.apellido}`
+          this.idEspecialistaSeleccionado = `${res?.id}`
+        });
+        break;
+    }
+
+    console.log(`${filter}:${field}`)
+    this.filtrosActivos[filter] = field;
+
+    const fields = Object.keys(this.filtrosActivos);
+    const values = Object.values(this.filtrosActivos);
+
+    this.filtrarTurnos(fields, values);
+  }
+
+  filtrarTurnos(fields: string[], values: string[])
+  {
+    this.turnosListos = false;
+    this.mostrarSpinner();
+    if(this.suscripcionActual)
+    {
+      this.suscripcionActual.unsubscribe();
+    }
+
+    let metodo;
+    if (this.authService.tipoUsuario == "paciente")
+    {
+
+      console.log(this.authService.usuarioLogeado.id)
+      this.suscripcionActual = this.turnosService.obtenerTurnosPorPacienteYFields(this.authService.usuarioLogeado.id, fields, values).subscribe({
+        next: (res) =>
+        {
+          this.turnos = res;
+          this.turnosAtenciones = res;
+          this.turnosListos = true;
+          if (res.length > 0)
+          {
+            this.hayTurnos = true;
+          }
+          else
+          {
+            this.hayTurnos = false;
+          }
+          this.ocultarSpinner();
+        }
+      });
+
+    }
+    else if (this.authService.tipoUsuario == "especialista")
+    {
+
+      console.log(this.authService.usuarioLogeado.id)
+      this.suscripcionActual = this.turnosService.obtenerTurnosPorEspecialistaYFields(this.authService.usuarioLogeado.id, fields, values).subscribe({
+        next: (res) =>
+        {
+          this.turnos = res;
+          this.turnosAtenciones = res;
+          this.turnosListos = true;
+          if (res.length > 0)
+          {
+            this.hayTurnos = true;
+          }
+          else
+          {
+            this.hayTurnos = false;
+          }
+          this.ocultarSpinner();
+        }
+      });
+    }
+    else if (this.authService.tipoUsuario == "administrador")
+    {
+      this.suscripcionActual = this.turnosService.obtenerTurnosPorFields(fields, values).subscribe({
+        next: (res) =>
+        {
+          this.turnos = res;
+          this.turnosAtenciones = res;
+          this.turnosListos = true;
+          if (res.length > 0)
+          {
+            this.hayTurnos = true;
+          }
+          else
+          {
+            this.hayTurnos = false;
+          }
+          this.ocultarSpinner();
+        }
+      })
+    }
+
+  }
 
 
   get nombreEspecialidad()

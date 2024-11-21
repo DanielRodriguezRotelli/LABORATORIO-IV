@@ -19,12 +19,13 @@ import { TablaPacientesComponent } from '../tabla-pacientes/tabla-pacientes.comp
 import { NgFor, NgIf } from '@angular/common';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { MinutosAHoraPipe } from '../../pipes/minutos-ahora.pipe';
+import { BorderSelectionBlueDirective } from '../../directives/border-selection-blue.directive';
 
 
 @Component({
   selector: 'app-solicitar-turnos',
   standalone: true,
-  imports: [ReactiveFormsModule, TablaEspecialistasComponent, TablaPacientesComponent, NgFor, NgIf, SpinnerComponent, MinutosAHoraPipe],
+  imports: [ReactiveFormsModule, TablaEspecialistasComponent, TablaPacientesComponent, NgFor, NgIf, SpinnerComponent, MinutosAHoraPipe, BorderSelectionBlueDirective],
   templateUrl: './solicitar-turnos.component.html',
   styleUrl: './solicitar-turnos.component.css'
 })

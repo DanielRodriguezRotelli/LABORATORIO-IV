@@ -4,7 +4,7 @@
 
 @if(authService.firebaseInicializado)
 {
-<div class="h-100 d-flex flex-column flex-md-row">
+<div [@arribaHaciaAbajo]="estadoAnimacion" class="h-100 d-flex flex-column flex-md-row">
   @if (!authService.auth.currentUser)
   {
     <div class="col-0 col-md-3"></div>

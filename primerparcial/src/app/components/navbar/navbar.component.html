@@ -20,14 +20,19 @@
           <a class="nav-link active" routerLink="chofer/detalle">Detalle chofer</a>
         </li>
 
-        <!-- Mostrar "Vehículos" solo si es administrador -->
-        <li *ngIf="isLogged$ && (isAdmin$ | async)" class="nav-item">
-          <a class="nav-link active" routerLink="vehiculo">Vehículos</a>
-        </li>
+        
+          <li *ngIf="isLogged$ && (isAdmin$ | async)" class="nav-item">
+            <a class="nav-link active" routerLink="vehiculo">Vehículos</a>
+          </li>
       </ul>
 
       <!-- Alineación del menú derecho -->
       <ul class="navbar-nav ms-auto">
+
+        <li *ngIf="!(loggedUser | async)" class="nav-item">
+          <a class="nav-link active" routerLink="registro">Registro</a>
+        </li>
+
         <li *ngIf="!(loggedUser | async)" class="nav-item">
           <a class="nav-link active" routerLink="login">Login</a>
         </li>

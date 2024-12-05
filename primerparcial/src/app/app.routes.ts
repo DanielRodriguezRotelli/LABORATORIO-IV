@@ -3,6 +3,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { adminGuard } from './guards/admin.guard';
+import { CanDeactivateGuard } from './guards/can-deactivate.guard';
 
 export const routes: Routes = [
 
@@ -12,6 +13,11 @@ export const routes: Routes = [
 
     { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)},
 
+    { path: 'registro', loadComponent: () => import('./components/register/register.component').then(m => m.RegisterComponent)},
+
+    { path: 'terms', loadComponent: () => import('./components/terms/terms.component').then(m => m.TermsComponent),
+      canDeactivate: [CanDeactivateGuard]
+    },
     {
       path: 'chofer/alta',
       loadChildren: () =>

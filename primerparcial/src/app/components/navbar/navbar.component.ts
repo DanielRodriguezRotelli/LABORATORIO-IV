@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -11,16 +11,16 @@ import { from, Observable } from 'rxjs';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent implements OnInit{
+export class NavbarComponent {
 
   loggedUser = this.authService.getLoggedUser();  // Obtener el usuario logueado
   isLogged$!: Observable<boolean>;       // Verificar si está logueado
   isAdmin$!: Observable<boolean>;                 // Observable para saber si es admin
 
+
   constructor( 
     private authService: AuthService, 
-    private router: Router) {}
-
+    private router: Router ) {}
 
   ngOnInit(): void {
     this.isLogged$ = this.authService.isLoggedIn(); 
@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit{
     this.isAdmin$ = this.authService.getIsAdmin();
   }
 
-
+  
   logout(): void {
     this.authService.logout().then( () => {
       this.router.navigateByUrl('/login');

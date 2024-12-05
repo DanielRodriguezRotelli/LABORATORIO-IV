@@ -12,7 +12,7 @@ export class DriverService {
 
   constructor(private firestore: Firestore) {}
 
-  getDriverPersons(): Observable<Driver[]> {
+  getDeliveryPersons(): Observable<Driver[]> {
     const driverRef: CollectionReference = collection(
       this.firestore,
       this.collectionName

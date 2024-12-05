@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Auth, authState, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 import { UserInterface } from '../interfaces/user.interface';
 import { map, Observable, of } from 'rxjs';
@@ -11,7 +11,10 @@ export class AuthService {
 
   currentUserSig: Observable<UserInterface | null>;
 
-  constructor(private auth: Auth, private firestore: Firestore) {
+  constructor(
+    private auth: Auth, 
+    private firestore: Firestore) {
+
     this.currentUserSig = authState(this.auth).pipe(
       map(user => {
         // Mapea las propiedades de User a UserInterface
@@ -51,6 +54,7 @@ export class AuthService {
           date: date, // Almacena solo la fecha en formato YYYY-MM-DD
         }).then(() => {
           console.log("Log entry successfully written!");
+          console.log("es Admin?: ", this.getUserRole(email));
         }).catch((error) => {
           console.error("Error writing log entry: ", error);
         });
@@ -61,6 +65,7 @@ export class AuthService {
       throw error;
     }
   }
+
 
   // Return Observable<boolean> for login state
   isLoggedIn(): Observable<boolean> {
@@ -74,6 +79,11 @@ export class AuthService {
 
   getLoggedUser(): Observable<UserInterface | null> {
     return this.currentUserSig; // Devuelve el observable para el usuario actual
+  }
+
+  registerUser(email: string, password: string)
+  {
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
   logout(): Promise<void> {

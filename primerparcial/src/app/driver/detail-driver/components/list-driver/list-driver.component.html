@@ -1,25 +1,25 @@
 <div>
-    <h2>Listado de Choferes</h2>
-    <table class="table table-striped" style="cursor: pointer;">
-      <thead>
-        <tr>
-          <th>DNI</th>
-          <th>Nombre</th>
-          <th>Edad</th>
-          <th>Pais de Origen</th>
-          <th>Licencia profesional?</th>
-          <th>Numero de licencia</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let chofer of choferes" (click)="seleccionarChofer(chofer)">
-          <td>{{ chofer?.dni }}</td>
-          <td>{{ chofer?.nombre }}</td>
-          <td>{{ chofer?.edad }}</td>
-          <td>{{ chofer?.pais! | translate }}</td>
-          <td>{{ chofer?.licenciaProfesional ? 'Sí' : 'No' }}</td>
-          <td>{{ chofer?.numeroLicencia }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <h2>Listado de Choferes</h2>
+  <table class="table table-striped" style="cursor: pointer;">
+    <thead>
+      <tr>
+        <th>DNI</th>
+        <th>Nombre</th>
+        <th>Edad</th>
+        <th>Pais de Origen</th>
+        <th>Licencia profesional?</th>
+        <th>Numero de licencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let chofer of choferes" (click)="seleccionarChofer(chofer)">
+        <td>{{ chofer?.dni }}</td>
+        <td>{{ chofer?.nombre }}</td>
+        <td>{{ chofer?.edad }}</td>
+        <td>{{ chofer?.pais! | translate }}</td>
+        <td>{{ chofer?.licenciaProfesional ? 'Sí' : 'No' }}</td>
+        <td>{{ chofer?.numeroLicencia }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

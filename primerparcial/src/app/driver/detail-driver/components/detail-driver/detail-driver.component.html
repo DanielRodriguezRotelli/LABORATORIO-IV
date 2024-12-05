@@ -1,25 +1,25 @@
 <body>
-    <main>
-      <div class="container py-4">
-        <div class="p-5 mb-4 bg-light rounded-3">
-          <div class="container-fluid py-5">
-            <app-list-driver [listDrivers]="listDrivers" (seleccionar)="seleccionar($event)"></app-list-driver>
+  <main>
+    <div class="container py-4">
+      <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+          <app-list-driver [listDrivers]="listDrivers" (seleccionar)="seleccionar($event)"></app-list-driver>
+        </div>
+      </div>
+
+      <div class="row align-items-md-stretch">
+        <div class="col-md-6">
+          <div class="h-100 p-5 text-white bg-dark rounded-3">
+              <app-selected-driver [choferSeleccionado]="choferSeleccionado"></app-selected-driver>
           </div>
         </div>
-  
-        <div class="row align-items-md-stretch">
-          <div class="col-md-6">
-            <div class="h-100 p-5 text-white bg-dark rounded-3">
-                <app-selected-driver [choferSeleccionado]="choferSeleccionado"></app-selected-driver>
-            </div>
-          </div>
 
-          <div class="col-md-6">
-            <div class="h-100 p-5 bg-light border rounded-3">
-                <app-country-driver *ngIf="choferSeleccionado?.pais" [paisChoferSeleccionado]=" choferSeleccionado?.pais"></app-country-driver>
-            </div>
+        <div class="col-md-6">
+          <div class="h-100 p-5 bg-light border rounded-3">
+              <app-country-driver *ngIf="choferSeleccionado?.pais" [paisChoferSeleccionado]=" choferSeleccionado?.pais"></app-country-driver>
           </div>
         </div>
       </div>
-    </main>
-  </body>
+    </div>
+  </main>
+</body>

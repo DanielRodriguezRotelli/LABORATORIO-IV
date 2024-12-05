@@ -14,7 +14,6 @@ export class VehicleService {
   constructor(private firestore: Firestore) {
     this.vehiculos = collection(this.firestore, 'vehiculos');
   }
-  
   async getVehicleAsync() {
     const querySnapshot = await getDocs(query(this.vehiculos));
     const result: Vehicle[] = [];

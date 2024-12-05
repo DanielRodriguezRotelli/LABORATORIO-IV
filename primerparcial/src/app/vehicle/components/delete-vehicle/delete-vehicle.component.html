@@ -1,0 +1,35 @@
+<div class="col">
+    <div class="card mb-4 rounded-3 shadow-sm border-warning">
+      <div class="card-header py-3 text-white bg-warning border-warning">
+        <h4 class="my-0 fw-normal">Borrar</h4>
+      </div>
+
+      <form *ngIf="item" [formGroup]="borrarVehiculoForm" (ngSubmit)="onSubmit()" class="card-body">
+        <div class="form-floating input my-3">
+          <input class="form-control bg-light" type="text" id="nombre" formControlName="nombre" name="nombre" placeholder="Nombre" readonly>
+          <label class="text-muted" for="nombre">Nombre</label>
+          <small class="text-danger" *ngIf="nombre?.touched && nombre?.errors">Ingrese un nombre para el vehiculo.</small>
+        </div>
+
+        <div class="form-floating input my-3">
+          <input class="form-control bg-light" type="text" id="tipo" formControlName="tipo" name="tipo" placeholder="tipo" readonly>
+          <label class="text-muted" for="tipo">Tipo</label>
+          <small class="text-danger" *ngIf="tipo?.touched && tipo?.errors">Ingrese un tipo para el vehiculo.</small>
+        </div>
+
+        <div class="form-floating input my-3">
+          <input class="form-control" type="number" id="cantidadRuedas" formControlName="cantidadRuedas" name="cantidadRuedas" placeholder="cantidad de Ruedas" readonly>
+          <label class="text-muted" for="precio">cantidad de Ruedas</label>
+          <small class="text-danger" *ngIf="cantidadRuedas?.touched && cantidadRuedas?.errors">Ingrese la cantidad de ruedas.</small>
+        </div>
+
+        <div class="form-floating input my-3">
+          <input class="form-control" type="number" id="capacidad" formControlName="capacidad" name="capacidad" placeholder="capacidad (500g-1000g)" readonly>
+          <label class="text-muted" for="peso">capacidad (2-100)</label>
+          <small class="text-danger" *ngIf="capacidad?.touched && capacidad?.errors">Ingrese una capacidad valida (entre 2 y 100 ).</small>
+        </div>
+        
+        <button type="submit" class="w-100 btn btn-lg btn-outline-warning">Confirmar</button>
+      </form>
+    </div>
+  </div>

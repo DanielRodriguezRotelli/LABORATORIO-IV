@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true
 })
 export class CapitalizePipe implements PipeTransform {
-
+  //Coloca mayuscula a la primera letra.
   //ESTE PIPE SE UTILIZA EN: - GESTON-USUARIOS, PACIENTES, MIS TURNOS, TABLA PACIENTE, TABLA ESPECIALISTAS
   transform(texto: string | undefined): string | undefined {
     if (texto != undefined) {

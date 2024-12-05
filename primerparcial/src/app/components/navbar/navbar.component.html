@@ -13,17 +13,17 @@
       <!-- Alineación del menú izquierdo -->
       <ul class="navbar-nav me-auto">
         <li *ngIf="loggedUser | async as user" class="nav-item">
-          <a class="nav-link active" routerLink="repartidor/alta">Alta Repartidor</a>
+          <a class="nav-link active" routerLink="chofer/alta">Alta Chofer</a>
         </li>
 
         <li  *ngIf="loggedUser | async as user" class="nav-item">
-          <a class="nav-link active" routerLink="repartidor/detalle">Detalle repartidor</a>
+          <a class="nav-link active" routerLink="chofer/detalle">Detalle chofer</a>
         </li>
 
-        <li *ngIf="loggedUser | async as user" class="nav-item">
-          <a class="nav-link active" routerLink="helados">Salen Helados</a>
+        <!-- Mostrar "Vehículos" solo si es administrador -->
+        <li *ngIf="isLogged$ && (isAdmin$ | async)" class="nav-item">
+          <a class="nav-link active" routerLink="vehiculo">Vehículos</a>
         </li>
-        
       </ul>
 
       <!-- Alineación del menú derecho -->

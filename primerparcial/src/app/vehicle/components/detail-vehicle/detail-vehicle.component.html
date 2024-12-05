@@ -1,0 +1,18 @@
+<div class="container py-3" style="margin-top: 20px;">
+    <div class="p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal">Vehículos</h1>
+    </div>
+  
+    <div>
+      <app-list-vehicle [listVehicles]="listVehicles" (seleccionar)="seleccionar($event)"></app-list-vehicle>
+      
+      <div class="row row-cols-1 row-cols-md-3 mb-3">
+        <app-create-vehicle (vehiculo)="alta($event)"></app-create-vehicle>
+
+        <app-update-vehicle [item]="vehiculo" (confirmar)="modificar()"></app-update-vehicle>
+
+        <app-delete-vehicle [item]="vehiculo" (confirmar)="borrar()"></app-delete-vehicle>
+
+      </div>
+    </div>
+  </div>

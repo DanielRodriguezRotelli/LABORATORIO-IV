@@ -11,9 +11,7 @@ export class AuthService {
 
   currentUserSig: Observable<UserInterface | null>;
 
-  constructor(private auth: Auth, 
-              private firestore: Firestore) {
-
+  constructor(private auth: Auth, private firestore: Firestore) {
     this.currentUserSig = authState(this.auth).pipe(
       map(user => {
         // Mapea las propiedades de User a UserInterface
@@ -29,7 +27,7 @@ export class AuthService {
     );
   }
 
-  getUserRole(email: string | null): string {
+  private getUserRole(email: string | null): string {
     // Asigna un rol basado en el correo electrónico
     if (email === 'admin@gmail.com') {
       return 'admin';
@@ -64,10 +62,12 @@ export class AuthService {
     }
   }
 
-  public isLoggedIn(): Promise<boolean> {
-    return new Promise((resolve: any) => {
-      this.auth.onAuthStateChanged((user: any) => {
-        user ? resolve(true) : resolve(false);
+  // Return Observable<boolean> for login state
+  isLoggedIn(): Observable<boolean> {
+    return new Observable<boolean>((observer) => {
+      this.auth.onAuthStateChanged((user) => {
+        observer.next(user !== null);
+        observer.complete();
       });
     });
   }
@@ -98,4 +98,3 @@ export class AuthService {
     );
   }
 }
-

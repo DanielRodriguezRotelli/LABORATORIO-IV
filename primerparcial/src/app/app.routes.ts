@@ -13,32 +13,32 @@ export const routes: Routes = [
     { path: 'login', loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)},
 
     {
-      path: 'repartidor/alta',
+      path: 'chofer/alta',
       loadChildren: () =>
-        import('./dealer/registration-dealer/registration-dealer.module').then(
-          (m) => m.RegistrationDealerModule
+        import('./driver/registration-driver/registration-driver.module').then(
+          (m) => m.RegistrationDriverModule
         ),
         canActivate: [AuthGuard],
         data: { authGuardPipe: () => redirectUnauthorizedTo('login') }
-      },
-      {
-        path: 'repartidor/detalle',
-        loadChildren: () =>
-          import('./dealer/detail-dealer/detail-dealer.module').then(
-            (m) => m.DetailDealerModule
-          ),
-          canActivate: [AuthGuard],
-          data: { authGuardPipe: () => redirectUnauthorizedTo('login') }
-      },
-      {
-        path: 'helados',
-        loadChildren: () =>
-          import('./ice-cream/ice-cream.module').then(
-            (m) => m.IceCreamModule
-          ),
-          canActivate: [AuthGuard, adminGuard],
-          data: { authGuardPipe: () => redirectUnauthorizedTo('login') }
-      },
+    },
+    {
+      path: 'chofer/detalle',
+      loadChildren: () =>
+        import('./driver/detail-driver/detail-driver.module').then(
+          (m) => m.DetailDriverModule
+        ),
+        canActivate: [AuthGuard],
+        data: { authGuardPipe: () => redirectUnauthorizedTo('login') }
+    },
+    {
+      path: 'vehiculo',
+      loadChildren: () =>
+        import('./vehicle/vehicle.module').then(
+          (m) => m.VehicleModule
+        ),
+        canActivate: [AuthGuard, adminGuard],
+        data: { authGuardPipe: () => redirectUnauthorizedTo('login') }
+    },
 
     { path: '**', loadComponent: () => import('./components/error/error.component').then((m) => m.ErrorComponent)},
 ];

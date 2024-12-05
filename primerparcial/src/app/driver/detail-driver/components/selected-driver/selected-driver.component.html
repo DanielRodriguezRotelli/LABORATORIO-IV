@@ -1,0 +1,8 @@
+<ul *ngIf="choferSeleccionado">
+    <li><strong>DNI:</strong> {{ choferSeleccionado.dni }}</li>
+    <li><strong>Nombre:</strong> {{ choferSeleccionado.nombre }}</li>
+    <li><strong>Edad:</strong> {{ choferSeleccionado.edad }}</li>
+    <li><strong>Pais de Origen:</strong> {{ choferSeleccionado.pais! | translate}}</li>
+    <li><strong>Licencia Profesional?:</strong> {{ choferSeleccionado.licenciaProfesional ? 'Sí' : 'No' }}</li>
+    <li><strong>Numero de Licencia:</strong> {{ choferSeleccionado.numeroLicencia }}</li>
+  </ul>

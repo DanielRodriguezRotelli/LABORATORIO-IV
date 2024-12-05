@@ -1,0 +1,4 @@
+<div *ngIf="country">
+    <h3>{{ country.name! | translate }}</h3>
+    <img [src]="country.flag" alt="Flag" *ngIf="country.flag">
+  </div>
